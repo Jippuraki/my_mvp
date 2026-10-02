@@ -21,6 +21,8 @@
     --shadow:0 8px 32px rgba(30,64,175,.12);
     --green:#0e8a6a;
     --green-soft:rgba(16,185,129,.14);
+    --warn:#b45309;
+    --warn-soft:rgba(245,158,11,.14);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -122,13 +124,16 @@
   .icon-btn.liked{color:#e11d48}
   .icon-btn.liked svg{fill:currentColor}
 
-  .content{padding:14px 16px 150px}
+  .content{padding:14px 16px 160px}
   .progress{display:flex;gap:4px;margin-bottom:12px}
   .progress span{flex:1;height:3px;border-radius:2px;background:rgba(37,99,235,.15);transition:background .25s}
   .progress span.on{background:var(--main)}
-  .large{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.3}
+  .large{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.3}
   .hint{font-size:12px;color:var(--sub);margin-top:2px}
-  .group-title{font-size:11px;font-weight:600;color:var(--faint);letter-spacing:.04em;margin:18px 4px 7px}
+  .group-title{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--faint);letter-spacing:.04em;margin:20px 4px 7px}
+  .req,.opt-badge{font-size:9px;font-weight:700;border-radius:999px;padding:1px 6px;letter-spacing:0}
+  .req{background:var(--main);color:#fff}
+  .opt-badge{background:rgba(15,27,51,.06);color:var(--sub)}
   .group{background:var(--glass-strong);border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 10px rgba(30,64,175,.06);overflow:hidden}
   .cell{display:flex;align-items:center;gap:10px;padding:11px 14px;font-size:13px}
   .cell + .cell{border-top:.5px solid var(--sep)}
@@ -136,27 +141,44 @@
   .cell .v{margin-left:auto;text-align:right;font-weight:600}
   .chev{color:var(--faint);font-size:16px;margin-left:4px}
 
-  .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .opt{
-    border:1px solid var(--line);background:var(--glass-strong);border-radius:14px;
-    padding:12px 10px;font-size:13px;color:#24314d;display:flex;align-items:center;gap:8px;
-    box-shadow:0 2px 8px rgba(30,64,175,.05);
-  }
-  .opt .box{width:18px;height:18px;border-radius:6px;border:1.5px solid #c3cde0;flex:0 0 18px;display:grid;place-items:center;color:#fff;font-size:11px}
-  .opt .box::after{content:""}
-  .opt.on{background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(79,70,229,.10));border-color:rgba(37,99,235,.5);color:var(--main);font-weight:700}
-  .opt.on .box{background:var(--main);border-color:var(--main)}
-  .opt.on .box::after{content:"✓"}
+  .jobs{display:flex;flex-wrap:wrap;align-items:center;gap:5px;padding:9px 14px;border-top:.5px solid var(--sep);background:rgba(239,246,255,.6);font-size:10.5px;color:var(--sub)}
+  .job{font-size:10.5px;font-weight:700;color:var(--main);background:var(--main-soft);border-radius:6px;padding:1px 7px}
+  .job.warn{color:var(--warn);background:var(--warn-soft)}
 
   .chips{display:flex;flex-wrap:wrap;gap:6px}
   .chip{border:1px solid var(--line);background:var(--glass-strong);border-radius:999px;padding:6px 12px;font-size:12px;color:#24314d}
   .chip.on{background:var(--main);border-color:var(--main);color:#fff;font-weight:700}
+  #rxMode{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  #rxMode .chip{text-align:center;padding:7px 4px;white-space:nowrap}
+
+  /* 렌즈 기능 */
+  .funcs{display:grid;gap:7px}
+  .func{
+    display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--glass-strong);
+    border-radius:14px;padding:9px 12px;box-shadow:0 2px 8px rgba(30,64,175,.05);
+  }
+  .func .tx{flex:1;min-width:0}
+  .func b{font-size:13px;display:block;line-height:1.3}
+  .func small{font-size:10.5px;color:var(--faint)}
+  .func .box{width:18px;height:18px;border-radius:6px;border:1.5px solid #c3cde0;flex:0 0 18px;display:grid;place-items:center;color:#fff;font-size:11px}
+  .func.on{background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(79,70,229,.10));border-color:rgba(37,99,235,.5)}
+  .func.on b{color:var(--main)}
+  .func.on .box{background:var(--main);border-color:var(--main)}
+  .func.on .box::after{content:"✓"}
+  .sw{width:28px;height:28px;border-radius:50%;flex:0 0 28px;border:2px solid #fff;box-shadow:0 1px 4px rgba(15,27,51,.18), inset 0 0 0 1px rgba(15,27,51,.06)}
+  .sw.tint{background:linear-gradient(180deg,#a8703f,#ecd2b3)}
+  .sw.mirror{background:linear-gradient(135deg,#8fb8ff,#f5f8ff 42%,#7aa0e6 58%,#dbe7ff)}
+  .sw.polar{background:radial-gradient(circle at 35% 30%,#6d7d74,#2f3a35)}
+  .sw.photo{background:linear-gradient(90deg,#eef2f7 50%,#4b5563 50%)}
+  .sw.blue{background:radial-gradient(circle at 35% 30%,#fffdf0,#f0e2a6)}
 
   .glasses{width:44px;height:30px;flex:0 0 44px;position:relative;border-radius:10px;background:linear-gradient(135deg,#dbe7fb,#f5f8ff)}
   .glasses::before,.glasses::after{content:"";position:absolute;top:9px;width:15px;height:12px;border:1.6px solid #4b5b7d;border-radius:40%}
   .glasses::before{left:5px}.glasses::after{right:5px}
   .glasses.semi::before,.glasses.semi::after{border-bottom-color:transparent}
   .glasses.rimless::before,.glasses.rimless::after{border-style:dashed;border-color:#8a9abb}
+  .glasses.none::before,.glasses.none::after{border-color:transparent}
+  .glasses.none{display:grid;place-items:center;color:var(--faint);font-size:16px;font-weight:700}
   .pin{width:10px;height:10px;border-radius:50% 50% 50% 0;background:var(--main);transform:rotate(-45deg);flex:0 0 10px}
 
   .bottom{
@@ -176,32 +198,39 @@
   .cta[disabled]{opacity:.45;box-shadow:none;cursor:not-allowed}
   .cta svg{width:16px;height:16px}
   .cta.ghost{background:var(--glass-strong);color:var(--main);border:1px solid rgba(37,99,235,.35);box-shadow:none;flex:0 0 42%}
-  .sel-count{font-size:11px;color:var(--sub);text-align:center}
+  #btnFind{flex:0 0 auto;height:58px;font-size:16px;border-radius:16px}
+  .sel-count{font-size:11px;color:var(--sub);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-  /* 메뉴 시트 / 토스트 */
+  /* 시트 / 토스트 */
   .dim{position:absolute;inset:0;z-index:70;background:rgba(15,27,51,.28);opacity:0;pointer-events:none;transition:opacity .25s}
   .dim.show{opacity:1;pointer-events:auto}
   .menu{
     position:absolute;left:10px;right:10px;bottom:10px;z-index:80;
-    max-height:86%;overflow-y:auto;scrollbar-width:none;
-    background:rgba(250,252,255,.94);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+    max-height:88%;overflow-y:auto;scrollbar-width:none;
+    background:rgba(250,252,255,.95);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
     border:1px solid var(--line);border-radius:22px;padding:8px 8px 26px;
     transform:translateY(115%);
     transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:0 -10px 30px rgba(15,27,51,.15);
   }
   .menu::-webkit-scrollbar{display:none}
   .menu.show{transform:translateY(0)}
+  .menu .grab{margin:4px auto 8px}
+  .menu-item{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:12px;border-radius:12px;font-size:14px;color:var(--ink);text-align:left}
+  .menu-item:hover{background:var(--main-soft)}
+  .menu-item .sub{margin-left:auto;font-size:11px;color:var(--faint)}
+  .toast{
+    position:absolute;left:50%;bottom:110px;transform:translate(-50%,12px);z-index:90;
+    background:rgba(15,27,51,.86);color:#fff;font-size:12px;padding:9px 14px;border-radius:12px;
+    white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
 
-  /* 가능한 안경원 보기 버튼 (크게) */
-  #btnFind{flex:0 0 auto;height:58px;font-size:16px;border-radius:16px}
-
-  /* 용어 도움말 (어포던스) */
+  /* 용어 도움말 */
   .glossary{font-size:10.5px;color:var(--faint);margin:7px 4px 0;line-height:1.5}
   .glossary b{color:var(--sub);font-weight:600}
 
   /* 도수 패널 */
   .rxpanel{margin-top:10px;background:var(--glass-strong);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:0 2px 10px rgba(30,64,175,.06)}
-  .rxpanel[hidden]{display:none}
   .rxq{font-size:12px;font-weight:700;margin-bottom:8px}
   .seg2{display:grid;grid-template-columns:1fr 1fr;background:rgba(15,27,51,.06);border-radius:10px;padding:3px;gap:3px}
   .seg2 button{border:0;background:transparent;border-radius:8px;padding:7px 4px;font-size:12px;color:var(--sub)}
@@ -218,6 +247,10 @@
   .stp .ctl button{width:28px;height:28px;border-radius:50%;border:1px solid rgba(37,99,235,.25);background:rgba(255,255,255,.85);color:var(--main);font-size:15px;font-weight:700;display:grid;place-items:center;line-height:1}
   .stp .ctl output{min-width:50px;text-align:center;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
   .rxnote{font-size:10.5px;color:var(--main);background:var(--main-soft);border-radius:8px;padding:6px 8px;margin-top:6px}
+  .privacy{font-size:9.5px;color:var(--faint);margin-top:8px;display:flex;gap:4px;line-height:1.45}
+  .infocard{font-size:11.5px;color:var(--sub);line-height:1.5;display:flex;gap:8px}
+  .infocard .ic{font-size:18px;line-height:1.2}
+  .infocard b{color:var(--ink)}
   .act{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.75);border-radius:12px;padding:10px 12px;margin-top:8px;text-align:left;font-size:12px;color:var(--ink)}
   .act .ic{font-size:16px}
   .act span.t{flex:1;min-width:0}
@@ -228,39 +261,54 @@
   .act.on .tg{background:var(--main)}
   .act.on .tg::after{left:16px}
 
+  /* 렌즈 참고 정보 */
+  .rec{margin-top:10px;border:1px solid rgba(37,99,235,.22);border-radius:14px;padding:11px 12px;background:linear-gradient(135deg,rgba(239,246,255,.95),rgba(238,242,255,.85))}
+  .rec-h{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px;font-weight:700;margin-bottom:8px}
+  .rec-tag{font-size:9px;font-weight:700;color:var(--sub);background:rgba(15,27,51,.06);border-radius:999px;padding:2px 7px;flex:0 0 auto}
+  .rec-chips{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+  .rec-chip{background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 8px;font-size:13px;font-weight:800;color:var(--main);box-shadow:0 1px 4px rgba(30,64,175,.06)}
+  .rec-chip small{display:block;font-size:9.5px;font-weight:600;color:var(--faint)}
+  .rec ul{list-style:none;display:grid;gap:4px}
+  .rec li{font-size:10.5px;color:var(--sub);line-height:1.45}
+  .rec li b{color:var(--ink);font-weight:700;margin-right:4px}
+  .rec-foot{font-size:9.5px;color:var(--faint);margin-top:8px;padding-top:7px;border-top:.5px solid var(--sep);line-height:1.45}
+
   /* 프레임 바텀시트 */
   .sh-title{font-size:15px;font-weight:800;padding:2px 10px 0}
   .sh-sub{font-size:11px;color:var(--sub);padding:0 10px 4px}
-  .sh-sec{font-size:11px;font-weight:600;color:var(--faint);margin:14px 10px 7px}
+  .sh-sec{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--faint);margin:14px 10px 7px}
   .sh-pad{padding:0 4px}
+  .search{display:flex;align-items:center;gap:8px;margin:10px 4px 0;background:#fff;border:1px solid rgba(37,99,235,.2);border-radius:12px;padding:0 12px;height:40px;box-shadow:0 1px 6px rgba(30,64,175,.06)}
+  .search svg{width:16px;height:16px;color:var(--faint);flex:0 0 16px}
+  .search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:13px;color:var(--ink)}
+  .search input::placeholder{color:var(--faint)}
+  .search:focus-within{border-color:var(--main);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+  .ac{margin:6px 4px 0;display:grid;gap:4px}
+  .ac-item{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:rgba(255,255,255,.85);border-radius:10px;padding:8px 10px;text-align:left;font-size:12px;color:var(--ink)}
+  .ac-item .br{font-size:10px;color:var(--faint);display:block}
+  .ac-item .meta{margin-left:auto;font-size:10px;color:var(--main);font-weight:700;white-space:nowrap}
+  .ac-empty{font-size:10.5px;color:var(--faint);padding:4px 6px}
+  .picked{display:flex;align-items:center;gap:8px;margin:8px 4px 0;font-size:11px;color:var(--main);background:var(--main-soft);border-radius:10px;padding:7px 10px}
+  .picked button{margin-left:auto;border:0;background:transparent;color:var(--sub);font-size:11px;text-decoration:underline}
+  .demo{font-size:9px;color:var(--faint);padding:3px 10px 0}
   .tiles{display:grid;gap:7px}
   .tiles.c3{grid-template-columns:repeat(3,1fr)}
   .tiles.c2{grid-template-columns:1fr 1fr}
-  .tiles.c1{grid-template-columns:1fr}
-  .tiles.c1 .tile.row2{padding:9px 12px;gap:10px}
-  .tiles.c1 .tile.row2 small{font-size:10px;display:block}
   .tile{border:1px solid var(--line);background:rgba(255,255,255,.8);border-radius:14px;padding:10px 6px 9px;text-align:center;color:#24314d;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px}
   .tile .em{font-size:20px;line-height:1}
   .tile .glasses{transform:scale(1.15);margin:2px 0}
   .tile b{font-size:12px}
   .tile small{font-size:9.5px;color:var(--faint);line-height:1.35}
   .tile.row2{flex-direction:row;text-align:left;padding:9px 10px;gap:8px}
-  .tile.row2 .tx{min-width:0}
   .tile.on{background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(79,70,229,.10));border-color:rgba(37,99,235,.5);color:var(--main)}
   .tile.on small{color:#5b7bc4}
+  .subs{margin:8px 4px 0;padding:10px;border-radius:12px;background:rgba(255,255,255,.7);border:1px solid var(--line)}
+  .subs .chips{gap:5px}
+  .subs .chip{padding:5px 10px;font-size:11.5px}
+  .subcap{font-size:10.5px;color:var(--sub);margin-top:8px;line-height:1.45}
+  .subcap b{color:var(--ink)}
+  .subwarn{font-size:10.5px;color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:5px 8px;margin-top:6px}
   .sh-done{margin:16px 4px 0;width:calc(100% - 8px);height:50px}
-  .menu .grab{margin:4px auto 8px}
-  .menu-item{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:12px;border-radius:12px;font-size:14px;color:var(--ink);text-align:left}
-  .menu-item:hover{background:var(--main-soft)}
-  .menu-item .sub{margin-left:auto;font-size:11px;color:var(--faint)}
-  .menu-item.off{color:var(--faint);cursor:default}
-  .menu-item.off:hover{background:transparent}
-  .toast{
-    position:absolute;left:50%;bottom:96px;transform:translate(-50%,12px);z-index:90;
-    background:rgba(15,27,51,.86);color:#fff;font-size:12px;padding:9px 14px;border-radius:12px;
-    white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
-  }
-  .toast.show{opacity:1;transform:translate(-50%,0)}
 
   /* ===== 매장 목록 ===== */
   .map{
@@ -353,6 +401,7 @@
   .cap.no{color:#97a3bd}
   .cap.no .ck{background:#c3cde0}
   .cap.want{font-weight:700}
+  .policy-note{font-size:10px;color:var(--faint);margin:6px 4px 0;line-height:1.45}
 
   footer{text-align:center;margin-top:44px;padding-top:20px;border-top:1px solid rgba(37,99,235,.18);font-size:13px;color:var(--sub)}
 
@@ -375,12 +424,12 @@
   <section class="three">
     <div class="row"><b>문제</b><p>패션 프레임을 구매한 뒤 무테, 틴팅, 미러, 도수렌즈 등의 특수 가공을 어디서 해야 할지 몰라 여러 안경원을 직접 찾아다니며 발품을 팔게 된다.</p></div>
     <div class="row"><b>고객</b><p>패션 프레임을 구매했지만 가공을 맡길 곳을 몰라 여러 안경원을 탐색하는 고객</p></div>
-    <div class="row"><b>핵심 가치</b><p>원하는 가공이 가능한 안경원을 앱에서 바로 찾고, 위치와 배송 가능 여부까지 한 번에 확인한다.<small>온라인 구매 ✕ · 배송 ○</small></p></div>
+    <div class="row"><b>핵심 가치</b><p>원하는 가공이 가능한 안경원을 앱에서 바로 찾고, 위치와 완성품 택배 수령 가능 여부까지 한 번에 확인한다.<small>온라인 구매 ✕ · 방문 결제 후 택배 수령 ○</small></p></div>
   </section>
 
   <div class="steps" id="steps">
-    <div class="step" data-step="1"><i>1</i>가공 유형 선택</div>
-    <div class="step" data-step="2"><i>2</i>프레임·도수 조건</div>
+    <div class="step" data-step="1"><i>1</i>내 프레임</div>
+    <div class="step" data-step="2"><i>2</i>도수·렌즈 기능</div>
     <div class="step" data-step="3"><i>3</i>지역 설정</div>
     <div class="step" data-step="4"><i>4</i>안경원 선택</div>
     <div class="step" data-step="5"><i>5</i>길찾기</div>
@@ -393,7 +442,7 @@
       <div class="label">
         <div class="num">화면 01 · 단계 1·2·3</div>
         <h2>조건 입력</h2>
-        <p>가공 유형 · 프레임·도수 조건 · 위치</p>
+        <p>내 프레임 · 도수·렌즈 기능 · 위치</p>
       </div>
       <div class="phone" id="p1"><div class="display">
         <div class="status">
@@ -417,36 +466,36 @@
           </div>
 
           <div class="content">
-            <div class="progress" id="progress"><span></span><span></span><span></span></div>
-            <div class="large">어떤 작업이<br>필요하세요?</div>
-            <div class="hint">필요한 가공을 모두 골라 주세요.</div>
+            <div class="progress" id="progress"><span></span><span></span><span></span><span></span></div>
+            <div class="large">내 프레임,<br>어디서 다시 쓸 수 있을까요?</div>
+            <div class="hint">꼭 필요한 건 테 모양과 지역뿐이에요.</div>
 
-            <div class="group-title">가공 유형</div>
-            <div class="seg" id="procs">
-              <div class="opt tap on" data-v="도수 렌즈"><span class="box"></span>도수 렌즈</div>
-              <div class="opt tap on" data-v="무테"><span class="box"></span>무테 가공</div>
-              <div class="opt tap" data-v="하금·반무테"><span class="box"></span>하금·반무테</div>
-              <div class="opt tap on" data-v="틴팅"><span class="box"></span>틴팅</div>
-              <div class="opt tap" data-v="미러"><span class="box"></span>미러 코팅</div>
-              <div class="opt tap" data-v="편광"><span class="box"></span>편광</div>
-            </div>
-
-            <div class="group-title">내 프레임 <span style="font-weight:400">· 탭해서 선택</span></div>
+            <!-- 1. 내 프레임 -->
+            <div class="group-title">내 프레임 <span class="req">필수</span></div>
             <div class="group">
-              <div class="cell tap" id="frameCell"><div class="glasses rimless" id="frameIcon"></div><div><b style="font-size:13px" id="frameName">무테 · 메탈</b><div style="font-size:11px;color:var(--sub)" id="frameWhere">온라인 · 브랜드 공식몰</div></div><span class="chev" style="margin-left:auto">›</span></div>
+              <div class="cell tap" id="frameCell">
+                <div class="glasses rimless" id="frameIcon"></div>
+                <div style="min-width:0"><b style="font-size:13px" id="frameName"></b><div style="font-size:11px;color:var(--sub)" id="frameWhere"></div></div>
+                <span class="chev" style="margin-left:auto">›</span>
+              </div>
+              <div class="jobs" id="jobs"></div>
             </div>
 
-            <div class="group-title">도수 상태</div>
-            <div class="chips" id="rx">
-              <span class="chip tap" data-v="일반">일반</span>
-              <span class="chip tap on" data-v="고도수">고도수</span>
-              <span class="chip tap on" data-v="고난시">고난시</span>
-              <span class="chip tap" data-v="모름">잘 모르겠어요</span>
+            <!-- 2. 도수 -->
+            <div class="group-title">도수 <span class="opt-badge">선택</span></div>
+            <div class="chips" id="rxMode">
+              <span class="chip tap" data-v="have">👓 도수 있음</span>
+              <span class="chip tap" data-v="none">🕶️ 무도수</span>
+              <span class="chip tap" data-v="unknown">🤔 잘 몰라요</span>
             </div>
-            <div class="glossary"><b>고도수</b> 렌즈가 두꺼워질 만큼 강한 도수 · <b>고난시</b> 사물이 겹치거나 번져 보이는 정도가 큰 경우</div>
-            <div class="rxpanel" id="rxPanel" hidden></div>
+            <div class="rxpanel" id="rxPanel"></div>
 
-            <div class="group-title">지역</div>
+            <!-- 3. 렌즈 기능 -->
+            <div class="group-title">원하는 렌즈 기능 <span class="opt-badge">선택</span></div>
+            <div class="funcs" id="funcs"></div>
+
+            <!-- 4. 지역 -->
+            <div class="group-title">지역 <span class="req">필수</span></div>
             <div class="group">
               <div class="cell tap" id="regionCell"><span class="pin"></span><span id="regionName">홍대 · 연남 · 신촌</span><span class="chev" style="margin-left:auto">›</span></div>
             </div>
@@ -467,6 +516,14 @@
         </div>
         <div class="menu" id="frameSheet">
           <div class="grab"></div>
+          <div class="sh-title">내 프레임 알려 주기</div>
+          <div class="sh-sub">모양과 소재에 따라 가공할 수 있는 안경원이 달라져요.</div>
+          <label class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" id="fsearch" placeholder="브랜드나 모델명으로 찾기 (예: 루미, OB-7)" autocomplete="off">
+          </label>
+          <div class="demo">검색 결과는 시연용 가상 브랜드예요</div>
+          <div id="facResults"></div>
           <div id="frameBody"></div>
         </div>
         <div class="toast" id="toast1"></div>
@@ -582,100 +639,180 @@
 
 <script>
 (function(){
-  /* ---------- 예시 데이터 (가상 매장) ---------- */
+  /* ================= 예시 데이터 (모두 가상) ================= */
   var SHOPS = [
     { id:"A", name:"렌즈공방 홍대점", verified:true, dist:0.3, open:true, x:27, y:44,
       addr:"마포구 예시로 12, 1층", hours:"월–토 10:00–20:00", off:"일요일", period:"2 ~ 5일", ship:true,
       desc:"무테·고난시 가공 경험이 많은 동네 안경원 (예시)",
-      caps:["도수 렌즈","무테","하금·반무테","틴팅","고도수","고난시","일반","도수 측정"] },
+      caps:["도수 렌즈","무테","하금·반무테","틴팅","변색","블루라이트","고도수","고난시","도수 측정"] },
     { id:"B", name:"연남 아이랩", verified:false, dist:0.6, open:true, x:58, y:36,
       addr:"마포구 예시로 45, 2층", hours:"매일 11:00–21:00", off:"없음", period:"1 ~ 3일", ship:false,
       desc:"컬러 틴팅과 편광 렌즈를 자주 다루는 안경원 (예시)",
-      caps:["도수 렌즈","무테","틴팅","편광","고도수","일반"] },
+      caps:["도수 렌즈","무테","틴팅","편광","변색","블루라이트","고도수"] },
     { id:"C", name:"신촌 글라스웍스", verified:true, dist:1.1, open:false, x:72, y:60,
       addr:"서대문구 예시로 88, 1층", hours:"화–일 10:30–19:30", off:"월요일", period:"3 ~ 7일", ship:true,
-      desc:"하금·미러 등 특수 가공을 전문으로 하는 작업실 (예시)",
-      caps:["도수 렌즈","무테","하금·반무테","미러","고도수","고난시","일반","도수 측정"] }
+      desc:"하금·미러·천연 소재 테 등 특수 가공을 전문으로 하는 작업실 (예시)",
+      caps:["도수 렌즈","무테","하금·반무테","미러","편광","블루라이트","고도수","고난시","도수 측정","천연 소재","빈티지 테"] }
   ];
-  var ALL_PROCS = ["도수 렌즈","무테","하금·반무테","틴팅","미러","편광"];
+  var CAP_ORDER = ["도수 렌즈","무테","하금·반무테","고도수","고난시","도수 측정","틴팅","미러","편광","변색","블루라이트","천연 소재"];
+  var CAP_LABEL = {"무테":"무테 가공","하금·반무테":"하금 가공","천연 소재":"천연 소재 테","빈티지 테":"빈티지 테"};
+  function capName(c){ return CAP_LABEL[c] || c; }
+
   var RIMS = [
-    {name:"풀림", cls:"", cap:"테가 렌즈 둘레를 전부 감싸요"},
-    {name:"반무테·하금", cls:"semi", cap:"위쪽만 테, 아래는 가는 줄로 고정"},
-    {name:"무테", cls:"rimless", cap:"테 없이 렌즈에 구멍을 뚫어 고정"}
+    {name:"풀림", cls:"", cap:"테가 렌즈 둘레를 전부 감싸요", job:null, jobLabel:"일반 연마"},
+    {name:"반무테·하금", cls:"semi", cap:"위쪽만 테, 아래는 가는 줄로 고정", job:"하금·반무테", jobLabel:"홈파기 가공"},
+    {name:"무테", cls:"rimless", cap:"테 없이 렌즈에 구멍을 뚫어 고정", job:"무테", jobLabel:"구멍 뚫기 가공"}
   ];
-  var MATS = [
-    {e:"🎨", name:"아세테이트", cap:"흔히 말하는 뿔테. 색이 다양한 플라스틱 소재"},
-    {e:"🔩", name:"메탈", cap:"얇고 단단한 금속 테"},
-    {e:"🪶", name:"티타늄", cap:"아주 가볍고 잘 휘지 않는 금속"},
-    {e:"🤔", name:"잘 모르겠어요", cap:"매장에서 실물로 확인해요"}
+  var MATCATS = [
+    {e:"🎨", name:"뿔테·플라스틱", subs:[
+      ["아세테이트","흔히 말하는 뿔테. 색과 무늬가 다양해요"],
+      ["TR90","아주 가볍고 잘 휘어져요. 스포츠 테에 많아요"],
+      ["울템","얇고 탄성이 강해요. 모양 조정이 까다로워요"],
+      ["셀룰로이드","빈티지 테에 많아요. 오래되면 갈라지기 쉬워요"]]},
+    {e:"🔩", name:"메탈", subs:[
+      ["티타늄","아주 가볍고 녹슬지 않아요. 고급 무테에 많아요"],
+      ["스테인리스","얇고 단단한 금속이에요"],
+      ["메모리 메탈","휘어도 원래 모양으로 돌아와요"],
+      ["모넬","가장 흔한 일반 금속 테예요"]]},
+    {e:"🪵", name:"천연 소재", warn:"열을 쓰면 안 되는 소재라 다룰 수 있는 안경원이 적어요", subs:[
+      ["버팔로혼","물소 뿔로 만든 고급 테예요"],
+      ["나무","나무를 깎아 만든 수제 테예요"]]},
+    {e:"🔀", name:"콤비·잘 모름", subs:[
+      ["콤비","메탈과 뿔테를 섞은 테예요"]]}
+  ];
+  var MODELS = [
+    {brand:"루미 아이웨어", model:"LM-02 Halo", rim:2, cat:1, sub:0},
+    {brand:"루미 아이웨어", model:"LM-11 Arc", rim:1, cat:1, sub:1},
+    {brand:"오브제 스튜디오", model:"OB-7 Round", rim:0, cat:0, sub:0},
+    {brand:"오브제 스튜디오", model:"OB-9 Slim", rim:0, cat:0, sub:2},
+    {brand:"노스톤", model:"NS Classic 48", rim:0, cat:0, sub:3},
+    {brand:"노스톤", model:"NS Horn 50", rim:0, cat:2, sub:0},
+    {brand:"하루안경", model:"HR Flex", rim:0, cat:0, sub:1},
+    {brand:"하루안경", model:"HR Combi 2", rim:1, cat:3, sub:0}
   ];
   var WHERE = {
     online:[{e:"🛍️",name:"브랜드 공식몰"},{e:"📱",name:"패션 플랫폼"},{e:"✈️",name:"해외 직구"},{e:"♻️",name:"중고·빈티지"}],
     offline:[{e:"🏬",name:"브랜드 매장"},{e:"🧭",name:"편집숍"},{e:"🎪",name:"팝업스토어"},{e:"🎁",name:"선물·기타"}]
   };
+  var FUNCS = [
+    {k:"틴팅", d:"렌즈에 원하는 색을 입혀요", sw:"tint"},
+    {k:"미러", d:"거울처럼 빛을 반사하는 코팅", sw:"mirror"},
+    {k:"편광", d:"물·도로에 반사된 눈부심을 줄여요", sw:"polar"},
+    {k:"변색", d:"햇빛을 받으면 렌즈가 어두워져요", sw:"photo"},
+    {k:"블루라이트", d:"화면에서 나오는 푸른빛을 줄여요", sw:"blue"}
+  ];
   var REGIONS = ["홍대 · 연남 · 신촌","합정 · 망원","이대 · 아현"];
 
-  var state = { rim:2, mat:1, buy:"online", where:0, region:0, sort:"dist", selected:"A", liked:{}, photo:0,
-    rxKnow:true, eye:"R", pd:63, measure:false,
-    rxv:{ R:{sph:-6.50, cyl:-2.25, axis:180}, L:{sph:-6.25, cyl:-2.00, axis:175} } };
-  function frameLabel(){ return RIMS[state.rim].name + " · " + MATS[state.mat].name; }
+  var INIT = function(){ return {
+    rim:2, cat:1, sub:0, model:null, buy:"online", where:0,
+    rxMode:"have", rxKnow:true, eye:"R", pd:63, measure:false,
+    rxv:{ R:{sph:-6.50, cyl:-2.25, axis:180}, L:{sph:-6.25, cyl:-2.00, axis:175} },
+    funcs:[], region:0 }; };
+  var state = INIT();
+  state.sort = "dist"; state.selected = "A"; state.liked = {}; state.photo = 0; state.shareRx = false;
 
   var $ = function(id){ return document.getElementById(id); };
-  function onList(id){ return Array.prototype.map.call($(id).querySelectorAll(".on"), function(e){return e.dataset.v;}); }
 
-  /* ---------- 공통 ---------- */
+  /* ================= 공통 ================= */
   var toastTimers = {};
   function toast(n,msg){
     var t = $("toast"+n); t.textContent = msg; t.classList.add("show");
-    clearTimeout(toastTimers[n]); toastTimers[n] = setTimeout(function(){ t.classList.remove("show"); }, 1800);
+    clearTimeout(toastTimers[n]); toastTimers[n] = setTimeout(function(){ t.classList.remove("show"); }, 1900);
   }
   function go(n){
-    var el = $("s"+n);
-    el.scrollIntoView({behavior:"smooth", block:"start"});
+    $("s"+n).scrollIntoView({behavior:"smooth", block:"start"});
     var p = $("p"+n); p.classList.add("focus");
     setTimeout(function(){ p.classList.remove("focus"); }, 1200);
   }
   function setStep(n){
-    document.querySelectorAll("#steps .step").forEach(function(s){
-      s.classList.toggle("now", +s.dataset.step === n);
-    });
+    document.querySelectorAll("#steps .step").forEach(function(s){ s.classList.toggle("now", +s.dataset.step === n); });
   }
-  function openSheet(n){ $("dim"+n).classList.add("show"); $("menu"+n).classList.add("show"); }
-  function closeSheet(n){ $("dim"+n).classList.remove("show"); $("menu"+n).classList.remove("show"); }
+  function openSheet(id){ $("dim1").classList.add("show"); $(id).classList.add("show"); }
+  function closeSheets1(){ $("dim1").classList.remove("show"); $("menu1").classList.remove("show"); $("frameSheet").classList.remove("show"); }
 
-  /* ---------- 화면 1 ---------- */
-  function updateS1(){
-    var procs = onList("procs"), rx = onList("rx");
-    var prog = $("progress").children;
-    prog[0].classList.toggle("on", procs.length>0);
-    prog[1].classList.toggle("on", rx.length>0);
-    prog[2].classList.toggle("on", state.region===0);
-    $("selCount").textContent = procs.length
-      ? "가공 "+procs.length+"개 · 도수 "+rx.length+"개 · "+REGIONS[state.region].replace(/ /g,"")
-      : "가공 유형을 하나 이상 선택해 주세요";
-    $("btnFind").disabled = procs.length===0;
-    renderRx();
+  /* ================= 조건 → 필요한 능력 ================= */
+  function maxRx(){
+    var R = state.rxv.R, L = state.rxv.L;
+    return { sph:Math.max(Math.abs(R.sph),Math.abs(L.sph)), cyl:Math.max(Math.abs(R.cyl),Math.abs(L.cyl)) };
   }
-  $("procs").addEventListener("click", function(e){
-    var o = e.target.closest(".opt"); if(!o) return;
-    o.classList.toggle("on"); setStep(1); updateS1();
-  });
-  $("rx").addEventListener("click", function(e){
-    var c = e.target.closest(".chip"); if(!c) return;
-    var v = c.dataset.v, chips = $("rx").querySelectorAll(".chip");
-    if(v==="일반" || v==="모름"){
-      var was = c.classList.contains("on");
-      chips.forEach(function(x){ x.classList.remove("on"); });
-      if(!was) c.classList.add("on");
-    }else{
-      $("rx").querySelector('[data-v="일반"]').classList.remove("on");
-      $("rx").querySelector('[data-v="모름"]').classList.remove("on");
-      c.classList.toggle("on");
+  function matName(){
+    if(state.cat===null) return "";
+    var c = MATCATS[state.cat];
+    return state.sub>=0 ? c.subs[state.sub][0] : c.name;
+  }
+  function frameLabel(){
+    if(state.rim===null) return "프레임을 알려 주세요";
+    return RIMS[state.rim].name + (state.cat!==null ? " · " + matName() : "");
+  }
+  function wanted(){
+    var w = [];
+    if(state.rim!==null && RIMS[state.rim].job) w.push(RIMS[state.rim].job);
+    if(state.cat===2) w.push("천연 소재");
+    if(state.cat===0 && state.sub===3) w.push("빈티지 테");
+    if(state.rxMode==="have"){
+      w.push("도수 렌즈");
+      if(state.rxKnow){
+        var m = maxRx();
+        if(m.sph>=6) w.push("고도수");
+        if(m.cyl>=2) w.push("고난시");
+      }else if(state.measure) w.push("도수 측정");
     }
+    if(state.rxMode==="unknown" && state.measure) w.push("도수 측정");
+    return w.concat(state.funcs);
+  }
+
+  /* ================= 화면 1 ================= */
+  function renderFrameCell(){
+    $("frameName").textContent = frameLabel();
+    $("frameName").style.color = state.rim===null ? "var(--faint)" : "";
+    var where = (state.buy==="online"?"온라인":"오프라인") + " · " + WHERE[state.buy][state.where].name;
+    $("frameWhere").textContent = state.model ? state.model.brand + " " + state.model.model + " · " + where : where;
+    $("frameIcon").className = "glasses " + (state.rim===null ? "none" : RIMS[state.rim].cls);
+    $("frameIcon").textContent = state.rim===null ? "+" : "";
+    var j = $("jobs");
+    if(state.rim===null){ j.style.display="none"; return; }
+    j.style.display="";
+    var h = '필요한 작업 <span class="job">'+RIMS[state.rim].jobLabel+'</span>';
+    if(state.cat===2) h += '<span class="job warn">열 사용 불가 소재</span>';
+    if(state.cat===0 && state.sub===3) h += '<span class="job warn">빈티지 테 취급</span>';
+    j.innerHTML = h + '<span style="margin-left:auto;color:var(--faint)">자동</span>';
+  }
+
+  function renderFuncs(){
+    $("funcs").innerHTML = FUNCS.map(function(f){
+      var on = state.funcs.indexOf(f.k)>-1;
+      return '<div class="func tap'+(on?" on":"")+'" data-k="'+f.k+'"><span class="sw '+f.sw+'"></span>'+
+        '<span class="tx"><b>'+f.k+'</b><small>'+f.d+'</small></span><span class="box"></span></div>';
+    }).join("");
+  }
+  $("funcs").addEventListener("click", function(e){
+    var f = e.target.closest(".func"); if(!f) return;
+    var k = f.dataset.k, i = state.funcs.indexOf(k);
+    if(i>-1) state.funcs.splice(i,1); else state.funcs.push(k);
+    setStep(2); renderFuncs(); updateS1();
+  });
+
+  function updateS1(){
+    var prog = $("progress").children;
+    prog[0].classList.toggle("on", state.rim!==null);
+    prog[1].classList.toggle("on", !!state.rxMode);
+    prog[2].classList.toggle("on", state.funcs.length>0);
+    prog[3].classList.toggle("on", state.region===0);
+    var rxTxt = {have: state.rxKnow ? "도수 입력" : "도수 있음", none:"무도수", unknown:"도수 모름"}[state.rxMode] || "도수 미선택";
+    $("selCount").textContent = state.rim===null
+      ? "테 모양을 먼저 알려 주세요"
+      : frameLabel()+" · "+rxTxt+(state.funcs.length?" · 기능 "+state.funcs.length+"개":"")+" · "+REGIONS[state.region].replace(/ /g,"");
+    $("btnFind").disabled = state.rim===null;
+    $("rxMode").querySelectorAll(".chip").forEach(function(c){ c.classList.toggle("on", c.dataset.v===state.rxMode); });
+    renderFrameCell(); renderRx();
+  }
+
+  /* ----- 도수 ----- */
+  $("rxMode").addEventListener("click", function(e){
+    var c = e.target.closest(".chip"); if(!c) return;
+    state.rxMode = state.rxMode===c.dataset.v ? null : c.dataset.v;
     setStep(2); updateS1();
   });
-
-  /* ----- 도수 패널 ----- */
   var RXF = {
     sph:{lb:"SPH", cap:"구면 도수 · 근시(−)·원시(+) 정도", step:0.25, min:-20, max:10},
     cyl:{lb:"CYL", cap:"난시 도수 · 숫자가 클수록 난시가 심해요", step:0.25, min:-6, max:0},
@@ -696,39 +833,62 @@
     return '<button type="button" class="act" data-act="call"><span class="ic">📞</span><span class="t">기존 안경원에 도수 물어보기<small>전에 안경을 맞춘 곳에 처방 기록을 요청해요</small></span><span class="chev">›</span></button>'+
       '<button type="button" class="act'+(state.measure?" on":"")+'" data-act="measure"><span class="ic">🔍</span><span class="t">도수 측정 가능한 안경원만 보기<small>방문해서 바로 도수를 잴 수 있는 곳만 찾아요</small></span><span class="tg"></span></button>';
   }
+  /* 참고용 렌즈 가이드: 일반 정보 · 특정 제품/매장 추천 아님 */
+  function lensGuide(){
+    var m = maxRx(), sph = m.sph, cyl = m.cyl, idx, idxWhy, design, designWhy;
+    if(sph < 2){ idx = "1.56"; idxWhy = "도수가 낮아 기본 굴절률로도 충분히 얇아요"; }
+    else if(sph < 4){ idx = "1.60"; idxWhy = "중간 도수라 한 단계 얇은 렌즈가 무난해요"; }
+    else if(sph < 6){ idx = "1.67"; idxWhy = "도수가 높아 렌즈 가장자리 두께를 줄여 줘요"; }
+    else { idx = "1.74"; idxWhy = "고도수라 가장 얇은 굴절률을 많이 선택해요"; }
+    if(sph >= 6 || cyl >= 2){ design = "양면비구면"; designWhy = "앞뒤 두 면을 다듬어 고도수·고난시의 주변부 왜곡을 줄여요"; }
+    else if(sph >= 2 || cyl >= 1){ design = "비구면"; designWhy = "구면보다 얇고 가장자리 왜곡이 적어요"; }
+    else { design = "구면 · 비구면"; designWhy = "낮은 도수라 구면도 무난하고, 더 얇게 원하면 비구면을 골라요"; }
+    var extra = (state.rim!==null && RIMS[state.rim].cls==="rimless")
+      ? '<li><b>무테 참고</b> 구멍 주변이 덜 깨지는 소재(트라이벡스·폴리카보네이트)도 함께 상담해 보세요</li>' : "";
+    return '<div class="rec">'+
+      '<div class="rec-h"><span>💡 내 도수에 맞는 렌즈 참고 정보</span><span class="rec-tag">참고용</span></div>'+
+      '<div class="rec-chips"><span class="rec-chip"><small>굴절률</small>'+idx+(idx==="1.74"?"":" 이상")+'</span><span class="rec-chip"><small>렌즈 설계</small>'+design+'</span></div>'+
+      '<ul><li><b>굴절률</b> '+idxWhy+'</li><li><b>설계</b> '+designWhy+'</li>'+extra+'</ul>'+
+      '<div class="rec-foot">입력한 도수 기준의 일반적인 안내예요. 생활 습관·프레임 크기에 따라 달라질 수 있으니 최종 선택은 매장 안경사와 상담하세요.</div>'+
+    '</div>';
+  }
   function renderRx(){
-    var rx = onList("rx"), p = $("rxPanel");
-    var high = rx.indexOf("고도수")>-1 || rx.indexOf("고난시")>-1;
-    var unknown = rx.indexOf("모름")>-1;
-    if(!high && !unknown){ p.hidden = true; return; }
-    p.hidden = false;
-    if(unknown){
-      p.innerHTML = '<div class="rxq">도수를 모르셔도 괜찮아요</div>' + unknownActions();
-    }else{
-      var h = '<div class="rxq">도수 값을 알고 있나요?</div>'+
-        '<div class="seg2"><button type="button" data-know="1" class="'+(state.rxKnow?"on":"")+'">알아요</button>'+
-        '<button type="button" data-know="0" class="'+(state.rxKnow?"":"on")+'">정확히 몰라요</button></div>';
-      if(state.rxKnow){
-        var e = state.rxv[state.eye];
-        h += '<div class="eyes"><button type="button" data-eye="R" class="'+(state.eye==="R"?"on":"")+'">오른쪽 눈 (R)</button>'+
-             '<button type="button" data-eye="L" class="'+(state.eye==="L"?"on":"")+'">왼쪽 눈 (L)</button></div>'+
-          stepRow("sph","SPH",RXF.sph.cap,e.sph)+
-          stepRow("cyl","CYL",RXF.cyl.cap,e.cyl)+
-          stepRow("axis","AXIS",RXF.axis.cap,e.axis)+
-          stepRow("pd","PD","동공 사이 거리 · 양쪽 공통",state.pd);
-        var notes = [];
-        if(Math.abs(e.sph)>=6) notes.push("이 눈은 고도수 범위예요");
-        if(Math.abs(e.cyl)>=2) notes.push("고난시 범위예요");
-        if(notes.length) h += '<div class="rxnote">ⓘ '+notes.join(" · ")+' — 처리 가능한 안경원만 보여 드려요</div>';
-      }else{
-        h += unknownActions();
-      }
-      p.innerHTML = h;
+    var p = $("rxPanel");
+    if(!state.rxMode){ p.style.display="none"; return; }
+    p.style.display="";
+    if(state.rxMode==="none"){
+      p.innerHTML = '<div class="infocard"><span class="ic">🕶️</span><span><b>도수 없는 렌즈로 교체해요.</b><br>아래 ‘원하는 렌즈 기능’에서 블루라이트·변색·틴팅 등을 골라 주세요.</span></div>';
+      return;
     }
+    if(state.rxMode==="unknown"){
+      p.innerHTML = '<div class="rxq">도수를 모르셔도 괜찮아요</div>' + unknownActions();
+      return;
+    }
+    var h = '<div class="rxq">도수 값을 알고 있나요?</div>'+
+      '<div class="seg2"><button type="button" data-know="1" class="'+(state.rxKnow?"on":"")+'">값 입력하기</button>'+
+      '<button type="button" data-know="0" class="'+(state.rxKnow?"":"on")+'">값은 몰라요</button></div>';
+    if(state.rxKnow){
+      var e = state.rxv[state.eye], m = maxRx();
+      h += '<div class="eyes"><button type="button" data-eye="R" class="'+(state.eye==="R"?"on":"")+'">오른쪽 눈 (R)</button>'+
+           '<button type="button" data-eye="L" class="'+(state.eye==="L"?"on":"")+'">왼쪽 눈 (L)</button></div>'+
+        stepRow("sph","SPH",RXF.sph.cap,e.sph)+
+        stepRow("cyl","CYL",RXF.cyl.cap,e.cyl)+
+        stepRow("axis","AXIS",RXF.axis.cap,e.axis)+
+        stepRow("pd","PD","동공 사이 거리 · 양쪽 공통",state.pd);
+      var notes = [];
+      if(m.sph>=6) notes.push("고도수");
+      if(m.cyl>=2) notes.push("고난시");
+      if(notes.length) h += '<div class="rxnote">ⓘ 입력한 값은 '+notes.join("·")+' 범위예요 — 처리 가능한 안경원만 보여 드려요</div>';
+      h += lensGuide();
+      h += '<div class="privacy">🔒 <span>입력한 도수는 이 기기에서 검색에만 쓰이고 저장되지 않아요.</span></div>';
+    }else{
+      h += unknownActions();
+    }
+    p.innerHTML = h;
   }
   $("rxPanel").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
-    if(b.dataset.know){ state.rxKnow = b.dataset.know==="1"; renderRx(); return; }
+    if(b.dataset.know){ state.rxKnow = b.dataset.know==="1"; updateS1(); return; }
     if(b.dataset.eye){ state.eye = b.dataset.eye; renderRx(); return; }
     if(b.dataset.f){
       var f = b.dataset.f, d = +b.dataset.d;
@@ -737,67 +897,94 @@
         var c = RXF[f], o = state.rxv[state.eye];
         o[f] = Math.round(Math.min(c.max, Math.max(c.min, o[f] + d*c.step))*100)/100;
       }
-      renderRx(); setStep(2); return;
+      setStep(2); updateS1(); return;
     }
     if(b.dataset.act==="call"){ toast(1,"기존 안경원에 보낼 도수 요청 문구를 준비했어요 (예시)"); return; }
     if(b.dataset.act==="measure"){
-      state.measure = !state.measure; renderRx(); updateS1();
+      state.measure = !state.measure; updateS1();
       toast(1, state.measure ? "도수 측정 가능한 안경원만 보여 드려요" : "측정 조건을 해제했어요");
     }
   });
 
   /* ----- 프레임 바텀시트 ----- */
+  function norm(s){ return s.toLowerCase().replace(/[\s\-]/g,""); }
+  function renderSearch(){
+    var q = norm($("fsearch").value), box = $("facResults");
+    var picked = state.model ? '<div class="picked">✓ '+state.model.brand+' '+state.model.model+' — 모양·소재를 자동으로 채웠어요<button type="button" data-clear="1">해제</button></div>' : "";
+    if(!q){ box.innerHTML = picked; return; }
+    var hits = MODELS.filter(function(m){ return norm(m.brand+m.model).indexOf(q)>-1 || norm(m.model).indexOf(q)>-1; }).slice(0,5);
+    box.innerHTML = '<div class="ac">' + (hits.length ? hits.map(function(m){
+      var i = MODELS.indexOf(m);
+      return '<button type="button" class="ac-item" data-model="'+i+'"><span><span class="br">'+m.brand+'</span><b>'+m.model+'</b></span>'+
+        '<span class="meta">'+RIMS[m.rim].name+' · '+MATCATS[m.cat].subs[m.sub][0]+'</span></button>';
+    }).join("") : '<div class="ac-empty">찾는 모델이 없어요. 아래에서 직접 골라 주세요.</div>') + '</div>' + picked;
+  }
   function renderFrameSheet(){
-    var w = WHERE[state.buy];
+    var w = WHERE[state.buy], c = state.cat!==null ? MATCATS[state.cat] : null;
+    var subs = "";
+    if(c){
+      var cap = state.sub>=0 ? '<b>'+c.subs[state.sub][0]+'</b> — '+c.subs[state.sub][1] : '정확한 소재를 몰라도 괜찮아요. 매장에서 실물로 확인해요.';
+      subs = '<div class="subs"><div class="chips">'+
+        c.subs.map(function(s,i){ return '<button type="button" class="chip'+(i===state.sub?" on":"")+'" data-sub="'+i+'">'+s[0]+'</button>'; }).join("")+
+        '<button type="button" class="chip'+(state.sub<0?" on":"")+'" data-sub="-1">잘 모르겠어요</button></div>'+
+        '<div class="subcap">'+cap+'</div>'+(c.warn?'<div class="subwarn">⚠︎ '+c.warn+'</div>':'')+'</div>';
+    }
     $("frameBody").innerHTML =
-      '<div class="sh-title">내 프레임 알려 주기</div>'+
-      '<div class="sh-sub">모양과 소재에 따라 가공할 수 있는 안경원이 달라져요.</div>'+
-      '<div class="sh-sec">테 모양</div>'+
+      '<div class="sh-sec">테 모양 <span class="req">필수</span></div>'+
       '<div class="sh-pad tiles c3">'+RIMS.map(function(r,i){
         return '<button type="button" class="tile'+(i===state.rim?" on":"")+'" data-rim="'+i+'"><div class="glasses '+r.cls+'"></div><b>'+r.name+'</b><small>'+r.cap+'</small></button>';
       }).join("")+'</div>'+
-      '<div class="sh-sec">소재</div>'+
-      '<div class="sh-pad tiles c1">'+MATS.map(function(m,i){
-        return '<button type="button" class="tile row2'+(i===state.mat?" on":"")+'" data-mat="'+i+'"><span class="em">'+m.e+'</span><span class="tx"><b>'+m.name+'</b> <small>'+m.cap+'</small></span></button>';
-      }).join("")+'</div>'+
-      '<div class="sh-sec">어디서 구매했나요?</div>'+
+      '<div class="sh-sec">소재 <span class="opt-badge">선택</span></div>'+
+      '<div class="sh-pad tiles c2">'+MATCATS.map(function(m,i){
+        return '<button type="button" class="tile row2'+(i===state.cat?" on":"")+'" data-cat="'+i+'"><span class="em">'+m.e+'</span><b>'+m.name+'</b></button>';
+      }).join("")+'</div>'+ subs +
+      '<div class="sh-sec">어디서 구매했나요? <span class="opt-badge">선택</span></div>'+
       '<div class="sh-pad"><div class="seg2"><button type="button" data-buy="online" class="'+(state.buy==="online"?"on":"")+'">🌐 온라인</button>'+
       '<button type="button" data-buy="offline" class="'+(state.buy==="offline"?"on":"")+'">🏪 오프라인 매장</button></div></div>'+
       '<div class="sh-pad tiles c2" style="margin-top:7px">'+w.map(function(x,i){
-        return '<button type="button" class="tile row2'+(i===state.where?" on":"")+'" data-where="'+i+'"><span class="em">'+x.e+'</span><span class="tx"><b>'+x.name+'</b></span></button>';
+        return '<button type="button" class="tile row2'+(i===state.where?" on":"")+'" data-where="'+i+'"><span class="em">'+x.e+'</span><b>'+x.name+'</b></button>';
       }).join("")+'</div>'+
-      '<button type="button" class="cta sh-done" data-done="1">선택 완료</button>';
+      '<button type="button" class="cta sh-done" data-done="1"'+(state.rim===null?" disabled":"")+'>'+(state.rim===null?"테 모양을 골라 주세요":"선택 완료")+'</button>';
   }
-  function applyFrame(){
-    $("frameName").textContent = frameLabel();
-    $("frameWhere").textContent = (state.buy==="online"?"온라인":"오프라인") + " · " + WHERE[state.buy][state.where].name;
-    $("frameIcon").className = "glasses " + RIMS[state.rim].cls;
-  }
-  function closeFrameSheet(){ $("frameSheet").classList.remove("show"); $("dim1").classList.remove("show"); }
   $("frameCell").addEventListener("click", function(){
-    renderFrameSheet(); $("dim1").classList.add("show"); $("frameSheet").classList.add("show"); setStep(2);
+    renderSearch(); renderFrameSheet(); openSheet("frameSheet"); setStep(1);
+  });
+  $("fsearch").addEventListener("input", renderSearch);
+  $("facResults").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.clear){ state.model = null; renderSearch(); updateS1(); return; }
+    var m = MODELS[+b.dataset.model];
+    state.model = m; state.rim = m.rim; state.cat = m.cat; state.sub = m.sub;
+    $("fsearch").value = "";
+    renderSearch(); renderFrameSheet(); updateS1();
+    toast(1, m.model+" 정보를 불러왔어요");
   });
   $("frameBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.done){ if(state.rim===null) return; closeSheets1(); toast(1,"프레임 정보를 저장했어요"); return; }
+    var manual = b.dataset.rim || b.dataset.cat || b.dataset.sub;
     if(b.dataset.rim) state.rim = +b.dataset.rim;
-    if(b.dataset.mat) state.mat = +b.dataset.mat;
-    if(b.dataset.buy){ if(state.buy!==b.dataset.buy){ state.buy = b.dataset.buy; state.where = 0; } }
+    if(b.dataset.cat){ var nc = +b.dataset.cat; if(nc!==state.cat){ state.cat = nc; state.sub = -1; } }
+    if(b.dataset.sub) state.sub = +b.dataset.sub;
+    if(b.dataset.buy && state.buy!==b.dataset.buy){ state.buy = b.dataset.buy; state.where = 0; }
     if(b.dataset.where) state.where = +b.dataset.where;
-    applyFrame();
-    if(b.dataset.done){ closeFrameSheet(); toast(1,"프레임 정보를 저장했어요"); return; }
-    renderFrameSheet();
+    if(manual && state.model) { state.model = null; renderSearch(); }
+    renderFrameSheet(); updateS1();
   });
-  $("regionCell").addEventListener("click", function(){ renderMenu("region"); openSheet(1); setStep(3); });
-  $("btnMenu").addEventListener("click", function(){ renderMenu("main"); openSheet(1); });
-  $("dim1").addEventListener("click", function(){ closeSheet(1); closeFrameSheet(); });
+
+  /* ----- 지역 · 메뉴 ----- */
+  $("regionCell").addEventListener("click", function(){ renderMenu("region"); openSheet("menu1"); setStep(3); });
+  $("btnMenu").addEventListener("click", function(){ renderMenu("main"); openSheet("menu1"); });
+  $("dim1").addEventListener("click", closeSheets1);
   $("btnHome").addEventListener("click", function(){
     $("s1scroll").scrollTo({top:0, behavior:"smooth"});
     $("top").scrollIntoView({behavior:"smooth"});
     setStep(0);
   });
   $("btnFind").addEventListener("click", function(){
+    if(state.rim===null){ toast(1,"테 모양을 먼저 알려 주세요"); return; }
     if(state.region!==0){ toast(1,"이 지역은 아직 준비 중이에요"); return; }
-    renderList(true); setStep(4); go(2);
+    renderList(true); renderDetail(); setStep(4); go(2);
   });
 
   function renderMenu(kind){
@@ -805,27 +992,27 @@
     if(kind==="region"){
       b.innerHTML = '<div style="font-size:13px;font-weight:700;padding:4px 12px 6px">지역 선택</div>' +
         REGIONS.map(function(r,i){
-          return '<button class="menu-item'+(i===0?'':' ')+'" data-r="'+i+'">'+
-            '<span class="pin" style="'+(i===state.region?'':'background:#c3cde0')+'"></span>'+r+
+          return '<button class="menu-item" data-r="'+i+'"><span class="pin" style="'+(i===state.region?'':'background:#c3cde0')+'"></span>'+r+
             '<span class="sub">'+(i===0?'이용 가능':'준비 중')+'</span></button>';
         }).join("");
       b.querySelectorAll("[data-r]").forEach(function(btn){
         btn.addEventListener("click", function(){
           state.region = +btn.dataset.r;
           $("regionName").textContent = REGIONS[state.region];
-          closeSheet(1); updateS1();
+          closeSheets1(); updateS1();
           if(state.region!==0) toast(1,"이 지역은 아직 준비 중이에요");
         });
       });
     }else{
+      var likedN = Object.keys(state.liked).filter(function(k){return state.liked[k];}).length;
       b.innerHTML =
         '<button class="menu-item" data-a="list"><span>🗺️</span>매장 목록 보기</button>'+
         '<button class="menu-item" data-a="detail"><span>🏬</span>최근 본 매장<span class="sub">'+shopById(state.selected).name+'</span></button>'+
-        '<button class="menu-item" data-a="liked"><span>♡</span>저장한 안경원<span class="sub">'+Object.keys(state.liked).filter(function(k){return state.liked[k];}).length+'곳</span></button>'+
+        '<button class="menu-item" data-a="liked"><span>♡</span>저장한 안경원<span class="sub">'+likedN+'곳</span></button>'+
         '<button class="menu-item" data-a="reset"><span>↺</span>조건 초기화</button>';
       b.querySelectorAll("[data-a]").forEach(function(btn){
         btn.addEventListener("click", function(){
-          var a = btn.dataset.a; closeSheet(1);
+          var a = btn.dataset.a; closeSheets1();
           if(a==="list"){ renderList(false); setStep(4); go(2); }
           if(a==="detail"){ renderDetail(); setStep(5); go(3); }
           if(a==="liked"){
@@ -839,22 +1026,16 @@
     }
   }
   function resetS1(){
-    document.querySelectorAll("#procs .opt, #rx .chip").forEach(function(e){ e.classList.remove("on"); });
-    state.rim = 2; state.mat = 1; state.buy = "online"; state.where = 0; applyFrame();
-    state.rxKnow = true; state.measure = false;
-    state.region = 0; $("regionName").textContent = REGIONS[0];
+    var keep = {sort:state.sort, selected:state.selected, liked:state.liked, photo:state.photo, shareRx:false};
+    state = INIT(); for(var k in keep) state[k] = keep[k];
+    state.rim = null; state.cat = null; state.sub = -1; state.rxMode = null;
+    $("regionName").textContent = REGIONS[0];
     $("s1scroll").scrollTo({top:0, behavior:"smooth"});
-    setStep(1); updateS1(); renderList(false);
+    setStep(1); renderFuncs(); updateS1(); renderList(false);
   }
 
-  /* ---------- 화면 2 ---------- */
+  /* ================= 화면 2 ================= */
   function shopById(id){ return SHOPS.filter(function(s){return s.id===id;})[0]; }
-  function wanted(){
-    var rx = onList("rx").filter(function(v){ return v==="고도수"||v==="고난시"; });
-    var w = onList("procs").concat(rx);
-    if(state.measure && (onList("rx").indexOf("모름")>-1 || (rx.length && !state.rxKnow))) w.push("도수 측정");
-    return w;
-  }
   function matches(){
     var w = wanted();
     var list = SHOPS.filter(function(s){ return w.every(function(v){ return s.caps.indexOf(v)>-1; }); });
@@ -866,7 +1047,7 @@
   }
   function renderList(autoSelect){
     var w = wanted(), list = matches();
-    $("pills").innerHTML = (w.length? w : ["조건 없음"]).map(function(v){ return '<span class="mini">'+v+'</span>'; }).join("");
+    $("pills").innerHTML = (w.length? w.map(capName) : ["조건 없음"]).map(function(v){ return '<span class="mini">'+v+'</span>'; }).join("");
     $("countTitle").textContent = "조건에 맞는 안경원 "+list.length+"곳";
     $("btnSort").textContent = (state.sort==="dist"?"거리순":"가공 많은순")+" ▾";
 
@@ -888,15 +1069,17 @@
     });
 
     if(!list.length){
-      $("list").innerHTML = '<div class="empty"><b>조건에 맞는 안경원이 없어요</b>가공 유형을 조금 줄여 보세요.<br><button type="button" id="emptyEdit">조건 바꾸기</button></div>';
+      $("list").innerHTML = '<div class="empty"><b>조건에 맞는 안경원이 없어요</b>렌즈 기능을 조금 줄여 보세요.<br><button type="button" id="emptyEdit">조건 바꾸기</button></div>';
       $("emptyEdit").addEventListener("click", function(){ setStep(1); go(1); });
       return;
     }
     $("list").innerHTML = list.map(function(s){
-      var tags = s.caps.filter(function(c){ return c!=="일반"; }).slice(0,4).map(function(c){
-        return '<span class="tag '+(w.indexOf(c)>-1?"ok":"")+'">'+c+'</span>';
+      var first = w.filter(function(c){ return s.caps.indexOf(c)>-1; });
+      var rest = s.caps.filter(function(c){ return w.indexOf(c)<0 && c!=="도수 렌즈"; });
+      var tags = first.concat(rest).slice(0,4).map(function(c){
+        return '<span class="tag '+(w.indexOf(c)>-1?"ok":"")+'">'+capName(c)+'</span>';
       }).join("");
-      if(s.ship) tags += '<span class="tag ship">배송 가능</span>';
+      if(s.ship) tags += '<span class="tag ship">방문 후 택배 수령</span>';
       return '<div class="shop tap'+(s.id===state.selected?" sel":"")+'" data-id="'+s.id+'">'+
         '<div class="thumb">'+s.id+'</div><div class="info-col">'+
         '<div class="nm">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+(state.liked[s.id]?' <span style="color:#e11d48">♥</span>':'')+'</div>'+
@@ -922,23 +1105,25 @@
     toast(2,"현재 위치: 홍대입구역 근처 (예시)");
   });
 
-  /* ---------- 화면 3 ---------- */
+  /* ================= 화면 3 ================= */
   function renderDetail(){
     var s = shopById(state.selected), w = wanted();
-    var caps = ALL_PROCS.concat(["고도수","고난시","도수 측정"]).map(function(c){
+    var caps = CAP_ORDER.map(function(c){
       var ok = s.caps.indexOf(c)>-1;
-      return '<div class="cap'+(ok?"":" no")+(ok&&w.indexOf(c)>-1?" want":"")+'"><span class="ck">'+(ok?"✓":"–")+'</span>'+c+'</div>';
+      return '<div class="cap'+(ok?"":" no")+(ok&&w.indexOf(c)>-1?" want":"")+'"><span class="ck">'+(ok?"✓":"–")+'</span>'+capName(c)+'</div>';
     }).join("");
     $("detail").innerHTML =
       '<div class="title">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+'</div>'+
       '<div class="desc">'+s.desc+'</div>'+
-      '<div class="summary"><span class="tag ok">'+s.dist+'km</span><span class="tag '+(s.open?"ok":"closed")+'">'+(s.open?"영업 중":"영업 종료")+'</span>'+(s.ship?'<span class="tag ship">배송 가능</span>':'<span class="tag closed">방문 수령</span>')+'</div>'+
+      '<div class="summary"><span class="tag ok">'+s.dist+'km</span><span class="tag '+(s.open?"ok":"closed")+'">'+(s.open?"영업 중":"영업 종료")+'</span>'+
+        (s.ship?'<span class="tag ship">방문 결제 후 택배 수령</span>':'<span class="tag closed">매장 방문 수령</span>')+'</div>'+
       '<div class="group-title">가공 가능 항목</div><div class="group caps">'+caps+'</div>'+
       '<div class="group-title">외부 프레임 정책 · 작업 기간</div><div class="group">'+
         '<div class="cell"><span class="k">외부 프레임</span><span class="v">가공 가능</span></div>'+
         '<div class="cell"><span class="k">방문 전 확인</span><span class="v">연락 권장</span></div>'+
         '<div class="cell"><span class="k">예상 작업 기간</span><span class="v">'+s.period+'</span></div>'+
-        '<div class="cell"><span class="k">완성품 배송</span><span class="v">'+(s.ship?"가능":"불가 · 방문 수령")+'</span></div></div>'+
+        '<div class="cell"><span class="k">완성품 수령</span><span class="v">'+(s.ship?"방문 결제 후 택배 가능":"매장 방문 수령")+'</span></div></div>'+
+      '<div class="policy-note">온라인 주문·결제는 받지 않아요. 상담·도수 확인·결제는 매장 방문 시 진행돼요.</div>'+
       '<div class="group-title">위치 · 영업 정보</div><div class="group">'+
         '<div class="cell"><span class="k">주소</span><span class="v">'+s.addr+'</span></div>'+
         '<div class="cell"><span class="k">영업시간</span><span class="v">'+s.hours+'</span></div>'+
@@ -962,24 +1147,43 @@
       $("dots").querySelectorAll("i").forEach(function(d,i){ d.classList.toggle("on", i===state.photo); });
     });
   });
-  $("btnAsk").addEventListener("click", function(){
-    var s = shopById(state.selected), w = wanted();
+
+  /* 문의하기: 도수는 민감정보 → 별도 동의한 경우에만 포함 */
+  function hasRxValues(){ return state.rxMode==="have" && state.rxKnow; }
+  function renderAsk(){
+    var s = shopById(state.selected);
+    var parts = [frameLabel()].concat(state.funcs);
+    var rxLine = "";
+    if(hasRxValues()){
+      var R = state.rxv.R, L = state.rxv.L;
+      rxLine = '<button type="button" class="act'+(state.shareRx?" on":"")+'" data-a="share"><span class="ic">🔒</span>'+
+        '<span class="t">도수 정보도 함께 보내기 <span style="color:var(--faint);font-weight:400">(선택)</span>'+
+        '<small>도수는 민감정보예요. 동의하면 이 매장에만 이번 문의에 한해 전달돼요.</small>'+
+        (state.shareRx?'<small style="color:var(--main)">R '+fmt("sph",R.sph)+' / '+fmt("cyl",R.cyl)+' · L '+fmt("sph",L.sph)+' / '+fmt("cyl",L.cyl)+'</small>':'')+
+        '</span><span class="tg"></span></button>';
+    }
     $("askBody").innerHTML =
       '<div style="font-size:13px;font-weight:700;padding:4px 12px 2px">'+s.name+'에 문의하기</div>'+
-      '<div style="font-size:11px;color:var(--sub);padding:0 12px 8px">보낼 내용: '+frameLabel()+' · '+(w.join(", ")||"조건 없음")+'</div>'+
+      '<div style="font-size:11px;color:var(--sub);padding:0 12px 4px">보낼 내용: '+parts.join(" · ")+'</div>'+
+      '<div style="padding:0 4px">'+rxLine+'</div>'+
       '<button class="menu-item" data-a="call"><span>📞</span>전화 문의</button>'+
       '<button class="menu-item" data-a="msg"><span>💬</span>메시지로 가공 가능 여부 묻기</button>'+
       '<button class="menu-item" data-a="close"><span>✕</span>닫기</button>';
-    $("askBody").querySelectorAll("[data-a]").forEach(function(btn){
-      btn.addEventListener("click", function(){
-        closeSheet(3);
-        if(btn.dataset.a==="call") toast(3,"예시 매장이라 전화는 연결되지 않아요");
-        if(btn.dataset.a==="msg") toast(3,"문의를 보냈어요 (예시)");
-      });
-    });
-    openSheet(3);
+  }
+  $("btnAsk").addEventListener("click", function(){
+    state.shareRx = false; renderAsk();
+    $("dim3").classList.add("show"); $("menu3").classList.add("show");
   });
-  $("dim3").addEventListener("click", function(){ closeSheet(3); });
+  function closeAsk(){ $("dim3").classList.remove("show"); $("menu3").classList.remove("show"); }
+  $("askBody").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    var a = b.dataset.a;
+    if(a==="share"){ state.shareRx = !state.shareRx; renderAsk(); return; }
+    closeAsk();
+    if(a==="call") toast(3,"예시 매장이라 전화는 연결되지 않아요");
+    if(a==="msg") toast(3, hasRxValues() ? (state.shareRx ? "도수를 포함해 문의를 보냈어요 (예시)" : "도수는 빼고 문의를 보냈어요 (예시)") : "문의를 보냈어요 (예시)");
+  });
+  $("dim3").addEventListener("click", closeAsk);
   $("btnRoute").addEventListener("click", function(){
     var s = shopById(state.selected);
     setStep(5);
@@ -990,8 +1194,8 @@
     }, 500);
   });
 
-  /* ---------- 시작 ---------- */
-  updateS1(); renderList(true); renderDetail();
+  /* ================= 시작 ================= */
+  renderFuncs(); updateS1(); renderList(true); renderDetail();
 })();
 </script>
 </body>
