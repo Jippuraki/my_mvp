@@ -403,6 +403,28 @@
   .cap.want{font-weight:700}
   .policy-note{font-size:10px;color:var(--faint);margin:6px 4px 0;line-height:1.45}
 
+  /* ===== 예상 비용 ===== */
+  .price{background:var(--glass-strong);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:0 2px 10px rgba(30,64,175,.06)}
+  .pspec{padding-bottom:10px;margin-bottom:10px;border-bottom:.5px solid var(--sep)}
+  .plbl{font-size:10.5px;font-weight:600;color:var(--faint);margin:2px 0 5px}
+  .plbl + .pchips{margin-bottom:8px}
+  .pchips{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:5px}
+  .pc{position:relative;border:1px solid var(--line);background:rgba(255,255,255,.85);border-radius:9px;padding:6px 2px;font-size:11.5px;color:#24314d;white-space:nowrap}
+  .pc.on{background:var(--main);border-color:var(--main);color:#fff;font-weight:700}
+  .pc i{position:absolute;top:-7px;right:-3px;font-style:normal;font-size:8px;font-weight:700;background:#0ea5e9;color:#fff;border-radius:999px;padding:0 4px;line-height:13px}
+  .pnote{font-size:10px;color:var(--faint);line-height:1.45}
+  .preset{border:0;background:transparent;color:var(--main);font-size:10.5px;font-weight:700;padding:2px 0}
+  .pl{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:var(--sub);padding:3px 0}
+  .pl span:last-child{color:var(--ink);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .pl.tot{margin-top:5px;padding-top:8px;border-top:.5px solid var(--sep);font-size:13px;color:var(--ink);font-weight:700}
+  .pl.tot span:last-child{color:var(--main);font-weight:800}
+  .pfoot{font-size:9.5px;color:var(--faint);margin-top:8px;line-height:1.45}
+  .fp{color:var(--main);font-weight:600}
+  .pline{font-size:11px;font-weight:700;color:var(--ink);margin:-3px 0 6px}
+  .pline span{color:var(--main)}
+  .cell.tot .k{color:var(--ink);font-weight:700}
+  .cell.tot .v{color:var(--main);font-weight:800}
+
   footer{text-align:center;margin-top:44px;padding-top:20px;border-top:1px solid rgba(37,99,235,.18);font-size:13px;color:var(--sub)}
 
   @media (max-width:1020px){ .screens{grid-template-columns:1fr} }
@@ -493,6 +515,10 @@
             <!-- 3. 렌즈 기능 -->
             <div class="group-title">원하는 렌즈 기능 <span class="opt-badge">선택</span></div>
             <div class="funcs" id="funcs"></div>
+
+            <!-- 예상 비용 -->
+            <div class="group-title">예상 비용 미리보기 <span class="opt-badge">참고</span></div>
+            <div class="price" id="priceCard"></div>
 
             <!-- 4. 지역 -->
             <div class="group-title">지역 <span class="req">필수</span></div>
@@ -644,15 +670,18 @@
     { id:"A", name:"렌즈공방 홍대점", verified:true, dist:0.3, open:true, x:27, y:44,
       addr:"마포구 예시로 12, 1층", hours:"월–토 10:00–20:00", off:"일요일", period:"2 ~ 5일", ship:true,
       desc:"무테·고난시 가공 경험이 많은 동네 안경원 (예시)",
-      caps:["도수 렌즈","무테","하금·반무테","틴팅","변색","블루라이트","고도수","고난시","도수 측정"] },
+      caps:["도수 렌즈","무테","하금·반무테","틴팅","변색","블루라이트","고도수","고난시","도수 측정"],
+      mul:1.0, outside:[1,1.5], drill:[1,2], groove:[0.5,1], priceDate:"2026.09.22", stale:false },
     { id:"B", name:"연남 아이랩", verified:false, dist:0.6, open:true, x:58, y:36,
       addr:"마포구 예시로 45, 2층", hours:"매일 11:00–21:00", off:"없음", period:"1 ~ 3일", ship:false,
       desc:"컬러 틴팅과 편광 렌즈를 자주 다루는 안경원 (예시)",
-      caps:["도수 렌즈","무테","틴팅","편광","변색","블루라이트","고도수"] },
+      caps:["도수 렌즈","무테","틴팅","편광","변색","블루라이트","고도수"],
+      mul:0.9, outside:[0,0], drill:[1.5,2.5], groove:null, priceDate:"2026.08.20", stale:true },
     { id:"C", name:"신촌 글라스웍스", verified:true, dist:1.1, open:false, x:72, y:60,
       addr:"서대문구 예시로 88, 1층", hours:"화–일 10:30–19:30", off:"월요일", period:"3 ~ 7일", ship:true,
       desc:"하금·미러·천연 소재 테 등 특수 가공을 전문으로 하는 작업실 (예시)",
-      caps:["도수 렌즈","무테","하금·반무테","미러","편광","블루라이트","고도수","고난시","도수 측정","천연 소재","빈티지 테"] }
+      caps:["도수 렌즈","무테","하금·반무테","미러","편광","블루라이트","고도수","고난시","도수 측정","천연 소재","빈티지 테"],
+      mul:1.15, outside:[1,2], drill:[1,1.5], groove:[0.5,1], priceDate:"2026.09.15", stale:false }
   ];
   var CAP_ORDER = ["도수 렌즈","무테","하금·반무테","고도수","고난시","도수 측정","틴팅","미러","편광","변색","블루라이트","천연 소재"];
   var CAP_LABEL = {"무테":"무테 가공","하금·반무테":"하금 가공","천연 소재":"천연 소재 테","빈티지 테":"빈티지 테"};
@@ -703,11 +732,21 @@
   ];
   var REGIONS = ["홍대 · 연남 · 신촌","합정 · 망원","이대 · 아현"];
 
+  /* 시연용 가상 가격 (단위: 만 원, 렌즈 한 쌍) — 실제 시세 아님 */
+  var LENS_PRICE = {
+    "1.56":{"구면":[3,5],"비구면":[4,7],"양면비구면":[8,14]},
+    "1.60":{"구면":[5,8],"비구면":[6,12],"양면비구면":[12,20]},
+    "1.67":{"구면":[8,12],"비구면":[10,18],"양면비구면":[18,30]},
+    "1.74":{"구면":[16,24],"비구면":[18,28],"양면비구면":[28,45]}
+  };
+  var NOPOWER_PRICE = [2,4];
+  var FUNC_PRICE = {"틴팅":[1,3],"미러":[3,6],"편광":[5,10],"변색":[6,12],"블루라이트":[1,3]};
+
   var INIT = function(){ return {
     rim:2, cat:1, sub:0, model:null, buy:"online", where:0,
     rxMode:"have", rxKnow:true, eye:"R", pd:63, measure:false,
     rxv:{ R:{sph:-6.50, cyl:-2.25, axis:180}, L:{sph:-6.25, cyl:-2.00, axis:175} },
-    funcs:[], region:0 }; };
+    funcs:[], region:0, pIdx:null, pDesign:null }; };
   var state = INIT();
   state.sort = "dist"; state.selected = "A"; state.liked = {}; state.photo = 0; state.shareRx = false;
 
@@ -761,6 +800,80 @@
     return w.concat(state.funcs);
   }
 
+  /* ================= 예상 비용 ================= */
+  function recommend(){
+    var m = maxRx();
+    return {
+      idx: m.sph<2 ? "1.56" : m.sph<4 ? "1.60" : m.sph<6 ? "1.67" : "1.74",
+      design: (m.sph>=6 || m.cyl>=2) ? "양면비구면" : (m.sph>=2 || m.cyl>=1) ? "비구면" : "구면"
+    };
+  }
+  function lensSpec(){
+    if(state.rxMode==="none") return {none:true};
+    var rec = (state.rxMode==="have" && state.rxKnow) ? recommend() : null;
+    return { idx: state.pIdx || (rec ? rec.idx : "1.60"), design: state.pDesign || (rec ? rec.design : "비구면"), rec: rec };
+  }
+  function won(x){
+    x = x>=10 ? Math.round(x) : Math.round(x*2)/2;
+    if(x===0) return "0";
+    if(x<1) return (x*10)+"천";
+    return (x%1 ? x.toFixed(1) : x)+"만";
+  }
+  function range(lo,hi){
+    if(hi===0) return "무료";
+    if(Math.round(lo*2)===Math.round(hi*2)) return won(lo)+" 원";
+    return won(lo)+"~"+won(hi)+" 원";
+  }
+  function across(key){
+    var lo = Infinity, hi = 0;
+    SHOPS.forEach(function(s){ if(s[key]){ lo = Math.min(lo, s[key][0]); hi = Math.max(hi, s[key][1]); } });
+    return [lo, hi];
+  }
+  /* shop이 없으면 지역 전체 범위, 있으면 그 매장이 등록한 가격 */
+  function costItems(shop){
+    var sp = lensSpec(), items = [];
+    function scaled(r){ return shop ? [r[0]*shop.mul, r[1]*shop.mul] : [r[0]*0.9, r[1]*1.15]; }
+    if(sp.none) items.push({k:"무도수 렌즈", r:scaled(NOPOWER_PRICE)});
+    else items.push({k:sp.idx+" "+sp.design+" 렌즈", r:scaled(LENS_PRICE[sp.idx][sp.design])});
+    state.funcs.forEach(function(f){ items.push({k:f+" 추가", r:scaled(FUNC_PRICE[f])}); });
+    if(state.rim!==null){
+      var job = RIMS[state.rim].job;
+      if(job==="무테") items.push({k:"구멍 뚫기 가공", r: shop ? shop.drill : across("drill")});
+      if(job==="하금·반무테") items.push({k:"홈파기 가공", r: shop ? (shop.groove || [0,0]) : across("groove")});
+    }
+    items.push({k:"외부 테 가공비", r: shop ? shop.outside : across("outside")});
+    var lo = 0, hi = 0;
+    items.forEach(function(i){ lo += i.r[0]; hi += i.r[1]; });
+    return {items:items, total:[lo,hi]};
+  }
+  function renderPrice(){
+    var sp = lensSpec(), c = costItems(null), h = "";
+    if(!sp.none){
+      h += '<div class="pspec"><div class="plbl">굴절률</div><div class="pchips">'+
+        ["1.56","1.60","1.67","1.74"].map(function(i){
+          return '<button type="button" class="pc'+(i===sp.idx?" on":"")+'" data-pidx="'+i+'">'+i+(sp.rec && sp.rec.idx===i ? '<i>추천</i>' : '')+'</button>';
+        }).join("")+'</div>'+
+        '<div class="plbl">렌즈 설계</div><div class="pchips">'+
+        ["구면","비구면","양면비구면"].map(function(d){
+          return '<button type="button" class="pc'+(d===sp.design?" on":"")+'" data-pdes="'+d+'">'+d+(sp.rec && sp.rec.design===d ? '<i>추천</i>' : '')+'</button>';
+        }).join("")+'</div>';
+      if(!sp.rec) h += '<div class="pnote">도수 값을 입력하면 맞는 사양을 추천해 드려요. 지금은 많이 쓰는 사양 기준이에요.</div>';
+      else if(state.pIdx || state.pDesign) h += '<button type="button" class="preset" data-preset="1">↺ 추천 사양으로 되돌리기</button>';
+      h += '</div>';
+    }
+    h += c.items.map(function(i){ return '<div class="pl"><span>'+i.k+'</span><span>'+range(i.r[0],i.r[1])+'</span></div>'; }).join("")+
+      '<div class="pl tot"><span>예상 합계</span><span>'+range(c.total[0],c.total[1])+'</span></div>'+
+      '<div class="pfoot">이 지역 매장들이 직접 등록한 가격의 범위예요 (시연용 가상 가격). 매장별 예상가는 목록에서 볼 수 있고, 실제 가격은 도수·렌즈 브랜드·프레임 상태에 따라 매장 상담 후 정해져요.</div>';
+    $("priceCard").innerHTML = h;
+  }
+  $("priceCard").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.pidx) state.pIdx = b.dataset.pidx;
+    if(b.dataset.pdes) state.pDesign = b.dataset.pdes;
+    if(b.dataset.preset){ state.pIdx = null; state.pDesign = null; }
+    setStep(2); renderPrice();
+  });
+
   /* ================= 화면 1 ================= */
   function renderFrameCell(){
     $("frameName").textContent = frameLabel();
@@ -782,7 +895,7 @@
     $("funcs").innerHTML = FUNCS.map(function(f){
       var on = state.funcs.indexOf(f.k)>-1;
       return '<div class="func tap'+(on?" on":"")+'" data-k="'+f.k+'"><span class="sw '+f.sw+'"></span>'+
-        '<span class="tx"><b>'+f.k+'</b><small>'+f.d+'</small></span><span class="box"></span></div>';
+        '<span class="tx"><b>'+f.k+'</b><small>'+f.d+' · <span class="fp">+'+range(FUNC_PRICE[f.k][0],FUNC_PRICE[f.k][1])+'</span></small></span><span class="box"></span></div>';
     }).join("");
   }
   $("funcs").addEventListener("click", function(e){
@@ -804,7 +917,7 @@
       : frameLabel()+" · "+rxTxt+(state.funcs.length?" · 기능 "+state.funcs.length+"개":"")+" · "+REGIONS[state.region].replace(/ /g,"");
     $("btnFind").disabled = state.rim===null;
     $("rxMode").querySelectorAll(".chip").forEach(function(c){ c.classList.toggle("on", c.dataset.v===state.rxMode); });
-    renderFrameCell(); renderRx();
+    renderFrameCell(); renderRx(); renderPrice();
   }
 
   /* ----- 도수 ----- */
@@ -1041,6 +1154,7 @@
     var list = SHOPS.filter(function(s){ return w.every(function(v){ return s.caps.indexOf(v)>-1; }); });
     list.sort(function(a,b){
       if(state.sort==="dist") return a.dist-b.dist;
+      if(state.sort==="price") return costItems(a).total[0]-costItems(b).total[0] || a.dist-b.dist;
       return b.caps.length-a.caps.length || a.dist-b.dist;
     });
     return list;
@@ -1049,7 +1163,7 @@
     var w = wanted(), list = matches();
     $("pills").innerHTML = (w.length? w.map(capName) : ["조건 없음"]).map(function(v){ return '<span class="mini">'+v+'</span>'; }).join("");
     $("countTitle").textContent = "조건에 맞는 안경원 "+list.length+"곳";
-    $("btnSort").textContent = (state.sort==="dist"?"거리순":"가공 많은순")+" ▾";
+    $("btnSort").textContent = SORT_LABEL[state.sort]+" ▾";
 
     if(list.length && (autoSelect || !list.some(function(s){return s.id===state.selected;}))) state.selected = list[0].id;
 
@@ -1084,6 +1198,7 @@
         '<div class="thumb">'+s.id+'</div><div class="info-col">'+
         '<div class="nm">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+(state.liked[s.id]?' <span style="color:#e11d48">♥</span>':'')+'</div>'+
         '<div class="meta">'+s.dist+'km · '+(s.open?"영업 중":"영업 종료")+' · '+s.addr.split(",")[0]+'</div>'+
+        (function(){ var t = costItems(s).total; return '<div class="pline">예상 <span>'+range(t[0],t[1])+'</span></div>'; })()+
         '<div class="tags">'+tags+'</div></div><span class="chev">›</span></div>';
     }).join("");
     $("list").querySelectorAll(".shop").forEach(function(c){
@@ -1095,10 +1210,13 @@
   }
   $("back2").addEventListener("click", function(){ setStep(1); go(1); });
   $("editCond").addEventListener("click", function(){ setStep(1); go(1); });
+  var SORT_LABEL = {dist:"거리순", price:"예상가 낮은순", caps:"가공 많은순"};
+  var SORT_NEXT = {dist:"price", price:"caps", caps:"dist"};
+  var SORT_TOAST = {dist:"가까운 순으로 정렬했어요", price:"예상 비용이 낮은 순으로 정렬했어요", caps:"가공 가능 항목이 많은 순으로 정렬했어요"};
   $("btnSort").addEventListener("click", function(){
-    state.sort = state.sort==="dist" ? "caps" : "dist";
+    state.sort = SORT_NEXT[state.sort];
     renderList(false);
-    toast(2, state.sort==="dist" ? "가까운 순으로 정렬했어요" : "가공 가능 항목이 많은 순으로 정렬했어요");
+    toast(2, SORT_TOAST[state.sort]);
   });
   $("btnLocate").addEventListener("click", function(){
     var me = $("me"); me.classList.remove("ping"); void me.offsetWidth; me.classList.add("ping");
@@ -1118,6 +1236,15 @@
       '<div class="summary"><span class="tag ok">'+s.dist+'km</span><span class="tag '+(s.open?"ok":"closed")+'">'+(s.open?"영업 중":"영업 종료")+'</span>'+
         (s.ship?'<span class="tag ship">방문 결제 후 택배 수령</span>':'<span class="tag closed">매장 방문 수령</span>')+'</div>'+
       '<div class="group-title">가공 가능 항목</div><div class="group caps">'+caps+'</div>'+
+      (function(){
+        var c = costItems(s);
+        return '<div class="group-title">예상 비용 <span class="opt-badge">내 조건 기준</span></div><div class="group">'+
+          c.items.map(function(i){ return '<div class="cell"><span class="k">'+i.k+'</span><span class="v">'+range(i.r[0],i.r[1])+'</span></div>'; }).join("")+
+          '<div class="cell tot"><span class="k">예상 합계</span><span class="v">'+range(c.total[0],c.total[1])+'</span></div></div>'+
+          '<div class="policy-note">매장이 직접 등록한 가격 · 등록일 '+s.priceDate+
+          (s.stale ? ' · <b style="color:var(--warn)">한 달 넘게 갱신되지 않아 달라졌을 수 있어요</b>' : '')+
+          '<br>실제 가격은 상담 후 확정돼요. 앱에서는 결제·할인·예약을 받지 않아요.</div>';
+      })()+
       '<div class="group-title">외부 프레임 정책 · 작업 기간</div><div class="group">'+
         '<div class="cell"><span class="k">외부 프레임</span><span class="v">가공 가능</span></div>'+
         '<div class="cell"><span class="k">방문 전 확인</span><span class="v">연락 권장</span></div>'+
@@ -1168,6 +1295,7 @@
       '<div style="padding:0 4px">'+rxLine+'</div>'+
       '<button class="menu-item" data-a="call"><span>📞</span>전화 문의</button>'+
       '<button class="menu-item" data-a="msg"><span>💬</span>메시지로 가공 가능 여부 묻기</button>'+
+      '<button class="menu-item" data-a="quote"><span>💰</span>이 조건으로 정확한 견적 묻기<span class="sub">예상 '+(function(){ var t = costItems(s).total; return range(t[0],t[1]); })()+'</span></button>'+
       '<button class="menu-item" data-a="close"><span>✕</span>닫기</button>';
   }
   $("btnAsk").addEventListener("click", function(){
@@ -1181,6 +1309,7 @@
     if(a==="share"){ state.shareRx = !state.shareRx; renderAsk(); return; }
     closeAsk();
     if(a==="call") toast(3,"예시 매장이라 전화는 연결되지 않아요");
+    if(a==="quote") toast(3,"견적 문의를 보냈어요 (예시)");
     if(a==="msg") toast(3, hasRxValues() ? (state.shareRx ? "도수를 포함해 문의를 보냈어요 (예시)" : "도수는 빼고 문의를 보냈어요 (예시)") : "문의를 보냈어요 (예시)");
   });
   $("dim3").addEventListener("click", closeAsk);
