@@ -236,6 +236,13 @@
   .seg2 button{border:0;background:transparent;border-radius:8px;padding:7px 4px;font-size:12px;color:var(--sub)}
   .seg2 button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 4px rgba(15,27,51,.12)}
   .seg2.c3{grid-template-columns:repeat(3,1fr)}
+  .seg2.sm{grid-template-columns:repeat(auto-fit,minmax(0,1fr))}
+  .seg2.sm button{font-size:11px;padding:6px 2px}
+  .rxsub{margin-top:12px}
+  .rxsub-t{font-size:11px;font-weight:700;color:var(--sub);margin:0 2px 5px}
+  .rxwarn{font-size:10.5px;color:#c2410c;background:rgba(251,146,60,.14);border-radius:10px;padding:7px 10px;margin-top:8px;line-height:1.45}
+  .rxdisc{font-size:10.5px;color:var(--sub);margin:10px 2px 0;line-height:1.45}
+  .stp.need output{color:#c2410c;font-size:11px}
   .confcap{font-size:10.5px;color:var(--sub);margin:6px 4px 0;line-height:1.45}
   .eyes{display:flex;gap:6px;margin:12px 0 4px}
   .eyes button{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:999px;padding:5px;font-size:11px;color:var(--sub)}
@@ -773,8 +780,9 @@
 
   var INIT = function(){ return {
     rim:2, cat:1, sub:0, matConf:"sure", model:null, buy:"online", where:0,
-    rxMode:"have", rxKnow:true, eye:"R", pd:63, measure:false,
-    rxv:{ R:{sph:-6.50, cyl:-2.25, axis:180}, L:{sph:-6.25, cyl:-2.00, axis:175} },
+    rxMode:"have", rxKnow:true, eye:"R", pd:63, pdKnown:true, measure:false,
+    /* cylMode: "has"(난시 있음·CYL/AXIS 입력) · "none"(평도수·난시 없음) · "unknown"(몰라요) */
+    rxv:{ R:{sph:-6.50, cyl:-2.25, axis:180, cylMode:"has"}, L:{sph:-6.25, cyl:-2.00, axis:175, cylMode:"has"} },
     funcs:[], region:0, pIdx:null, pDesign:null }; };
   var state = INIT();
   state.sort = "dist"; state.selected = "A"; state.liked = {}; state.photo = 0; state.shareRx = false;
@@ -799,9 +807,24 @@
   function closeSheets1(){ $("dim1").classList.remove("show"); $("menu1").classList.remove("show"); $("frameSheet").classList.remove("show"); $("photoSheet").classList.remove("show"); }
 
   /* ================= 조건 → 필요한 능력 ================= */
+  /* 난시를 모르거나 없으면 0으로 계산해요 */
+  function cylOf(o){ return o.cylMode==="has" ? o.cyl : 0; }
   function maxRx(){
     var R = state.rxv.R, L = state.rxv.L;
-    return { sph:Math.max(Math.abs(R.sph),Math.abs(L.sph)), cyl:Math.max(Math.abs(R.cyl),Math.abs(L.cyl)) };
+    return { sph:Math.max(Math.abs(R.sph),Math.abs(L.sph)), cyl:Math.max(Math.abs(cylOf(R)),Math.abs(cylOf(L))) };
+  }
+  /* 난시(CYL)가 있는데 AXIS를 안 쓴 눈 */
+  function axisMissing(){
+    return ["R","L"].filter(function(k){ var o = state.rxv[k]; return o.cylMode==="has" && o.axis===null; });
+  }
+  function cylUnknown(){ return state.rxv.R.cylMode==="unknown" || state.rxv.L.cylMode==="unknown"; }
+  function rxHasUnknown(){ return cylUnknown() || !state.pdKnown; }
+  function rxEyeText(o){
+    var s = fmt("sph",o.sph);
+    if(o.cylMode==="has") s += " / " + fmt("cyl",o.cyl) + " AX " + (o.axis===null ? "?" : o.axis);
+    else if(o.cylMode==="none") s += " / 난시 없음";
+    else s += " / CYL 모름";
+    return s;
   }
   function matName(){
     if(state.cat===null) return "";
@@ -823,6 +846,7 @@
         var m = maxRx();
         if(m.sph>=6) w.push("고도수");
         if(m.cyl>=2) w.push("고난시");
+        if(rxHasUnknown() && state.measure) w.push("도수 측정");
       }else if(state.measure) w.push("도수 측정");
     }
     if(state.rxMode==="unknown" && state.measure) w.push("도수 측정");
@@ -941,7 +965,7 @@
     prog[1].classList.toggle("on", !!state.rxMode);
     prog[2].classList.toggle("on", state.funcs.length>0);
     prog[3].classList.toggle("on", state.region===0);
-    var rxTxt = {have: state.rxKnow ? "도수 입력" : "도수 있음", none:"무도수", unknown:"도수 모름"}[state.rxMode] || "도수 미선택";
+    var rxTxt = {have: state.rxKnow ? (axisMissing().length ? "AXIS 입력 필요" : "도수 입력") : "도수 있음", none:"무도수", unknown:"도수 모름"}[state.rxMode] || "도수 미선택";
     $("selCount").textContent = state.rim===null
       ? "테 모양을 먼저 알려 주세요"
       : frameLabel()+" · "+rxTxt+(state.funcs.length?" · 기능 "+state.funcs.length+"개":"")+" · "+REGIONS[state.region].replace(/ /g,"");
@@ -962,12 +986,12 @@
     axis:{lb:"AXIS", cap:"난시 축 · 난시 방향(0~180°)", step:5, min:0, max:180}
   };
   function fmt(f,v){
-    if(f==="axis") return v+"°";
+    if(f==="axis") return v===null ? "입력 필요" : v+"°";
     if(f==="pd") return v.toFixed(1)+"mm";
     return (v>0?"+":v<0?"−":"")+Math.abs(v).toFixed(2);
   }
   function stepRow(f,lb,cap,v){
-    return '<div class="stp"><div class="lb"><b>'+lb+'</b><span>'+cap+'</span></div>'+
+    return '<div class="stp'+(v===null?" need":"")+'"><div class="lb"><b>'+lb+'</b><span>'+cap+'</span></div>'+
       '<div class="ctl"><button type="button" data-f="'+f+'" data-d="-1" aria-label="'+lb+' 낮추기">−</button>'+
       '<output>'+fmt(f,v)+'</output>'+
       '<button type="button" data-f="'+f+'" data-d="1" aria-label="'+lb+' 높이기">+</button></div></div>';
@@ -986,13 +1010,16 @@
     if(sph >= 6 || cyl >= 2){ design = "양면비구면"; designWhy = "앞뒤 두 면을 다듬어 고도수·고난시의 주변부 왜곡을 줄여요"; }
     else if(sph >= 2 || cyl >= 1){ design = "비구면"; designWhy = "구면보다 얇고 가장자리 왜곡이 적어요"; }
     else { design = "구면 · 비구면"; designWhy = "낮은 도수라 구면도 무난하고, 더 얇게 원하면 비구면을 골라요"; }
-    var extra = (state.rim!==null && RIMS[state.rim].cls==="rimless")
-      ? '<li><b>무테 참고</b> 구멍 주변이 덜 깨지는 소재(트라이벡스·폴리카보네이트)도 함께 상담해 보세요</li>' : "";
+    var unk = [];
+    if(cylUnknown()) unk.push("난시(CYL)를 몰라서 SPH 기준으로만 안내해요");
+    if(!state.pdKnown) unk.push("PD는 매장에서 측정해요");
+    var extra = unk.map(function(t){ return '<li><b>참고</b> '+t+'</li>'; }).join("") + ((state.rim!==null && RIMS[state.rim].cls==="rimless")
+      ? '<li><b>무테 참고</b> 구멍 주변이 덜 깨지는 소재(트라이벡스·폴리카보네이트)도 함께 상담해 보세요</li>' : "");
     return '<div class="rec">'+
       '<div class="rec-h"><span>💡 내 도수에 맞는 렌즈 참고 정보</span><span class="rec-tag">참고용</span></div>'+
       '<div class="rec-chips"><span class="rec-chip"><small>굴절률</small>'+idx+(idx==="1.74"?"":" 이상")+'</span><span class="rec-chip"><small>렌즈 설계</small>'+design+'</span></div>'+
       '<ul><li><b>굴절률</b> '+idxWhy+'</li><li><b>설계</b> '+designWhy+'</li>'+extra+'</ul>'+
-      '<div class="rec-foot">입력한 도수 기준의 일반적인 안내예요. 생활 습관·프레임 크기에 따라 달라질 수 있으니 최종 선택은 매장 안경사와 상담하세요.</div>'+
+      '<div class="rec-foot">입력한 도수 기준의 일반적인 안내예요. 생활 습관·프레임 크기에 따라 달라질 수 있으니 최종 선택은 매장 안경사와 상담하세요. * 정확히 쓰지 않으면 렌즈 참고 정보는 달라질 수 있어요.</div>'+
     '</div>';
   }
   function renderRx(){
@@ -1014,10 +1041,28 @@
       var e = state.rxv[state.eye], m = maxRx();
       h += '<div class="eyes"><button type="button" data-eye="R" class="'+(state.eye==="R"?"on":"")+'">오른쪽 눈 (R)</button>'+
            '<button type="button" data-eye="L" class="'+(state.eye==="L"?"on":"")+'">왼쪽 눈 (L)</button></div>'+
-        stepRow("sph","SPH",RXF.sph.cap,e.sph)+
-        stepRow("cyl","CYL",RXF.cyl.cap,e.cyl)+
-        stepRow("axis","AXIS",RXF.axis.cap,e.axis)+
-        stepRow("pd","PD","동공 사이 거리 · 양쪽 공통",state.pd);
+        stepRow("sph","SPH",RXF.sph.cap,e.sph);
+      /* CYL: 난시가 없거나(평도수) 몰라도 괜찮아요. 있으면 AXIS는 꼭 필요해요 */
+      h += '<div class="rxsub"><div class="rxsub-t">CYL · 난시 도수</div><div class="seg2 c3 sm">'+
+        [["none","난시 없음(평도수)"],["has","값 입력"],["unknown","몰라요"]].map(function(x){
+          return '<button type="button" data-cyl="'+x[0]+'" class="'+(e.cylMode===x[0]?"on":"")+'">'+x[1]+'</button>';
+        }).join("")+'</div></div>';
+      if(e.cylMode==="has"){
+        h += stepRow("cyl","CYL",RXF.cyl.cap,e.cyl) + stepRow("axis","AXIS",RXF.axis.cap,e.axis);
+        if(e.axis===null) h += '<div class="rxwarn">⚠︎ 난시(CYL)가 있으면 AXIS도 꼭 입력해 주세요. 처방전에 AX 또는 A로 적혀 있어요.</div>';
+      }else if(e.cylMode==="none"){
+        h += '<div class="rxnote">ⓘ 난시가 없는 평도수예요. AXIS는 필요 없어요.</div>';
+      }else{
+        h += '<div class="rxnote">ⓘ CYL을 몰라도 괜찮아요. 매장에서 측정해 드려요.</div>';
+      }
+      h += '<div class="rxsub"><div class="rxsub-t">PD · 동공 사이 거리 (양쪽 공통)</div><div class="seg2 sm">'+
+        [["1","값 입력"],["0","몰라요"]].map(function(x){
+          return '<button type="button" data-pdk="'+x[0]+'" class="'+((x[0]==="1")===state.pdKnown?"on":"")+'">'+x[1]+'</button>';
+        }).join("")+'</div></div>';
+      if(state.pdKnown) h += stepRow("pd","PD","동공 사이 거리 · 양쪽 공통",state.pd);
+      else h += '<div class="rxnote">ⓘ PD를 몰라도 괜찮아요. 매장에서 측정해 드려요.</div>';
+      if(rxHasUnknown()) h += '<button type="button" class="act'+(state.measure?" on":"")+'" data-act="measure"><span class="ic">🔍</span><span class="t">도수 측정 가능한 안경원만 보기<small>모르는 값은 방문해서 바로 잴 수 있는 곳만 찾아요</small></span><span class="tg"></span></button>';
+      h += '<div class="rxdisc">* 정확히 쓰지 않으면 렌즈 참고 정보는 달라질 수 있어요.</div>';
       var notes = [];
       if(m.sph>=6) notes.push("고도수");
       if(m.cyl>=2) notes.push("고난시");
@@ -1038,10 +1083,19 @@
       if(f==="pd"){ state.pd = Math.min(75, Math.max(50, state.pd + d*0.5)); }
       else{
         var c = RXF[f], o = state.rxv[state.eye];
-        o[f] = Math.round(Math.min(c.max, Math.max(c.min, o[f] + d*c.step))*100)/100;
+        if(f==="axis" && o.axis===null) o.axis = 90; /* 처음 누르면 90°에서 시작 */
+        else o[f] = Math.round(Math.min(c.max, Math.max(c.min, o[f] + d*c.step))*100)/100;
+        if(f==="cyl" && o.cyl===0){ o.cylMode = "none"; } /* 0까지 올리면 난시 없음 */
       }
       setStep(2); updateS1(); return;
     }
+    if(b.dataset.cyl){
+      var oc = state.rxv[state.eye]; oc.cylMode = b.dataset.cyl;
+      if(oc.cylMode==="none") oc.cyl = 0;
+      if(oc.cylMode==="has" && oc.cyl===0){ oc.cyl = -0.25; oc.axis = null; }
+      setStep(2); updateS1(); return;
+    }
+    if(b.dataset.pdk){ state.pdKnown = b.dataset.pdk==="1"; setStep(2); updateS1(); return; }
     if(b.dataset.act==="call"){ toast(1,"기존 안경원에 보낼 도수 요청 문구를 준비했어요 (예시)"); return; }
     if(b.dataset.act==="measure"){
       state.measure = !state.measure; updateS1();
@@ -1229,6 +1283,12 @@
   });
   $("btnFind").addEventListener("click", function(){
     if(state.rim===null){ toast(1,"테 모양을 먼저 알려 주세요"); return; }
+    var miss = (state.rxMode==="have" && state.rxKnow) ? axisMissing() : [];
+    if(miss.length){
+      state.eye = miss[0]; setStep(2); updateS1();
+      toast(1,"난시(CYL)가 있으면 AXIS도 꼭 입력해 주세요");
+      return;
+    }
     if(state.region!==0){ toast(1,"이 지역은 아직 준비 중이에요"); return; }
     renderList(true); renderDetail(); setStep(4); go(2);
   });
@@ -1419,7 +1479,7 @@
       rxLine = '<button type="button" class="act'+(state.shareRx?" on":"")+'" data-a="share"><span class="ic">🔒</span>'+
         '<span class="t">도수 정보도 함께 보내기 <span style="color:var(--faint);font-weight:400">(선택)</span>'+
         '<small>도수는 민감정보예요. 동의하면 이 매장에만 이번 문의에 한해 전달돼요.</small>'+
-        (state.shareRx?'<small style="color:var(--main)">R '+fmt("sph",R.sph)+' / '+fmt("cyl",R.cyl)+' · L '+fmt("sph",L.sph)+' / '+fmt("cyl",L.cyl)+'</small>':'')+
+        (state.shareRx?'<small style="color:var(--main)">R '+rxEyeText(R)+' · L '+rxEyeText(L)+' · '+(state.pdKnown?'PD '+state.pd.toFixed(1):'PD 모름')+'</small>':'')+
         '</span><span class="tg"></span></button>';
     }
     $("askBody").innerHTML =
