@@ -235,6 +235,8 @@
   .seg2{display:grid;grid-template-columns:1fr 1fr;background:rgba(15,27,51,.06);border-radius:10px;padding:3px;gap:3px}
   .seg2 button{border:0;background:transparent;border-radius:8px;padding:7px 4px;font-size:12px;color:var(--sub)}
   .seg2 button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 4px rgba(15,27,51,.12)}
+  .seg2.c3{grid-template-columns:repeat(3,1fr)}
+  .confcap{font-size:10.5px;color:var(--sub);margin:6px 4px 0;line-height:1.45}
   .eyes{display:flex;gap:6px;margin:12px 0 4px}
   .eyes button{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:999px;padding:5px;font-size:11px;color:var(--sub)}
   .eyes button.on{background:var(--main);border-color:var(--main);color:#fff;font-weight:700}
@@ -309,6 +311,25 @@
   .subcap b{color:var(--ink)}
   .subwarn{font-size:10.5px;color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:5px 8px;margin-top:6px}
   .sh-done{margin:16px 4px 0;width:calc(100% - 8px);height:50px}
+
+  /* 사진으로 찾기 */
+  .photo-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:calc(100% - 8px);margin:10px 4px 0;height:42px;border:1px dashed rgba(37,99,235,.5);background:var(--main-soft);color:var(--main);border-radius:12px;font-size:13px;font-weight:700}
+  .shoot{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 4px;margin-top:8px}
+  .shoot .ex{border:1px solid var(--line);background:rgba(255,255,255,.85);border-radius:14px;padding:8px;text-align:center;font-size:10.5px;color:var(--sub);line-height:1.4}
+  .shoot .ex svg{display:block;width:100%;height:58px;border-radius:9px;margin-bottom:5px}
+  .shoot .ex b{display:block;font-size:11.5px}
+  .shoot .ex.ok b{color:var(--green)}
+  .shoot .ex.bad b{color:#c2410c}
+  .tips{margin:10px 6px 0;font-size:11.5px;line-height:1.7;list-style:none}
+  .priv{margin:8px 6px 0;font-size:10px;color:var(--faint);line-height:1.5}
+  .shot{display:flex;align-items:center;gap:12px;margin:10px 4px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px}
+  .shot img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex:0 0 64px}
+  .shot b{font-size:13px}
+  .shot small{display:block;font-size:10.5px;color:var(--sub);line-height:1.4;margin-top:2px}
+  .fake{display:inline-block;margin:4px 10px 0;font-size:9.5px;font-weight:700;color:#b45309;background:rgba(245,158,11,.14);border-radius:999px;padding:2px 8px}
+  .spin{width:34px;height:34px;border-radius:50%;border:3px solid rgba(37,99,235,.2);border-top-color:var(--main);animation:sp .8s linear infinite;margin:26px auto 10px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .linkbtn{display:block;margin:8px auto 0;border:0;background:transparent;color:var(--sub);font-size:12px;text-decoration:underline}
 
   /* ===== 매장 목록 ===== */
   .map{
@@ -544,6 +565,7 @@
           <div class="grab"></div>
           <div class="sh-title">내 프레임 알려 주기</div>
           <div class="sh-sub">모양과 소재에 따라 가공할 수 있는 안경원이 달라져요.</div>
+          <button type="button" class="photo-btn" id="btnPhoto">📷 사진으로 찾기</button>
           <label class="search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
             <input type="search" id="fsearch" placeholder="브랜드나 모델명으로 찾기 (예: 루미, OB-7)" autocomplete="off">
@@ -552,6 +574,11 @@
           <div id="facResults"></div>
           <div id="frameBody"></div>
         </div>
+        <div class="menu" id="photoSheet">
+          <div class="grab"></div>
+          <div id="photoBody"></div>
+        </div>
+        <input type="file" accept="image/*" id="photoFile" hidden>
         <div class="toast" id="toast1"></div>
         <div class="homebar"></div>
       </div></div>
@@ -745,7 +772,7 @@
   var FUNC_PRICE = {"틴팅":[1,3],"미러":[3,6],"편광":[5,10],"변색":[6,12],"블루라이트":[1,3]};
 
   var INIT = function(){ return {
-    rim:2, cat:1, sub:0, model:null, buy:"online", where:0,
+    rim:2, cat:1, sub:0, matConf:"sure", model:null, buy:"online", where:0,
     rxMode:"have", rxKnow:true, eye:"R", pd:63, measure:false,
     rxv:{ R:{sph:-6.50, cyl:-2.25, axis:180}, L:{sph:-6.25, cyl:-2.00, axis:175} },
     funcs:[], region:0, pIdx:null, pDesign:null }; };
@@ -769,7 +796,7 @@
     document.querySelectorAll("#steps .step").forEach(function(s){ s.classList.toggle("now", +s.dataset.step === n); });
   }
   function openSheet(id){ $("dim1").classList.add("show"); $(id).classList.add("show"); }
-  function closeSheets1(){ $("dim1").classList.remove("show"); $("menu1").classList.remove("show"); $("frameSheet").classList.remove("show"); }
+  function closeSheets1(){ $("dim1").classList.remove("show"); $("menu1").classList.remove("show"); $("frameSheet").classList.remove("show"); $("photoSheet").classList.remove("show"); }
 
   /* ================= 조건 → 필요한 능력 ================= */
   function maxRx(){
@@ -890,6 +917,7 @@
     var h = '필요한 작업 <span class="job">'+RIMS[state.rim].jobLabel+'</span>';
     if(state.cat===2) h += '<span class="job warn">열 사용 불가 소재</span>';
     if(state.cat===0 && state.sub===3) h += '<span class="job warn">빈티지 테 취급</span>';
+    if(state.cat!==null && state.matConf!=="sure") h += '<span class="job warn">소재는 매장에서 확인</span>';
     j.innerHTML = h + '<span style="margin-left:auto;color:var(--faint)">자동</span>';
   }
 
@@ -1044,6 +1072,15 @@
         '<button type="button" class="chip'+(state.sub<0?" on":"")+'" data-sub="-1">잘 모르겠어요</button></div>'+
         '<div class="subcap">'+cap+'</div>'+(c.warn?'<div class="subwarn">⚠︎ '+c.warn+'</div>':'')+'</div>';
     }
+    var conf = "";
+    if(c){
+      var CONF = [["sure","확실해요","소재를 알고 있어요."],["maybe","아마 그래요","매장에서 실물로 한 번 더 확인해 주세요."],["unknown","몰라요","소재 없이 찾고, 매장에서 확인해 달라고 알려요."]];
+      var cur = CONF.filter(function(x){ return x[0]===state.matConf; })[0] || CONF[0];
+      conf = '<div class="sh-sec">소재가 맞는지 얼마나 확실한가요? <span class="opt-badge">선택</span></div>'+
+        '<div class="sh-pad"><div class="seg2 c3">'+CONF.map(function(x){
+          return '<button type="button" data-conf="'+x[0]+'" class="'+(x[0]===state.matConf?"on":"")+'">'+x[1]+'</button>';
+        }).join("")+'</div><div class="confcap">'+cur[2]+'</div></div>';
+    }
     $("frameBody").innerHTML =
       '<div class="sh-sec">테 모양 <span class="req">필수</span></div>'+
       '<div class="sh-pad tiles c3">'+RIMS.map(function(r,i){
@@ -1052,7 +1089,7 @@
       '<div class="sh-sec">소재 <span class="opt-badge">선택</span></div>'+
       '<div class="sh-pad tiles c2">'+MATCATS.map(function(m,i){
         return '<button type="button" class="tile row2'+(i===state.cat?" on":"")+'" data-cat="'+i+'"><span class="em">'+m.e+'</span><b>'+m.name+'</b></button>';
-      }).join("")+'</div>'+ subs +
+      }).join("")+'</div>'+ subs + conf +
       '<div class="sh-sec">어디서 구매했나요? <span class="opt-badge">선택</span></div>'+
       '<div class="sh-pad"><div class="seg2"><button type="button" data-buy="online" class="'+(state.buy==="online"?"on":"")+'">🌐 온라인</button>'+
       '<button type="button" data-buy="offline" class="'+(state.buy==="offline"?"on":"")+'">🏪 오프라인 매장</button></div></div>'+
@@ -1077,6 +1114,7 @@
   $("frameBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
     if(b.dataset.done){ if(state.rim===null) return; closeSheets1(); toast(1,"프레임 정보를 저장했어요"); return; }
+    if(b.dataset.conf){ state.matConf = b.dataset.conf; renderFrameSheet(); updateS1(); return; }
     var manual = b.dataset.rim || b.dataset.cat || b.dataset.sub;
     if(b.dataset.rim) state.rim = +b.dataset.rim;
     if(b.dataset.cat){ var nc = +b.dataset.cat; if(nc!==state.cat){ state.cat = nc; state.sub = -1; } }
@@ -1085,6 +1123,99 @@
     if(b.dataset.where) state.where = +b.dataset.where;
     if(manual && state.model) { state.model = null; renderSearch(); }
     renderFrameSheet(); updateS1();
+  });
+
+  /* ----- 사진으로 찾기 (시연용: 실제로 분석하지 않아요) ----- */
+  var photo = { thumb:null, pick:null, job:0 };
+  function swapSheet(id){
+    ["menu1","frameSheet","photoSheet"].forEach(function(s){ $(s).classList.remove("show"); });
+    $("dim1").classList.add("show"); $(id).classList.add("show");
+  }
+  function glassesSvg(bg, lens, behind){
+    return '<svg viewBox="0 0 120 58" aria-hidden="true"><rect width="120" height="58" fill="'+bg+'"/>'+behind+
+      '<circle cx="38" cy="30" r="16" fill="none" stroke="'+lens+'" stroke-width="3"/>'+
+      '<circle cx="82" cy="30" r="16" fill="none" stroke="'+lens+'" stroke-width="3"/>'+
+      '<path d="M54 28q6-4 12 0" fill="none" stroke="'+lens+'" stroke-width="3"/></svg>';
+  }
+  function templeSvg(){
+    return '<svg viewBox="0 0 120 58" aria-hidden="true"><rect width="120" height="58" fill="#f8fafc"/>'+
+      '<rect x="8" y="22" width="104" height="14" rx="7" fill="#1f2a44"/>'+
+      '<text x="60" y="32" font-size="8" text-anchor="middle" fill="#fff">OB-7 48□20</text></svg>';
+  }
+  function photoGuide(){
+    photo.job++;
+    $("photoBody").innerHTML =
+      '<div class="sh-title">📷 이렇게 찍어 주세요</div>'+
+      '<div class="sh-sub">테 모양과 소재를 사진으로 짐작해 드려요.</div>'+
+      '<div class="shoot">'+
+        '<div class="ex ok">'+glassesSvg("#f8fafc","#1f2a44","")+'<b>✅ 이렇게</b>단색 배경에 놓고 정면 전체</div>'+
+        '<div class="ex ok">'+templeSvg()+'<b>✅ 이렇게</b>다리 안쪽 글씨도 한 장 (선택)</div>'+
+        '<div class="ex bad">'+glassesSvg("#f3d9c4","#1f2a44",'<ellipse cx="60" cy="34" rx="46" ry="30" fill="#e8bfa0"/>')+'<b>❌ 어려워요</b>얼굴에 쓴 채로 찍기</div>'+
+        '<div class="ex bad">'+glassesSvg("#1b2233","#4b5878","").replace("</svg>",'<rect x="92" width="28" height="58" fill="#0f1524"/></svg>')+'<b>❌ 어려워요</b>어둡거나 일부가 잘림</div>'+
+      '</div>'+
+      '<ul class="tips"><li>💡 밝은 곳에서 흰 종이나 책상 위에 놓아 주세요.</li><li>💡 테 전체가 화면 안에 들어오게 찍어 주세요.</li><li>💡 얼굴이 나오지 않게 해 주세요.</li></ul>'+
+      '<div class="priv">🔒 이 화면은 시연용이에요. 사진은 서버로 보내지 않고, 분석도 실제로 하지 않아요.</div>'+
+      '<button type="button" class="cta sh-done" data-p="pick">사진 고르기 · 촬영하기</button>'+
+      '<button type="button" class="linkbtn" data-p="back">직접 고를래요</button>';
+  }
+  function photoResult(){
+    var m = photo.pick, r = RIMS[m.rim], mat = MATCATS[m.cat].subs[m.sub];
+    $("photoBody").innerHTML =
+      '<span class="fake">시연용 가짜 분석이에요</span>'+
+      '<div class="sh-title">이렇게 보여요</div>'+
+      '<div class="sh-sub">추정이에요. 맞는지 확인해 주세요.</div>'+
+      '<div class="shot">'+(photo.thumb ? '<img alt="고른 사진" src="'+photo.thumb+'">' : '<div class="glasses '+r.cls+'"></div>')+
+        '<div><b>'+r.name+'</b><small>'+r.cap+'</small><small>소재 후보: '+mat[0]+' — '+mat[1]+'</small></div></div>'+
+      '<div class="priv">정확한 소재는 매장에서 실물로 확인해요.</div>'+
+      '<button type="button" class="cta sh-done" data-p="ok">맞아요, 이 프레임으로</button>'+
+      '<button type="button" class="linkbtn" data-p="edit">직접 고칠래요</button>'+
+      '<button type="button" class="linkbtn" data-p="retry">다시 찍기</button>';
+  }
+  function applyPhotoPick(){
+    var m = photo.pick;
+    state.model = null; state.rim = m.rim; state.cat = m.cat; state.sub = m.sub;
+    state.matConf = "maybe"; /* 사진으로 짐작한 소재라서 '아마 그래요'로 시작 */
+    updateS1();
+  }
+  function makeThumb(file, cb){
+    var done = false;
+    function fin(t){ if(!done){ done = true; cb(t); } }
+    try{
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function(){
+        try{
+          var c = document.createElement("canvas"); c.width = c.height = 96;
+          var s = Math.min(img.width, img.height);
+          c.getContext("2d").drawImage(img, (img.width-s)/2, (img.height-s)/2, s, s, 0, 0, 96, 96);
+          fin(c.toDataURL("image/jpeg", .7));
+        }catch(e){ fin(null); }
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); fin(null); };
+      img.src = url;
+    }catch(e){ fin(null); }
+  }
+  $("btnPhoto").addEventListener("click", function(){ photoGuide(); swapSheet("photoSheet"); });
+  $("photoBody").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    var a = b.dataset.p;
+    if(a==="pick") $("photoFile").click();
+    if(a==="back") swapSheet("frameSheet");
+    if(a==="retry") photoGuide();
+    if(a==="ok"){ applyPhotoPick(); closeSheets1(); toast(1,"사진으로 프레임을 채웠어요 (시연)"); }
+    if(a==="edit"){ applyPhotoPick(); renderSearch(); renderFrameSheet(); swapSheet("frameSheet"); toast(1,"필요하면 고쳐 주세요"); }
+  });
+  $("photoFile").addEventListener("change", function(){
+    var f = this.files && this.files[0]; this.value = "";
+    if(!f) return;
+    if(!/^image\//.test(f.type)){ toast(1,"사진 파일만 고를 수 있어요"); return; }
+    var job = ++photo.job;
+    $("photoBody").innerHTML = '<div class="spin"></div><div class="sh-sub" style="text-align:center">사진을 살펴보는 중…</div>';
+    makeThumb(f, function(t){
+      photo.thumb = t;
+      photo.pick = MODELS[(f.size + f.name.length) % MODELS.length];
+      setTimeout(function(){ if(job===photo.job) photoResult(); }, 1400);
+    });
   });
 
   /* ----- 지역 · 메뉴 ----- */
