@@ -66,7 +66,7 @@
   .step.now{background:var(--main);color:#fff}
   .step.now i{background:#fff;color:var(--main)}
 
-  .screens{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;justify-items:center}
+  .screens{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;justify-items:center}
   .screen-wrap{width:100%;max-width:320px;scroll-margin-top:16px}
   .label{margin-bottom:12px}
   .label .num{font-size:12px;font-weight:700;color:var(--main)}
@@ -343,6 +343,36 @@
   .spin{width:34px;height:34px;border-radius:50%;border:3px solid rgba(37,99,235,.2);border-top-color:var(--main);animation:sp .8s linear infinite;margin:26px auto 10px}
   @keyframes sp{to{transform:rotate(360deg)}}
   .linkbtn{display:block;margin:8px auto 0;border:0;background:transparent;color:var(--sub);font-size:12px;text-decoration:underline}
+
+  /* 마이페이지 */
+  .content.my{padding-bottom:44px}
+  .myprof{display:flex;align-items:center;gap:12px;background:var(--glass-strong);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:0 2px 10px rgba(30,64,175,.06)}
+  .myprof .av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--main-soft);flex:0 0 42px}
+  .myprof b{font-size:14px;display:block}
+  .myprof small{font-size:10.5px;color:var(--sub);line-height:1.4;display:block}
+  .fcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin-top:8px;box-shadow:0 2px 10px rgba(30,64,175,.06)}
+  .fc-top{display:flex;align-items:center;gap:10px}
+  .fc-top img,.fc-top .ph{width:46px;height:46px;border-radius:11px;object-fit:cover;flex:0 0 46px;background:var(--main-soft);display:grid;place-items:center;font-size:20px}
+  .fc-top b{font-size:13px;display:block;line-height:1.3}
+  .fc-top small{font-size:10.5px;color:var(--sub);display:block;line-height:1.35}
+  .fc-top .grow{flex:1;min-width:0}
+  .fc-f{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:5px 8px;margin-top:8px;font-size:11px;color:var(--sub)}
+  .fc-f input{font:inherit;font-size:12px;border:1px solid var(--line);background:rgba(255,255,255,.9);border-radius:8px;padding:5px 8px;color:var(--ink);min-width:0;width:100%}
+  .fc-use{display:block;width:100%;margin-top:9px;height:34px;border:1px solid rgba(37,99,235,.35);background:var(--glass-strong);color:var(--main);border-radius:10px;font-size:12px;font-weight:700}
+  .pcell{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:13px}
+  .pcell + .pcell{border-top:.5px solid var(--sep)}
+  .pcell .pn{flex:1;min-width:0}
+  .pcell .pn small{display:block;font-size:10.5px;color:var(--sub)}
+  .pcell button{border:0;background:transparent;color:var(--main);font-size:11.5px;font-weight:700;padding:4px 6px}
+  .pcell button.del{color:var(--faint)}
+  .peditor{margin-top:8px;background:#fff;border:1px solid rgba(37,99,235,.3);border-radius:14px;padding:10px 12px}
+  .peditor .row2{display:flex;gap:6px;margin-top:8px}
+  .peditor input{width:100%;font:inherit;font-size:12.5px;border:1px solid var(--line);border-radius:9px;padding:7px 9px;margin-top:6px;color:var(--ink)}
+  .peditor .row2 button{flex:1;height:34px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid rgba(37,99,235,.35);background:var(--glass-strong);color:var(--main)}
+  .peditor .row2 button.pri{background:var(--main);color:#fff;border-color:var(--main)}
+  .scard{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:8px;font-size:12.5px;color:var(--ink)}
+  .scard small{display:block;font-size:10.5px;color:var(--sub)}
+  .soon{margin-top:16px;font-size:11px;color:var(--sub);background:rgba(15,27,51,.05);border-radius:12px;padding:10px 12px;line-height:1.6}
 
   /* 프레임 보관함 */
   .recent{display:flex;gap:6px;overflow-x:auto;padding:8px 4px 0;scrollbar-width:none;align-items:center}
@@ -622,10 +652,41 @@
       </div></div>
     </div>
 
-    <!-- ===== 화면 2 : 매장 목록 ===== -->
+    <!-- ===== 화면 2 : 마이페이지 ===== -->
+    <div class="screen-wrap" id="sMy">
+      <div class="label">
+        <div class="num">화면 02 · 마이페이지</div>
+        <h2>마이페이지</h2>
+        <p>내 안경장 · 내 장소 · 저장한 안경원</p>
+      </div>
+      <div class="phone" id="pMy"><div class="display">
+        <div class="status">
+          <span>9:41</span><div class="island"></div>
+          <div class="sys">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg>
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 2.2c2.2 0 4.2.9 5.7 2.3l1.1-1.1A9.6 9.6 0 0 0 7.5.6 9.6 9.6 0 0 0 .7 3.4l1.1 1.1a8 8 0 0 1 5.7-2.3Zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1a6.4 6.4 0 0 0-9 0l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3Zm0 3.2c-.5 0-1 .2-1.3.5L7.5 10.4l1.3-1.3a1.9 1.9 0 0 0-1.3-.5Z"/></svg>
+            <div class="batt"><i></i></div>
+          </div>
+        </div>
+        <div class="scroll" id="myScroll">
+          <div class="nav">
+            <button class="icon-btn" type="button" aria-label="조건 입력으로" id="myBack">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <div class="t">마이페이지</div>
+            <span></span>
+          </div>
+          <div class="content my" id="myBody"></div>
+        </div>
+        <div class="toast" id="toastMy"></div>
+        <div class="homebar"></div>
+      </div></div>
+    </div>
+
+    <!-- ===== 화면 3 : 매장 목록 ===== -->
     <div class="screen-wrap" id="s2">
       <div class="label">
-        <div class="num">화면 02 · 단계 4</div>
+        <div class="num">화면 03 · 단계 4</div>
         <h2>매장 목록</h2>
         <p>지도 · 안경원 카드 · 가공 가능 태그</p>
       </div>
@@ -678,7 +739,7 @@
     <!-- ===== 화면 3 : 매장 상세 ===== -->
     <div class="screen-wrap" id="s3">
       <div class="label">
-        <div class="num">화면 03 · 단계 5</div>
+        <div class="num">화면 04 · 단계 5</div>
         <h2>매장 상세</h2>
         <p>가공 가능 항목 · 외부 프레임 정책·작업 기간 · 위치·영업 정보</p>
       </div>
@@ -829,7 +890,7 @@
     rxv:{ R:{sph:-6.50, cyl:-2.25, axis:180, cylMode:"has"}, L:{sph:-6.25, cyl:-2.00, axis:175, cylMode:"has"} },
     funcs:[], region:0, pIdx:null, pDesign:null }; };
   var state = INIT();
-  state.sort = "dist"; state.selected = "A"; state.liked = {}; state.photo = 0; state.shareRx = false;
+  state.sort = "dist"; state.selected = "A"; state.liked = loadLiked(); state.photo = 0; state.shareRx = false;
   state.loc = Object.assign({}, GPS);
 
   var $ = function(id){ return document.getElementById(id); };
@@ -849,7 +910,14 @@
     document.querySelectorAll("#steps .step").forEach(function(s){ s.classList.toggle("now", +s.dataset.step === n); });
   }
   function openSheet(id){ $("dim1").classList.add("show"); $(id).classList.add("show"); }
-  function closeSheets1(){ $("dim1").classList.remove("show"); $("menu1").classList.remove("show"); $("frameSheet").classList.remove("show"); $("photoSheet").classList.remove("show"); }
+  /* 저장한 안경원: 이 기기에 저장 (막혀 있으면 이번 방문 동안만 기억) */
+  function loadLiked(){
+    try{ var v = JSON.parse(localStorage.getItem("afterframe.liked.v1") || "{}"); return (v && typeof v==="object") ? v : {}; }
+    catch(e){ return {}; }
+  }
+  function saveLiked(){ try{ localStorage.setItem("afterframe.liked.v1", JSON.stringify(state.liked)); }catch(e){} refreshMy(); }
+  var vaultMode = false; /* 마이페이지에서 '프레임 추가'로 들어온 경우 */
+  function closeSheets1(){ vaultMode = false; $("dim1").classList.remove("show"); $("menu1").classList.remove("show"); $("frameSheet").classList.remove("show"); $("photoSheet").classList.remove("show"); }
 
   /* ================= 조건 → 필요한 능력 ================= */
   /* 난시를 모르거나 없으면 0으로 계산해요 */
@@ -1204,9 +1272,10 @@
         return '<button type="button" class="tile row2'+(i===state.where?" on":"")+'" data-where="'+i+'"><span class="em">'+x.e+'</span><b>'+x.name+'</b></button>';
       }).join("")+'</div>'+
       '<button type="button" class="vault-add" data-vault="1"'+(state.rim===null?" disabled":"")+'>📦 내 프레임 보관함에 넣기</button>'+
-      '<button type="button" class="cta sh-done" data-done="1"'+(state.rim===null?" disabled":"")+'>'+(state.rim===null?"테 모양을 골라 주세요":"선택 완료")+'</button>';
+      '<button type="button" class="cta sh-done" data-done="1"'+(state.rim===null?" disabled":"")+'>'+(state.rim===null?"테 모양을 골라 주세요":vaultMode?"보관함에 넣고 마이페이지로":"선택 완료")+'</button>';
   }
   $("frameCell").addEventListener("click", function(){
+    document.querySelector("#frameSheet .sh-title").textContent = vaultMode ? "보관함에 넣을 프레임 고르기" : "내 프레임 알려 주기";
     renderSearch(); renderFrameSheet(); renderRecent(); openSheet("frameSheet"); setStep(1);
   });
   $("fsearch").addEventListener("input", renderSearch);
@@ -1223,7 +1292,15 @@
   $("frameBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
     if(b.dataset.vault){ if(addVault(null)) renderRecent(); return; }
-    if(b.dataset.done){ if(state.rim===null) return; closeSheets1(); toast(1,"프레임 정보를 저장했어요"); return; }
+    if(b.dataset.done){
+      if(state.rim===null) return;
+      var vm = vaultMode;
+      if(vm){
+        var okAdd = addVault(null, true); closeSheets1(); renderMy(); go("My");
+        toast("My", okAdd ? "보관함에 넣었어요" : "이미 보관함에 있어요"); return;
+      }
+      closeSheets1(); toast(1,"프레임 정보를 저장했어요"); return;
+    }
     if(b.dataset.conf){ state.matConf = b.dataset.conf; renderFrameSheet(); updateS1(); return; }
     var manual = b.dataset.rim || b.dataset.cat || b.dataset.sub;
     if(b.dataset.rim) state.rim = +b.dataset.rim;
@@ -1316,11 +1393,13 @@
     if(a==="retry") photoGuide();
     if(a==="save"){ photo.save = !photo.save; photoResult(); }
     if(a==="ok"){
-      applyPhotoPick(); var saved = photo.save && addVault(photo.thumb, true); closeSheets1();
-      toast(1,"사진으로 프레임을 채웠어요 (시연)"+(saved?" · 보관함에 넣었어요":""));
+      var vm = vaultMode;
+      applyPhotoPick(); var saved = (photo.save || vm) && addVault(photo.thumb, true); closeSheets1();
+      if(vm){ renderMy(); go("My"); toast("My", saved ? "보관함에 넣었어요" : "이미 보관함에 있어요"); }
+      else toast(1,"사진으로 프레임을 채웠어요 (시연)"+(saved?" · 보관함에 넣었어요":""));
     }
     if(a==="edit"){
-      applyPhotoPick(); var saved2 = photo.save && addVault(photo.thumb, true);
+      applyPhotoPick(); var saved2 = photo.save && !vaultMode && addVault(photo.thumb, true);
       renderSearch(); renderFrameSheet(); renderRecent(); swapSheet("frameSheet");
       toast(1,"필요하면 고쳐 주세요"+(saved2?" · 보관함에 넣었어요":""));
     }
@@ -1347,7 +1426,7 @@
     }
     return vault;
   }
-  function persistVault(){ try{ localStorage.setItem(VKEY, JSON.stringify(vault)); }catch(e){} }
+  function persistVault(){ try{ localStorage.setItem(VKEY, JSON.stringify(vault)); }catch(e){} refreshMy(); }
   function todayStr(){
     var d = new Date(), p = function(n){ return (n<10?"0":"")+n; };
     return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate());
@@ -1446,6 +1525,7 @@
     }else{
       var likedN = Object.keys(state.liked).filter(function(k){return state.liked[k];}).length;
       b.innerHTML =
+        '<button class="menu-item" data-a="my"><span>👤</span>마이페이지</button>'+
         '<button class="menu-item" data-a="list"><span>🗺️</span>매장 목록 보기</button>'+
         '<button class="menu-item" data-a="vault"><span>📦</span>내 프레임 보관함<span class="sub">'+getVault().length+'개</span></button>'+
         '<button class="menu-item" data-a="detail"><span>🏬</span>최근 본 매장<span class="sub">'+shopById(state.selected).name+'</span></button>'+
@@ -1456,6 +1536,7 @@
           var a = btn.dataset.a;
           if(a==="vault"){ renderMenu("vault"); return; }
           closeSheets1();
+          if(a==="my"){ renderMy(); go("My"); }
           if(a==="list"){ renderList(false); setStep(4); go(2); }
           if(a==="detail"){ renderDetail(); setStep(5); go(3); }
           if(a==="liked"){
@@ -1597,7 +1678,7 @@
     }
     return places;
   }
-  function persistPlaces(){ try{ localStorage.setItem(PKEY, JSON.stringify(places)); }catch(e){} }
+  function persistPlaces(){ try{ localStorage.setItem(PKEY, JSON.stringify(places)); }catch(e){} refreshMy(); }
   /* 입력한 동네·역 이름을 시연용 지역(홍대·연남·신촌)과 맞춰 봐요. 없으면 '준비 중' */
   function resolvePlace(q){
     var n = norm(q), hit = null;
@@ -1613,6 +1694,7 @@
     var label = l.kind==="gps" ? "📍 현재 위치"
       : l.kind==="home" ? "🏠 본가 · "+l.name
       : l.kind==="work" ? "🏢 직장 · "+l.name
+      : l.kind==="x" ? "📌 "+l.label+" · "+l.name
       : "🔎 "+l.name;
     $("locName").textContent = label;
   }
@@ -1636,18 +1718,20 @@
   }
   function renderLoc(){
     var p = getPlaces(), cur = state.loc.kind;
-    function row(kind, icon, title){
-      var pl = p[kind];
+    function row(kind, icon, title, pl, on){
+      pl = pl || p[kind];
       if(!pl) return '<div class="menu-item" style="cursor:default"><span>'+icon+'</span>'+title+'<span class="sub">아래에서 검색해 저장해요</span></div>';
-      return '<div class="vitem"><button type="button" class="menu-item" data-loc="'+kind+'"><span>'+icon+'</span>'+title+' · '+esc(pl.name)+
-        '<span class="sub">'+(pl.covered?"":"준비 중 ")+(cur===kind?"✓":"")+'</span></button>'+
-        '<button type="button" class="vdel" data-ldel="'+kind+'" aria-label="'+title+' 지우기">✕</button></div>';
+      if(on===undefined) on = cur===kind;
+      return '<div class="vitem"><button type="button" class="menu-item" data-loc="'+kind+'"><span>'+icon+'</span>'+esc(title)+' · '+esc(pl.name)+
+        '<span class="sub">'+(pl.covered?"":"준비 중 ")+(on?"✓":"")+'</span></button>'+
+        '<button type="button" class="vdel" data-ldel="'+kind+'" aria-label="'+esc(title)+' 지우기">✕</button></div>';
     }
+    var extraRows = (p.extra||[]).map(function(x,i){ return row("x"+i, "📌", x.label, x, cur==="x" && state.loc.xi===i); }).join("");
     $("locBody").innerHTML =
       '<div style="font-size:13px;font-weight:700;padding:4px 12px 2px">어느 위치 근처에서 찾을까요?</div>'+
       '<div style="font-size:11px;color:var(--sub);padding:0 12px 6px">본가나 직장 근처도 찾아볼 수 있어요.</div>'+
       '<button type="button" class="menu-item" data-loc="gps"><span>📍</span>현재 위치<span class="sub">'+GPS.sub+(cur==="gps"?" ✓":"")+'</span></button>'+
-      row("home","🏠","본가")+row("work","🏢","직장")+
+      row("home","🏠","본가")+row("work","🏢","직장")+extraRows+
       '<label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>'+
       '<input type="search" id="locSearch" placeholder="동네나 역 이름 (예: 연남동, 신촌역)" autocomplete="off"></label>'+
       '<div id="locRes"></div>'+
@@ -1667,12 +1751,15 @@
     if(b.dataset.loc){
       var k = b.dataset.loc;
       if(k==="gps") selectLoc(Object.assign({}, GPS));
+      else if(k.charAt(0)==="x"){
+        var xi = +k.slice(1), xp = (p.extra||[])[xi];
+        if(xp) selectLoc({kind:"x", xi:xi, label:xp.label, name:xp.name, covered:xp.covered, x:xp.x, y:xp.y});
+      }
       else if(p[k]) selectLoc({kind:k, name:p[k].name, covered:p[k].covered, x:p[k].x, y:p[k].y});
       return;
     }
     if(b.dataset.ldel){
-      delete p[b.dataset.ldel]; persistPlaces();
-      if(state.loc.kind===b.dataset.ldel){ state.loc = Object.assign({}, GPS); applyLoc(); renderList(true); renderDetail(); }
+      removePlace(b.dataset.ldel);
       renderLoc(); toast(2,"저장한 장소를 지웠어요"); return;
     }
     if(b.dataset.q){ $("locSearch").value = b.dataset.q; renderLocRes(b.dataset.q); return; }
@@ -1684,6 +1771,108 @@
         renderLoc(); toast(2,(a==="home"?"본가":"직장")+"로 저장했어요");
       }
     }
+  });
+
+  /* ================= 마이페이지 (이 기기에 저장) ================= */
+  /* 장소 저장·삭제: 위치 시트와 마이페이지가 같은 저장값을 써요 */
+  function resetLocIfSelected(kind){
+    if(state.loc.kind===kind){ state.loc = Object.assign({}, GPS); applyLoc(); renderList(true); renderDetail(); }
+  }
+  function removePlace(k){
+    var p = getPlaces();
+    if(k.charAt(0)==="x"){ if(p.extra) p.extra.splice(+k.slice(1), 1); resetLocIfSelected("x"); }
+    else{ delete p[k]; resetLocIfSelected(k); }
+    persistPlaces();
+  }
+  function savePlace(k, q, label){
+    var r = resolvePlace(q), p = getPlaces(), rec = {name:r.name, covered:r.covered, x:r.x, y:r.y};
+    if(k==="new"){ rec.label = label; (p.extra = p.extra || []).push(rec); }
+    else if(k.charAt(0)==="x"){ rec.label = label || p.extra[+k.slice(1)].label; p.extra[+k.slice(1)] = rec; resetLocIfSelected("x"); }
+    else{ p[k] = rec; resetLocIfSelected(k); }
+    persistPlaces();
+  }
+  var myEdit = null; /* 장소 편집 중: {k:"home"|"work"|"x0"|"new"} */
+  function refreshMy(){ if(!myEdit) renderMy(); }
+  function placeCell(k, icon, title, pl){
+    return '<div class="pcell"><span>'+icon+'</span><div class="pn"><b style="font-size:13px">'+esc(title)+'</b><small>'+
+      (pl ? esc(pl.name)+(pl.covered?"":" · 준비 중") : "설정 안 함")+'</small></div>'+
+      '<button type="button" data-my="pedit" data-k="'+k+'">'+(pl?"바꾸기":"설정")+'</button>'+
+      (pl ? '<button type="button" class="del" data-my="pdel" data-k="'+k+'" aria-label="'+esc(title)+' 지우기">✕</button>' : '')+'</div>';
+  }
+  function frameCard(it, i){
+    var sub = (it.conf && it.conf!=="sure") ? '소재는 매장에서 확인' : (it.nick ? vaultLabel(it) : "");
+    return '<div class="fcard"><div class="fc-top">'+
+      (it.thumb ? '<img alt="" src="'+it.thumb+'">' : '<span class="ph">👓</span>')+
+      '<div class="grow"><b>'+esc(it.nick || vaultLabel(it))+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div>'+
+      '<button type="button" class="vdel" data-my="vdel" data-i="'+i+'" aria-label="보관함에서 지우기">✕</button></div>'+
+      '<div class="fc-f"><span>별명</span><input type="text" maxlength="20" data-f="nick" data-i="'+i+'" placeholder="예: 내 최애 무테" value="'+esc(it.nick||"")+'">'+
+      '<span>렌즈 맞춘 날</span><input type="date" data-f="lensDate" data-i="'+i+'" value="'+esc(it.lensDate||"")+'">'+
+      '<span>메모</span><input type="text" maxlength="60" data-f="memo" data-i="'+i+'" placeholder="구매처, 느낌 등" value="'+esc(it.memo||"")+'"></div>'+
+      '<button type="button" class="fc-use" data-my="use" data-i="'+i+'">이 프레임으로 안경원 찾기</button></div>';
+  }
+  function renderMy(){
+    var v = getVault(), p = getPlaces(), h = "";
+    var likedIds = Object.keys(state.liked).filter(function(k){ return state.liked[k] && shopById(k); });
+    h += '<div class="myprof"><div class="av">🙂</div><div><b>게스트</b><small>이 기기에만 저장돼요. 로그인하면 기기를 바꿔도 이어져요 (준비 중)</small></div></div>';
+    h += '<div class="group-title">🧰 내 안경장 <span class="opt-badge">'+v.length+'/'+VMAX+'</span></div>';
+    h += v.length ? v.map(frameCard).join("") : '<div class="notice">아직 비어 있어요. 아래에서 프레임을 추가해 보세요.</div>';
+    h += '<button type="button" class="vault-add" data-my="addframe">＋ 프레임 추가 (사진 · 검색 · 직접 고르기)</button>';
+    h += '<div class="group-title">📍 내 장소 <span class="opt-badge">동네·역 이름만</span></div><div class="group">'+
+      placeCell("home","🏠","본가",p.home)+placeCell("work","🏢","직장",p.work)+
+      (p.extra||[]).map(function(x,i){ return placeCell("x"+i,"📌",x.label,x); }).join("")+'</div>';
+    if(myEdit){
+      var k = myEdit.k, isNew = k==="new", isX = k.charAt(0)==="x", cur = isNew ? null : (isX ? (p.extra||[])[+k.slice(1)] : p[k]);
+      var title = isNew ? "장소 추가" : (k==="home" ? "본가" : k==="work" ? "직장" : (cur ? cur.label : "장소"))+" 설정";
+      h += '<div class="peditor"><b style="font-size:12px">'+esc(title)+'</b>'+
+        ((isNew||isX) ? '<input type="text" id="peLabel" maxlength="10" placeholder="이름 (예: 학교, 부모님 댁)" value="'+esc(cur?cur.label:"")+'">' : '')+
+        '<input type="search" id="peQ" maxlength="30" placeholder="동네나 역 이름 (예: 연남동, 신촌역)" value="'+esc(cur?cur.name:"")+'" autocomplete="off">'+
+        '<div style="font-size:10.5px;color:var(--sub);margin-top:6px">지금은 홍대·연남·신촌만 지원해요. 다른 지역도 저장은 돼요.</div>'+
+        '<div class="row2"><button type="button" data-my="pcancel">취소</button><button type="button" class="pri" data-my="psave">저장</button></div></div>';
+    }else if((p.extra||[]).length<3){
+      h += '<button type="button" class="vault-add" data-my="padd">＋ 장소 추가</button>';
+    }
+    h += '<div class="notice">동네·역 이름만 저장하고, 이 기기에만 보관해요. 매장 목록의 📍 위치 버튼에도 똑같이 보여요.</div>';
+    h += '<div class="group-title">♥ 저장한 안경원 <span class="opt-badge">'+likedIds.length+'곳</span></div>';
+    h += likedIds.length ? likedIds.map(function(id){
+      var s = shopById(id);
+      return '<button type="button" class="scard" data-my="shop" data-id="'+id+'"><span style="font-weight:800;color:var(--main)">'+id+'</span><span style="flex:1;min-width:0"><b>'+esc(s.name)+'</b><small>'+esc(s.addr.split(",")[0])+' · '+(s.open?"영업 중":"영업 종료")+'</small></span><span class="chev">›</span></button>';
+    }).join("") : '<div class="notice">아직 없어요. 매장 상세 화면의 ♡를 누르면 여기에 모여요.</div>';
+    h += '<div class="soon">곧 추가돼요 · 🔔 교체·점검 알림 · 📋 이전 도수 기록 · 🧾 가공 이력</div>';
+    $("myBody").innerHTML = h;
+  }
+  $("myBack").addEventListener("click", function(){ setStep(1); go(1); });
+  $("myBody").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b || !b.dataset.my) return;
+    var a = b.dataset.my, v = getVault();
+    if(a==="addframe"){ vaultMode = true; go(1); setTimeout(function(){ $("frameCell").click(); }, 350); return; }
+    if(a==="vdel"){ v.splice(+b.dataset.i, 1); persistVault(); renderRecent(); toast("My","보관함에서 지웠어요"); return; }
+    if(a==="use"){
+      var it = v[+b.dataset.i]; if(!it) return;
+      applyVault(it);
+      if(axisMissing().length) go(1);
+      $("btnFind").click(); return;
+    }
+    if(a==="shop"){
+      renderList(false); state.selected = b.dataset.id; state.photo = 0; renderDetail(); setStep(5); go(3); return;
+    }
+    if(a==="pedit"){ myEdit = {k:b.dataset.k}; renderMy(); var q = $("peQ"); if(q) q.focus(); return; }
+    if(a==="padd"){ myEdit = {k:"new"}; renderMy(); var l = $("peLabel"); if(l) l.focus(); return; }
+    if(a==="pcancel"){ myEdit = null; renderMy(); return; }
+    if(a==="psave"){
+      var qv = ($("peQ").value || "").trim(), lv = $("peLabel") ? ($("peLabel").value || "").trim() : "";
+      if(!qv){ toast("My","동네나 역 이름을 적어 주세요"); return; }
+      var k = myEdit.k;
+      if((k==="new" || k.charAt(0)==="x") && !lv) lv = "내 장소";
+      savePlace(k, qv, lv); myEdit = null; renderMy(); toast("My","장소를 저장했어요"); return;
+    }
+    if(a==="pdel"){ removePlace(b.dataset.k); renderMy(); toast("My","장소를 지웠어요"); }
+  });
+  $("myBody").addEventListener("change", function(e){
+    var f = e.target.dataset.f; if(!f) return;
+    var it = getVault()[+e.target.dataset.i]; if(!it) return;
+    it[f] = (f==="lensDate") ? (e.target.value || null) : e.target.value.trim();
+    var keepEdit = myEdit; myEdit = {k:"_"}; persistVault(); myEdit = keepEdit; /* 입력 중에는 화면을 다시 그리지 않아요 */
+    toast("My","저장했어요");
   });
 
   /* ================= 화면 3 ================= */
@@ -1725,7 +1914,7 @@
   }
   $("back3").addEventListener("click", function(){ setStep(4); go(2); });
   $("btnLike").addEventListener("click", function(){
-    var id = state.selected; state.liked[id] = !state.liked[id];
+    var id = state.selected; state.liked[id] = !state.liked[id]; saveLiked();
     $("btnLike").classList.toggle("liked", state.liked[id]);
     toast(3, state.liked[id] ? "저장한 안경원에 추가했어요" : "저장을 취소했어요");
     renderList(false);
@@ -1787,7 +1976,7 @@
   });
 
   /* ================= 시작 ================= */
-  renderFuncs(); updateS1(); renderList(true); renderDetail();
+  renderFuncs(); updateS1(); renderList(true); renderDetail(); renderMy();
 })();
 </script>
 </body>
