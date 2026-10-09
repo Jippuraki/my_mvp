@@ -325,6 +325,15 @@
   .subwarn{font-size:10.5px;color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:5px 8px;margin-top:6px}
   .sh-done{margin:16px 4px 0;width:calc(100% - 8px);height:50px}
 
+  /* 조건 카드 */
+  .condcard{margin:6px 4px 0;background:#fff;border:1px solid rgba(37,99,235,.3);border-radius:16px;padding:12px 14px;box-shadow:0 2px 10px rgba(30,64,175,.08)}
+  .condcard .ct{font-size:11px;font-weight:700;color:var(--main);margin-bottom:6px}
+  .condcard dl{display:grid;grid-template-columns:68px 1fr;gap:5px 8px;font-size:12px}
+  .condcard dt{color:var(--faint)}
+  .condcard dd{font-weight:600;word-break:keep-all}
+  .cardbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 4px 0}
+  .cardbtns button{height:42px;border:1px solid rgba(37,99,235,.35);background:var(--glass-strong);color:var(--main);border-radius:12px;font-size:12px;font-weight:700}
+
   /* 사진으로 찾기 */
   .photo-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:calc(100% - 8px);margin:10px 4px 0;height:42px;border:1px dashed rgba(37,99,235,.5);background:var(--main-soft);color:var(--main);border-radius:12px;font-size:13px;font-weight:700}
   .shoot{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 4px;margin-top:8px}
@@ -2245,28 +2254,67 @@
     });
   });
 
-  /* 문의하기: 도수는 민감정보 → 별도 동의한 경우에만 포함 */
+  /* 문의하기: 앱은 문의를 대신 보내지 않아요. 조건을 한 장으로 정리해 사용자가 직접 전달해요. 도수는 민감정보 → 별도 동의한 경우에만 포함 */
+  var NOTICE = "정보 제공만 해요. 가공·결제는 매장과 직접 해요. 앱은 문의를 대신 보내거나 답장을 받지 않아요.";
+  var askView = "menu";
   function hasRxValues(){ return state.rxMode==="have" && state.rxKnow; }
+  function rxToggleHtml(){
+    if(!hasRxValues()) return "";
+    var R = state.rxv.R, L = state.rxv.L;
+    return '<button type="button" class="act'+(state.shareRx?" on":"")+'" data-a="share"><span class="ic">🔒</span>'+
+      '<span class="t">도수 정보도 함께 보내기 <span style="color:var(--faint);font-weight:400">(선택)</span>'+
+      '<small>도수는 민감정보예요. 동의하면 이 매장에만 이번 문의에 한해 전달돼요.</small>'+
+      (state.shareRx?'<small style="color:var(--main)">R '+rxEyeText(R)+' · L '+rxEyeText(L)+' · '+(state.pdKnown?'PD '+state.pd.toFixed(1):'PD 모름')+'</small>':'')+
+      '</span><span class="tg"></span></button>';
+  }
   function renderAsk(){
+    askView = "menu";
     var s = shopById(state.selected);
     var parts = [frameLabel()].concat(state.funcs);
-    var rxLine = "";
-    if(hasRxValues()){
-      var R = state.rxv.R, L = state.rxv.L;
-      rxLine = '<button type="button" class="act'+(state.shareRx?" on":"")+'" data-a="share"><span class="ic">🔒</span>'+
-        '<span class="t">도수 정보도 함께 보내기 <span style="color:var(--faint);font-weight:400">(선택)</span>'+
-        '<small>도수는 민감정보예요. 동의하면 이 매장에만 이번 문의에 한해 전달돼요.</small>'+
-        (state.shareRx?'<small style="color:var(--main)">R '+rxEyeText(R)+' · L '+rxEyeText(L)+' · '+(state.pdKnown?'PD '+state.pd.toFixed(1):'PD 모름')+'</small>':'')+
-        '</span><span class="tg"></span></button>';
-    }
     $("askBody").innerHTML =
       '<div style="font-size:13px;font-weight:700;padding:4px 12px 2px">'+s.name+'에 문의하기</div>'+
       '<div style="font-size:11px;color:var(--sub);padding:0 12px 4px">보낼 내용: '+parts.join(" · ")+'</div>'+
-      '<div style="padding:0 4px">'+rxLine+'</div>'+
+      '<div style="padding:0 4px">'+rxToggleHtml()+'</div>'+
+      '<button class="menu-item" data-a="card"><span>📋</span>내 조건 카드 만들기<span class="sub">복사 · 문자로 직접 보내기</span></button>'+
       '<button class="menu-item" data-a="call"><span>📞</span>전화 문의</button>'+
       '<button class="menu-item" data-a="msg"><span>💬</span>메시지로 가공 가능 여부 묻기</button>'+
-      '<button class="menu-item" data-a="quote"><span>💰</span>이 조건으로 정확한 견적 묻기<span class="sub">예상 '+(function(){ var t = costItems(s).total; return range(t[0],t[1]); })()+'</span></button>'+
+      '<div class="notice">'+NOTICE+'</div>'+
       '<button class="menu-item" data-a="close"><span>✕</span>닫기</button>';
+  }
+  /* 조건 카드에 들어갈 줄들 (도수는 공유에 동의했을 때만 값이 들어가요) */
+  function cardRows(){
+    var rows = [["프레임", frameLabel()+(state.model ? " ("+state.model.brand+" "+state.model.model+")" : "")]];
+    if(state.cat!==null){
+      var cf = {sure:"확실해요", maybe:"아마 그래요", unknown:"몰라요"}[state.matConf] || "확실해요";
+      rows.push(["소재 확신", cf+(state.matConf!=="sure" ? " · 실물 확인 필요" : "")]);
+    }
+    var w = wanted().map(capName);
+    rows.push(["필요한 가공", w.length ? w.join(" · ") : "없음"]);
+    if(state.rxMode==="none") rows.push(["도수", "무도수 (도수 없는 렌즈)"]);
+    else if(state.rxMode==="unknown" || (state.rxMode==="have" && !state.rxKnow)) rows.push(["도수", "잘 몰라요 · 측정이 필요해요"]);
+    else if(hasRxValues()){
+      rows.push(["도수", state.shareRx
+        ? "R "+rxEyeText(state.rxv.R)+" · L "+rxEyeText(state.rxv.L)+" · "+(state.pdKnown ? "PD "+state.pd.toFixed(1) : "PD 모름")
+        : "공유 안 함 (매장에서 직접 말할게요)"]);
+    }
+    return rows;
+  }
+  function cardText(){
+    var s = shopById(state.selected);
+    return "[After Frame 조건 카드]\nTo. "+s.name+"\n"+cardRows().map(function(r){ return r[0]+": "+r[1]; }).join("\n")+"\n(정확한 견적은 상담에서 알려 주세요)";
+  }
+  function renderCard(){
+    askView = "card";
+    var s = shopById(state.selected);
+    $("askBody").innerHTML =
+      '<div style="font-size:13px;font-weight:700;padding:4px 12px 2px">📋 내 조건 카드</div>'+
+      '<div style="font-size:11px;color:var(--sub);padding:0 12px 4px">직접 보내거나, 매장에서 이 화면을 보여 주세요.</div>'+
+      '<div style="padding:0 4px">'+rxToggleHtml()+'</div>'+
+      '<div class="condcard"><div class="ct">To. '+esc(s.name)+'</div><dl>'+
+        cardRows().map(function(r){ return '<dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd>'; }).join("")+'</dl></div>'+
+      '<div class="cardbtns"><button type="button" data-a="copy">복사하기</button><button type="button" data-a="sms">문자로</button><button type="button" data-a="call">전화하기</button></div>'+
+      '<div class="notice">'+NOTICE+'</div>'+
+      '<button class="menu-item" data-a="back"><span>←</span>돌아가기</button>';
   }
   $("btnAsk").addEventListener("click", function(){
     state.shareRx = false; renderAsk();
@@ -2276,10 +2324,18 @@
   $("askBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
     var a = b.dataset.a;
-    if(a==="share"){ state.shareRx = !state.shareRx; renderAsk(); return; }
+    if(a==="share"){ state.shareRx = !state.shareRx; if(askView==="card") renderCard(); else renderAsk(); return; }
+    if(a==="card"){ renderCard(); return; }
+    if(a==="back"){ renderAsk(); return; }
+    if(a==="copy"){
+      var t = cardText(), ok = function(v){ toast(3, v ? "조건 카드를 복사했어요" : "복사가 막혀 있어요. 화면을 직접 보여 주세요"); };
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function(){ ok(true); }, function(){ ok(false); });
+      else ok(false);
+      return;
+    }
+    if(a==="sms"){ toast(3,"문자 앱을 열어요 · 받는 사람은 직접 골라 주세요"); window.location.href = "sms:?&body=" + encodeURIComponent(cardText()); return; }
     closeAsk();
     if(a==="call") toast(3,"예시 매장이라 전화는 연결되지 않아요");
-    if(a==="quote") toast(3,"견적 문의를 보냈어요 (예시)");
     if(a==="msg") toast(3, hasRxValues() ? (state.shareRx ? "도수를 포함해 문의를 보냈어요 (예시)" : "도수는 빼고 문의를 보냈어요 (예시)") : "문의를 보냈어요 (예시)");
   });
   $("dim3").addEventListener("click", closeAsk);
