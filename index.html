@@ -381,6 +381,14 @@
   @keyframes traysIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
   @media (prefers-reduced-motion:reduce){ .case-open.anim .case-lid,.case-open.anim .slots{animation:none} }
 
+  /* 이전 도수 기록 */
+  .rxrec{margin-bottom:10px;padding-bottom:10px;border-bottom:.5px solid var(--sep)}
+  .rxrec-i{background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 11px;margin-top:6px}
+  .rxrec-i .rr-t{font-size:12px}
+  .rxrec-i .rr-t span{color:var(--sub)}
+  .rxrec-i .rr-s{font-size:10.5px;color:var(--sub);margin-top:2px;line-height:1.45}
+  .rxf{display:block;font-size:11px;color:var(--sub);margin-top:8px}
+
   /* 알림 */
   .alertcard{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 12px;padding:9px 12px;border:1px solid rgba(245,158,11,.45);background:rgba(254,243,199,.7);border-radius:12px;font-size:12px;font-weight:700;color:#92400e;text-align:left}
   .alertcard[hidden]{display:none}
@@ -603,7 +611,7 @@
       <div class="label">
         <div class="num">화면 01 · 단계 1·2·3</div>
         <h2>조건 입력</h2>
-        <p>내 프레임 · 도수·렌즈 기능 · 위치</p>
+        <p>내 프레임 · 도수 · 지역</p>
       </div>
       <div class="phone" id="p1"><div class="display">
         <div class="status">
@@ -652,17 +660,6 @@
             </div>
             <div class="rxpanel" id="rxPanel"></div>
 
-            <!-- 3. 렌즈 기능 -->
-            <div class="group-title">원하는 렌즈 기능 <span class="opt-badge">선택</span></div>
-            <button type="button" class="fold" id="funcsHead" aria-expanded="false" aria-controls="funcs">
-              <span class="fold-t" id="funcsSum"></span><span class="chev">▾</span>
-            </button>
-            <div class="funcs" id="funcs" hidden></div>
-
-            <!-- 예상 비용 -->
-            <div class="group-title">예상 비용 미리보기 <span class="opt-badge">참고</span></div>
-            <div class="price" id="priceCard"></div>
-
             <!-- 4. 지역 -->
             <div class="group-title">지역 <span class="req">필수</span></div>
             <div class="group">
@@ -672,10 +669,11 @@
         </div>
 
         <div class="bottom" style="flex-direction:column;gap:6px">
-          <div class="sel-count" id="selCount"></div>
-          <button class="cta" type="button" id="btnFind">가능한 안경원 보기
+          <div class="sel-count" id="selCount1"></div>
+          <button class="cta" type="button" id="btnNext">다음: 렌즈 기능
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
+          <button type="button" class="linkbtn" id="btnSkip" style="margin:0">렌즈 기능은 건너뛰고 바로 안경원 보기</button>
         </div>
 
         <div class="dim" id="dim1"></div>
@@ -707,10 +705,60 @@
       </div></div>
     </div>
 
-    <!-- ===== 화면 2 : 마이페이지 ===== -->
+    <!-- ===== 화면 2 : 렌즈 기능 · 예상 비용 ===== -->
+    <div class="screen-wrap" id="sFn">
+      <div class="label">
+        <div class="num">화면 02 · 단계 2</div>
+        <h2>렌즈 기능</h2>
+        <p>원하는 기능 · 예상 비용 미리보기</p>
+      </div>
+      <div class="phone" id="pFn"><div class="display">
+        <div class="status">
+          <span>9:41</span><div class="island"></div>
+          <div class="sys">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg>
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 2.2c2.2 0 4.2.9 5.7 2.3l1.1-1.1A9.6 9.6 0 0 0 7.5.6 9.6 9.6 0 0 0 .7 3.4l1.1 1.1a8 8 0 0 1 5.7-2.3Zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1a6.4 6.4 0 0 0-9 0l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3Zm0 3.2c-.5 0-1 .2-1.3.5L7.5 10.4l1.3-1.3a1.9 1.9 0 0 0-1.3-.5Z"/></svg>
+            <div class="batt"><i></i></div>
+          </div>
+        </div>
+        <div class="scroll" id="fnScroll">
+          <div class="nav">
+            <button class="icon-btn" type="button" aria-label="조건 입력으로" id="fnBack">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <div class="t">렌즈 기능</div>
+            <span></span>
+          </div>
+          <div class="content">
+            <div class="large">어떤 렌즈 기능이<br>필요하세요?</div>
+            <div class="hint">필요 없으면 바로 안경원을 찾아도 돼요.</div>
+
+            <div class="group-title">원하는 렌즈 기능 <span class="opt-badge">선택</span></div>
+            <button type="button" class="fold" id="funcsHead" aria-expanded="true" aria-controls="funcs" hidden>
+              <span class="fold-t" id="funcsSum"></span><span class="chev">▾</span>
+            </button>
+            <div class="funcs" id="funcs"></div>
+
+            <div class="group-title">예상 비용 미리보기 <span class="opt-badge">참고</span></div>
+            <div class="price" id="priceCard"></div>
+          </div>
+        </div>
+
+        <div class="bottom" style="flex-direction:column;gap:6px">
+          <div class="sel-count" id="selCount"></div>
+          <button class="cta" type="button" id="btnFind">가능한 안경원 보기
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="toast" id="toastFn"></div>
+        <div class="homebar"></div>
+      </div></div>
+    </div>
+
+    <!-- ===== 화면 3 : 마이페이지 ===== -->
     <div class="screen-wrap" id="sMy">
       <div class="label">
-        <div class="num">화면 02 · 마이페이지</div>
+        <div class="num">화면 03 · 마이페이지</div>
         <h2>마이페이지</h2>
         <p>내 안경장 · 내 장소 · 저장한 안경원</p>
       </div>
@@ -741,7 +789,7 @@
     <!-- ===== 화면 3 : 매장 목록 ===== -->
     <div class="screen-wrap" id="s2">
       <div class="label">
-        <div class="num">화면 03 · 단계 4</div>
+        <div class="num">화면 04 · 단계 4</div>
         <h2>매장 목록</h2>
         <p>지도 · 안경원 카드 · 가공 가능 태그</p>
       </div>
@@ -794,7 +842,7 @@
     <!-- ===== 화면 3 : 매장 상세 ===== -->
     <div class="screen-wrap" id="s3">
       <div class="label">
-        <div class="num">화면 04 · 단계 5</div>
+        <div class="num">화면 05 · 단계 5</div>
         <h2>매장 상세</h2>
         <p>가공 가능 항목 · 외부 프레임 정책·작업 기간 · 위치·영업 정보</p>
       </div>
@@ -1126,7 +1174,7 @@
     head.setAttribute("aria-expanded", funcsOpen ? "true" : "false");
     $("funcs").hidden = !funcsOpen;
   }
-  var funcsOpen = false;
+  var funcsOpen = true; /* 렌즈 기능은 이제 별도 화면이라 항상 펼쳐서 보여 줘요 */
   $("funcsHead").addEventListener("click", function(){ funcsOpen = !funcsOpen; renderFuncs(); });
   $("funcs").addEventListener("click", function(e){
     var f = e.target.closest(".func"); if(!f) return;
@@ -1142,10 +1190,12 @@
     prog[2].classList.toggle("on", state.funcs.length>0);
     prog[3].classList.toggle("on", state.region===0);
     var rxTxt = {have: state.rxKnow ? (axisMissing().length ? "AXIS 입력 필요" : "도수 입력") : "도수 있음", none:"무도수", unknown:"도수 모름"}[state.rxMode] || "도수 미선택";
-    $("selCount").textContent = state.rim===null
-      ? "테 모양을 먼저 알려 주세요"
-      : frameLabel()+" · "+rxTxt+(state.funcs.length?" · 기능 "+state.funcs.length+"개":"")+" · "+REGIONS[state.region].replace(/ /g,"");
+    var baseTxt = frameLabel()+" · "+rxTxt;
+    var regTxt = REGIONS[state.region].replace(/ /g,"");
+    $("selCount1").textContent = state.rim===null ? "테 모양을 먼저 알려 주세요" : baseTxt+" · "+regTxt+(state.funcs.length?" · 기능 "+state.funcs.length+"개":"");
+    $("selCount").textContent = state.rim===null ? "테 모양을 먼저 알려 주세요" : baseTxt+(state.funcs.length?" · 기능 "+state.funcs.length+"개":" · 기능 선택 안 함")+" · "+regTxt;
     $("btnFind").disabled = state.rim===null;
+    $("btnNext").disabled = state.rim===null;
     $("rxMode").querySelectorAll(".chip").forEach(function(c){ c.classList.toggle("on", c.dataset.v===state.rxMode); });
     renderFrameCell(); renderRx(); renderPrice();
   }
@@ -1207,10 +1257,10 @@
       return;
     }
     if(state.rxMode==="unknown"){
-      p.innerHTML = '<div class="rxq">도수를 모르셔도 괜찮아요</div>' + unknownActions();
+      p.innerHTML = rxRecordsHtml() + '<div class="rxq">도수를 모르셔도 괜찮아요</div>' + unknownActions();
       return;
     }
-    var h = '<div class="rxq">도수 값을 알고 있나요?</div>'+
+    var h = rxRecordsHtml() + '<div class="rxq">도수 값을 알고 있나요?</div>'+
       '<div class="seg2"><button type="button" data-know="1" class="'+(state.rxKnow?"on":"")+'">값 입력하기</button>'+
       '<button type="button" data-know="0" class="'+(state.rxKnow?"":"on")+'">값은 몰라요</button></div>';
     if(state.rxKnow){
@@ -1244,7 +1294,7 @@
       if(m.cyl>=2) notes.push("고난시");
       if(notes.length) h += '<div class="rxnote">ⓘ 입력한 값은 '+notes.join("·")+' 범위예요 — 처리 가능한 안경원만 보여 드려요</div>';
       h += lensGuide();
-      h += '<div class="privacy">🔒 <span>입력한 도수는 이 기기에서 검색에만 쓰이고 저장되지 않아요.</span></div>';
+      h += rxSaveHtml();
     }else{
       h += unknownActions();
     }
@@ -1252,6 +1302,16 @@
   }
   $("rxPanel").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.rxload){ loadRx(+b.dataset.rxload); return; }
+    if(b.dataset.rxtoggle){ rxSaveOpen = !rxSaveOpen; renderRx(); return; }
+    if(b.dataset.rxsave){
+      if(axisMissing().length){ toast(1,"난시(CYL)가 있으면 AXIS도 꼭 입력해 주세요"); return; }
+      var rd = ($("rxDate").value || "").trim() || todayStr(), rs = ($("rxShop").value || "").trim(), recs = getRx();
+      if(recs.length>=RXMAX){ var old0 = rxByDate(false)[0]; recs.splice(recs.indexOf(old0), 1); }
+      recs.push({id:Date.now(), date:rd, shop:rs, R:JSON.parse(JSON.stringify(state.rxv.R)), L:JSON.parse(JSON.stringify(state.rxv.L)), pd:state.pd, pdKnown:state.pdKnown});
+      persistRx(); rxSaveOpen = false; updateS1();
+      toast(1,"도수를 이 기기에 기록했어요 ("+recs.length+"/"+RXMAX+")"); return;
+    }
     if(b.dataset.know){ state.rxKnow = b.dataset.know==="1"; updateS1(); return; }
     if(b.dataset.eye){ state.eye = b.dataset.eye; renderRx(); return; }
     if(b.dataset.f){
@@ -1539,17 +1599,27 @@
     $("top").scrollIntoView({behavior:"smooth"});
     setStep(0);
   });
-  $("btnFind").addEventListener("click", function(){
-    if(state.rim===null){ toast(1,"테 모양을 먼저 알려 주세요"); return; }
+  /* 화면 01 조건에 문제가 있으면 안내 글을 돌려줘요 (없으면 null) */
+  function s1Problem(){
+    if(state.rim===null) return "테 모양을 먼저 알려 주세요";
     var miss = (state.rxMode==="have" && state.rxKnow) ? axisMissing() : [];
-    if(miss.length){
-      state.eye = miss[0]; setStep(2); updateS1();
-      toast(1,"난시(CYL)가 있으면 AXIS도 꼭 입력해 주세요");
-      return;
-    }
-    if(state.region!==0){ toast(1,"이 지역은 아직 준비 중이에요"); return; }
+    if(miss.length){ state.eye = miss[0]; setStep(2); updateS1(); return "난시(CYL)가 있으면 AXIS도 꼭 입력해 주세요"; }
+    if(state.region!==0) return "이 지역은 아직 준비 중이에요";
+    return null;
+  }
+  function tryFind(){
+    var m = s1Problem();
+    if(m){ go(1); toast(1, m); return; }
     renderList(true); renderDetail(); setStep(4); go(2);
+  }
+  $("btnFind").addEventListener("click", tryFind);
+  $("btnSkip").addEventListener("click", tryFind);
+  $("btnNext").addEventListener("click", function(){
+    var m = s1Problem();
+    if(m){ toast(1, m); return; }
+    setStep(2); go("Fn");
   });
+  $("fnBack").addEventListener("click", function(){ setStep(1); go(1); });
 
   function renderMenu(kind){
     var b = $("menuBody");
@@ -1833,7 +1903,65 @@
     }
   });
 
-  /* ================= 마이페이지 (이 기기에 저장) ================= */
+  /* ================= 이전 도수 기록 (기본은 저장 안 함 · 직접 켰을 때만 이 기기에 최대 2개) ================= */
+  var RXKEY = "afterframe.rx.v1", RXMAX = 2, rxRecs = null, rxSaveOpen = false;
+  function getRx(){
+    if(rxRecs===null){
+      try{ var r = JSON.parse(localStorage.getItem(RXKEY) || "[]"); rxRecs = Array.isArray(r) ? r : []; }
+      catch(e){ rxRecs = []; }
+    }
+    return rxRecs;
+  }
+  function persistRx(){ try{ localStorage.setItem(RXKEY, JSON.stringify(rxRecs)); }catch(e){} refreshMy(); }
+  function rxByDate(desc){
+    return getRx().slice().sort(function(a,b){ var c = (a.date||"").localeCompare(b.date||"") || (a.id-b.id); return desc ? -c : c; });
+  }
+  function rxSummary(r){ return "R "+rxEyeText(r.R)+" · L "+rxEyeText(r.L)+" · "+(r.pdKnown ? "PD "+r.pd.toFixed(1) : "PD 모름"); }
+  function rxRecordsHtml(){
+    var list = rxByDate(true);
+    if(!list.length) return "";
+    return '<div class="rxrec"><div class="rxq">📋 이전 도수로 맞추기</div>'+list.map(function(r){
+      var old = monthsSince(r.date) >= 24;
+      return '<div class="rxrec-i"><div class="rr-t"><b>측정일 '+esc(r.date || "모름")+'</b>'+(r.shop ? '<span> · '+esc(r.shop)+'</span>' : '')+'</div>'+
+        '<div class="rr-s">'+esc(rxSummary(r))+'</div>'+
+        (old ? '<div class="rxwarn">2년이 넘은 기록이에요. 눈 상태가 달라졌을 수 있어요. 새로 확인해 보세요.</div>' : '')+
+        '<button type="button" class="vault-add" style="margin:6px 0 0;width:100%" data-rxload="'+r.id+'">이 도수 불러오기</button></div>';
+    }).join("")+'</div>';
+  }
+  function rxSaveHtml(){
+    var full = getRx().length >= RXMAX, oldest = full ? rxByDate(false)[0] : null;
+    var h = '<div class="privacy">🔒 <span>도수는 기본으로 저장되지 않아요. 아래에서 직접 선택할 때만, 이 기기에만 저장해요.</span></div>'+
+      '<button type="button" class="act'+(rxSaveOpen?" on":"")+'" data-rxtoggle="1"><span class="ic">💾</span><span class="t">이 도수 기록해 두기 <span style="color:var(--faint);font-weight:400">(선택)</span>'+
+      '<small>다음에 "이전 도수로 맞추기"로 불러와요</small></span><span class="tg"></span></button>';
+    if(rxSaveOpen){
+      h += '<div class="peditor"><b style="font-size:12px">도수 기록 (최대 '+RXMAX+'개)</b>'+
+        '<label class="rxf">측정일<input type="date" id="rxDate" value="'+todayStr()+'"></label>'+
+        '<label class="rxf">측정한 안경원 (선택)<input type="text" id="rxShop" maxlength="20" placeholder="예: ○○안경"></label>'+
+        (full ? '<div class="rxwarn">이미 '+RXMAX+'개가 저장돼 있어요. 저장하면 가장 오래된 기록(측정일 '+esc(oldest.date || "모름")+')이 지워져요.</div>' : '')+
+        '<div class="row2"><button type="button" data-rxtoggle="1">취소</button><button type="button" class="pri" data-rxsave="1">이 기기에 저장</button></div></div>';
+    }
+    return h;
+  }
+  function loadRx(id){
+    var r = getRx().filter(function(x){ return x.id===id; })[0]; if(!r) return;
+    state.rxMode = "have"; state.rxKnow = true; state.measure = false;
+    state.rxv = JSON.parse(JSON.stringify({R:r.R, L:r.L})); state.pd = r.pd; state.pdKnown = r.pdKnown;
+    setStep(2); updateS1();
+    toast(1,"이전 도수를 불러왔어요 · 입력 칸에서 고칠 수 있어요");
+  }
+  function rxMyHtml(){
+    var list = rxByDate(true), h = '<div class="group-title">📋 내 도수 정보 <span class="opt-badge">'+list.length+'/'+RXMAX+'</span></div>';
+    if(!list.length) return h+'<div class="notice">저장한 도수가 없어요. 조건 입력 화면에서 도수를 입력하고 "이 도수 기록해 두기"를 켜면 여기에 보여요.</div>';
+    h += list.map(function(r){
+      return '<div class="fcard"><div class="fc-top"><div class="grow"><b>'+esc(r.date ? "측정일 "+r.date : "측정일 모름")+(r.shop ? " · "+esc(r.shop) : "")+'</b><small>'+esc(rxSummary(r))+'</small></div>'+
+        '<button type="button" class="vdel" data-my="rxdel" data-id="'+r.id+'" aria-label="도수 기록 지우기">✕</button></div>'+
+        '<div class="fc-f"><span>측정일</span><input type="date" data-rx="date" data-id="'+r.id+'" value="'+esc(r.date||"")+'">'+
+        '<span>측정 안경원</span><input type="text" maxlength="20" data-rx="shop" data-id="'+r.id+'" placeholder="예: ○○안경" value="'+esc(r.shop||"")+'"></div></div>';
+    }).join("");
+    return h+'<div class="notice">도수는 민감한 정보예요. 이 기기에만 저장되고 서버로 보내지 않아요. 언제든 지울 수 있어요.</div>';
+  }
+
+  /* ================= 마이페이지 (이 기기에 저장) =================
   /* 장소 저장·삭제: 위치 시트와 마이페이지가 같은 저장값을 써요 */
   function resetLocIfSelected(kind){
     if(state.loc.kind===kind){ state.loc = Object.assign({}, GPS); applyLoc(); renderList(true); renderDetail(); }
@@ -1983,12 +2111,13 @@
       h += '<button type="button" class="vault-add" data-my="padd">＋ 장소 추가</button>';
     }
     h += '<div class="notice">동네·역 이름만 저장하고, 이 기기에만 보관해요. 매장 목록의 📍 위치 버튼에도 똑같이 보여요.</div>';
+    h += rxMyHtml();
     h += '<div class="group-title">♥ 저장한 안경원 <span class="opt-badge">'+likedIds.length+'곳</span></div>';
     h += likedIds.length ? likedIds.map(function(id){
       var s = shopById(id);
       return '<button type="button" class="scard" data-my="shop" data-id="'+id+'"><span style="font-weight:800;color:var(--main)">'+id+'</span><span style="flex:1;min-width:0"><b>'+esc(s.name)+'</b><small>'+esc(s.addr.split(",")[0])+' · '+(s.open?"영업 중":"영업 종료")+'</small></span><span class="chev">›</span></button>';
     }).join("") : '<div class="notice">아직 없어요. 매장 상세 화면의 ♡를 누르면 여기에 모여요.</div>';
-    h += '<div class="soon">곧 추가돼요 · 🔔 교체·점검 알림 · 📋 이전 도수 기록 · 🧾 가공 이력</div>';
+    h += '<div class="soon">곧 추가돼요 · 🧾 가공 이력 · 로그인</div>';
     $("myBody").innerHTML = h;
     renderAlertCard();
   }
@@ -1997,6 +2126,11 @@
   $("myBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b || !b.dataset.my) return;
     var a = b.dataset.my, v = getVault();
+    if(a==="rxdel"){
+      var rid = +b.dataset.id, rr = getRx(), ri = rr.map(function(x){ return x.id; }).indexOf(rid);
+      if(ri>-1){ rr.splice(ri, 1); persistRx(); renderRx(); toast("My","도수 기록을 지웠어요"); }
+      return;
+    }
     if(a==="shift"){ shiftMonths = shiftMonths ? 0 : 13; renderMy(); toast("My", shiftMonths ? "시연: 13개월 뒤 날짜로 봐요" : "오늘 날짜로 돌아왔어요"); return; }
     if(a==="opencase"){ caseOpen = true; caseAnim = true; caseSel = +b.dataset.i; delMode = false; renderMy(); caseAnim = false; return; }
     if(a==="lensack" || a==="lensnew" || a==="checkdone"){
@@ -2046,6 +2180,11 @@
       var ci = getVault()[+e.target.dataset.i]; if(!ci) return;
       ci.chk = ci.chk || {}; ci.chk[e.target.dataset.chk] = e.target.checked;
       var ke = myEdit; myEdit = {k:"_"}; persistVault(); myEdit = ke; return; /* 체크할 때는 화면을 다시 그리지 않아요 */
+    }
+    if(e.target.dataset.rx){
+      var rec = getRx().filter(function(x){ return x.id===+e.target.dataset.id; })[0]; if(!rec) return;
+      rec[e.target.dataset.rx] = e.target.value.trim();
+      var kk = myEdit; myEdit = {k:"_"}; persistRx(); myEdit = kk; renderRx(); toast("My","저장했어요"); return;
     }
     var f = e.target.dataset.f; if(!f) return;
     var it = getVault()[+e.target.dataset.i]; if(!it) return;
