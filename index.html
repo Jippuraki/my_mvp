@@ -1896,31 +1896,40 @@
     c.hidden = !n;
     if(n) $("alertCardTxt").textContent = "알림 "+n+"개 · 교체·점검 시기가 됐어요";
   }
+  /* ----- 알림 보여 주기: 알림 칸은 한 줄 카드, 자세한 알림은 안경통의 해당 안경 카드 안에서 (B안으로 확정) ----- */
+  function itemLabel(i){ var it = getVault()[i]; return esc(it.nick || vaultLabel(it)); }
+  function alertCardHtml(a){
+    var nm = itemLabel(a.i);
+    if(a.type==="lens"){
+      return '<div class="acard"><b>👓 '+nm+' · 렌즈 교체·시력 확인 시기예요</b>'+
+        '<div class="ab">렌즈를 맞춘 지 약 '+a.months+'개월이 지났어요. 눈이 피곤하거나 잘 안 보이면 안경원이나 안과에서 시력을 확인해 보세요. (참고용 안내예요)</div>'+
+        '<div class="abtns"><button type="button" data-my="lensack" data-i="'+a.i+'">시력 확인했어요</button>'+
+        '<button type="button" data-my="lensnew" data-i="'+a.i+'">새 렌즈 맞췄어요</button>'+
+        '<button type="button" class="pri" data-my="use" data-i="'+a.i+'">이 프레임으로 안경원 찾기</button></div></div>';
+    }
+    var ck = getVault()[a.i].chk || {};
+    return '<div class="acard"><b>🔧 '+nm+' · 안경 점검 시기예요</b>'+
+      '<div class="ab">마지막 점검 후 약 '+a.months+'개월이 지났어요. 아래를 확인해 보세요.</div>'+
+      CHECKS.map(function(t, k){ return '<label class="chk"><input type="checkbox" data-chk="'+k+'" data-i="'+a.i+'"'+(ck[k]?" checked":"")+'>'+t+'</label>'; }).join("")+
+      '<div class="ab">걸리는 곳이 있으면 안경원에서 점검받아 보세요.</div>'+
+      '<div class="abtns"><button type="button" class="pri" data-my="checkdone" data-i="'+a.i+'">점검 끝났어요</button></div></div>';
+  }
+  /* B안: 선택한 안경의 알림만 그 안경 카드 안에서 보여 줘요 */
+  function itemAlertsHtml(i){
+    return computeAlerts().filter(function(a){ return a.i===i; }).map(alertCardHtml).join("");
+  }
   function alertsHtml(){
-    var list = computeAlerts(), v = getVault(), h = '<div class="group-title">🔔 알림 <span class="opt-badge">'+list.length+'개</span></div>';
+    var list = computeAlerts(), h = '<div class="group-title">🔔 알림 <span class="opt-badge">'+list.length+'개</span></div>';
     if(!list.length) h += '<div class="notice">지금은 알림이 없어요. 렌즈를 맞춘 지 약 '+LENS_MONTHS+'개월이 지나거나, 점검한 지 약 '+CHECK_MONTHS+'개월이 지나면 여기에 알려 드려요.</div>';
-    list.forEach(function(a){
-      var it = v[a.i], nm = esc(it.nick || vaultLabel(it));
-      if(a.type==="lens"){
-        h += '<div class="acard"><b>👓 '+nm+' · 렌즈 교체·시력 확인 시기예요</b>'+
-          '<div class="ab">렌즈를 맞춘 지 약 '+a.months+'개월이 지났어요. 눈이 피곤하거나 잘 안 보이면 안경원이나 안과에서 시력을 확인해 보세요. (참고용 안내예요)</div>'+
-          '<div class="abtns"><button type="button" data-my="lensack" data-i="'+a.i+'">시력 확인했어요</button>'+
-          '<button type="button" data-my="lensnew" data-i="'+a.i+'">새 렌즈 맞췄어요</button>'+
-          '<button type="button" class="pri" data-my="use" data-i="'+a.i+'">이 프레임으로 안경원 찾기</button></div></div>';
-      }else{
-        var ck = it.chk || {};
-        h += '<div class="acard"><b>🔧 '+nm+' · 안경 점검 시기예요</b>'+
-          '<div class="ab">마지막 점검 후 약 '+a.months+'개월이 지났어요. 아래를 확인해 보세요.</div>'+
-          CHECKS.map(function(t, k){ return '<label class="chk"><input type="checkbox" data-chk="'+k+'" data-i="'+a.i+'"'+(ck[k]?" checked":"")+'>'+t+'</label>'; }).join("")+
-          '<div class="ab">걸리는 곳이 있으면 안경원에서 점검받아 보세요.</div>'+
-          '<div class="abtns"><button type="button" class="pri" data-my="checkdone" data-i="'+a.i+'">점검 끝났어요</button></div></div>';
-      }
-    });
+    else h += '<div class="acard"><b>🔔 알림 '+list.length+'개</b>'+
+      '<div class="ab">안경통에서 🔔이 붙은 칸을 누르면 그 안경의 알림이 열려요.</div>'+
+      '<div class="abtns"><button type="button" class="pri" data-my="opencase" data-i="'+list[0].i+'">안경통 열어서 확인하기</button></div></div>';
     h += '<div class="demo-shift"><span>시연용 · 지금 날짜: '+todayStr()+(shiftMonths?' ('+shiftMonths+'개월 뒤로 본 상태)':'')+'<br>알림이 뜨는 모습을 보려고 날짜를 앞당겨 봐요.</span>'+
       '<button type="button" class="'+(shiftMonths?"on":"")+'" data-my="shift">'+(shiftMonths?"되돌리기":"13개월 뒤 보기")+'</button></div>';
     h += '<div class="notice">알림에는 특정 안경원 추천이나 광고가 들어가지 않아요. 건강에 대한 안내는 참고용이에요.</div>';
     return h;
   }
+
   /* 안경통: 닫혀 있다가 누르면 뚜껑이 열리고 칸마다 프레임이 보여요 (칸 수 = 보관함 최대 개수) */
   var caseOpen = false, caseAnim = false, caseSel = -1, delMode = false, undoDel = null;
   function slotName(it){ return it.nick || (RIMS[it.rim].name + (it.cat!==null && it.cat>=0 ? " "+(it.sub>=0 ? MATCATS[it.cat].subs[it.sub][0] : MATCATS[it.cat].name) : "")); }
@@ -1955,7 +1964,7 @@
     h += alertsHtml();
     h += '<div class="group-title">🧰 내 안경장 <span class="opt-badge">'+v.length+'/'+VMAX+'</span></div>';
     h += caseHtml(v);
-    if(caseOpen && v[caseSel]) h += frameCard(v[caseSel], caseSel);
+    if(caseOpen && v[caseSel]) h += itemAlertsHtml(caseSel) + frameCard(v[caseSel], caseSel);
     h += v.length<VMAX
       ? '<button type="button" class="vault-add" data-my="addframe">＋ 프레임 추가 (사진 · 검색 · 직접 고르기)</button>'
       : '<div class="notice">안경장이 가득 찼어요 (최대 '+VMAX+'개). 하나를 지우면 새로 넣을 수 있어요.</div>';
@@ -1989,6 +1998,7 @@
     var b = e.target.closest("button"); if(!b || !b.dataset.my) return;
     var a = b.dataset.my, v = getVault();
     if(a==="shift"){ shiftMonths = shiftMonths ? 0 : 13; renderMy(); toast("My", shiftMonths ? "시연: 13개월 뒤 날짜로 봐요" : "오늘 날짜로 돌아왔어요"); return; }
+    if(a==="opencase"){ caseOpen = true; caseAnim = true; caseSel = +b.dataset.i; delMode = false; renderMy(); caseAnim = false; return; }
     if(a==="lensack" || a==="lensnew" || a==="checkdone"){
       var ai = v[+b.dataset.i]; if(!ai) return;
       if(a==="lensack"){ ai.lensAck = todayStr(); toast("My","확인했어요. 약 "+LENS_MONTHS+"개월 뒤에 다시 알려 드려요"); }
