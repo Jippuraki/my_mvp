@@ -325,6 +325,13 @@
   .subwarn{font-size:10.5px;color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:5px 8px;margin-top:6px}
   .sh-done{margin:16px 4px 0;width:calc(100% - 8px);height:50px}
 
+  /* 굴절률 선택 불가 · 회원 정보 */
+  .pc.dis{opacity:.45;text-decoration:line-through;cursor:not-allowed;background:rgba(15,27,51,.05)}
+  .pc.dis i{background:#94a3b8;text-decoration:none}
+  .pfbtn{margin-left:auto;flex:0 0 auto;border:1px solid rgba(37,99,235,.4);background:var(--glass-strong);color:var(--main);border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700}
+  .pfrow{margin-top:10px;font-size:11px;color:var(--sub)}
+  .pfrow .chips{margin-top:5px}
+
   /* 조건 카드 */
   .condcard{margin:6px 4px 0;background:#fff;border:1px solid rgba(37,99,235,.3);border-radius:16px;padding:12px 14px;box-shadow:0 2px 10px rgba(30,64,175,.08)}
   .condcard .ct{font-size:11px;font-weight:700;color:var(--main);margin-bottom:6px}
@@ -790,6 +797,11 @@
           </div>
           <div class="content my" id="myBody"></div>
         </div>
+        <div class="dim" id="dimMy"></div>
+        <div class="menu" id="menuMy">
+          <div class="grab"></div>
+          <div id="pfBody"></div>
+        </div>
         <div class="toast" id="toastMy"></div>
         <div class="homebar"></div>
       </div></div>
@@ -995,9 +1007,18 @@
   var NOPOWER_PRICE = [2,4];
   var FUNC_PRICE = {"틴팅":[1,3],"미러":[3,6],"편광":[5,10],"변색":[6,12],"블루라이트":[1,3]};
 
+  /* 회원 정보(시연용): 성별·기존 안경 유무. 성별은 PD 평균값을 채우는 데만 써요. 이 기기에만 저장 */
+  var PD_AVG = {m:64, f:62, x:63}, profile = loadProfile();
+  function loadProfile(){
+    try{ var p = JSON.parse(localStorage.getItem("afterframe.profile.v1") || "null"); return (p && typeof p==="object") ? p : {}; }
+    catch(e){ return {}; }
+  }
+  function saveProfile(p){ profile = p; try{ localStorage.setItem("afterframe.profile.v1", JSON.stringify(p)); }catch(e){} }
+  function pdDefault(){ return PD_AVG[profile.gender] || 63; }
+
   var INIT = function(){ return {
     rim:2, cat:1, sub:0, matConf:"sure", model:null, buy:"online", where:0,
-    rxMode:"have", rxKnow:true, eye:"R", pd:63, pdKnown:true, measure:false,
+    rxMode:(profile.hasGlasses===false ? "unknown" : "have"), rxKnow:true, eye:"R", pd:pdDefault(), pdKnown:true, pdTouched:false, rxTouched:false, measure:false,
     /* cylMode: "has"(난시 있음·CYL/AXIS 입력) · "none"(평도수·난시 없음) · "unknown"(몰라요) */
     rxv:{ R:{sph:-6.50, cyl:-2.25, axis:180, cylMode:"has"}, L:{sph:-6.25, cyl:-2.00, axis:175, cylMode:"has"} },
     funcs:[], region:0, pIdx:null, pDesign:null }; };
@@ -1086,10 +1107,19 @@
       design: (m.sph>=6 || m.cyl>=2) ? "양면비구면" : (m.sph>=2 || m.cyl>=1) ? "비구면" : "구면"
     };
   }
+  /* 도수에 따라 고를 수 있는 굴절률이 달라요 (|SPH| 기준 · 시연용 기준이고 제조사·매장마다 달라요) */
+  var IDX_RANGE = {"1.56":[0,6], "1.60":[0,8], "1.67":[2,12], "1.74":[4,15]};
+  function idxState(idx){
+    if(!(state.rxMode==="have" && state.rxKnow)) return {ok:true};
+    var m = maxRx().sph, r = IDX_RANGE[idx];
+    if(m < r[0]) return {ok:false, why:"도수가 낮아서 이 굴절률은 필요하지 않아요"};
+    if(m > r[1]) return {ok:false, why:"도수가 높아서 이 굴절률로는 너무 두꺼워요"};
+    return {ok:true};
+  }
   function lensSpec(){
     if(state.rxMode==="none") return {none:true};
     var rec = (state.rxMode==="have" && state.rxKnow) ? recommend() : null;
-    return { idx: state.pIdx || (rec ? rec.idx : "1.60"), design: state.pDesign || (rec ? rec.design : "비구면"), rec: rec };
+    return { idx: (state.pIdx && idxState(state.pIdx).ok) ? state.pIdx : (rec ? rec.idx : "1.60"), design: state.pDesign || (rec ? rec.design : "비구면"), rec: rec };
   }
   function won(x){
     x = x>=10 ? Math.round(x) : Math.round(x*2)/2;
@@ -1129,8 +1159,16 @@
     if(!sp.none){
       h += '<div class="pspec"><div class="plbl">굴절률</div><div class="pchips">'+
         ["1.56","1.60","1.67","1.74"].map(function(i){
+          var st = idxState(i);
+          if(!st.ok) return '<button type="button" class="pc dis" disabled aria-disabled="true" title="'+esc(st.why)+'" aria-label="'+i+' 선택 불가: '+esc(st.why)+'">'+i+'<i>불가</i></button>';
           return '<button type="button" class="pc'+(i===sp.idx?" on":"")+'" data-pidx="'+i+'">'+i+(sp.rec && sp.rec.idx===i ? '<i>추천</i>' : '')+'</button>';
         }).join("")+'</div>'+
+        (function(){
+          var bad = ["1.56","1.60","1.67","1.74"].filter(function(i){ return !idxState(i).ok; });
+          if(!bad.length) return "";
+          return '<div class="pnote">도수에 따라 고를 수 있는 굴절률이 달라요. "불가" 표시는 이 도수에서는 고를 수 없어요.<br>'+
+            bad.map(function(i){ return i+' · '+idxState(i).why; }).join('<br>')+'<br>제조사·매장마다 달라서 시연용 기준이에요.</div>';
+        })()+
         '<div class="plbl">렌즈 설계</div><div class="pchips">'+
         ["구면","비구면","양면비구면"].map(function(d){
           return '<button type="button" class="pc'+(d===sp.design?" on":"")+'" data-pdes="'+d+'">'+d+(sp.rec && sp.rec.design===d ? '<i>추천</i>' : '')+'</button>';
@@ -1212,7 +1250,7 @@
   /* ----- 도수 ----- */
   $("rxMode").addEventListener("click", function(e){
     var c = e.target.closest(".chip"); if(!c) return;
-    state.rxMode = state.rxMode===c.dataset.v ? null : c.dataset.v;
+    state.rxMode = state.rxMode===c.dataset.v ? null : c.dataset.v; state.rxTouched = true;
     setStep(2); updateS1();
   });
   var RXF = {
@@ -1257,6 +1295,11 @@
       '<div class="rec-foot">입력한 도수 기준의 일반적인 안내예요. 생활 습관·프레임 크기에 따라 달라질 수 있으니 최종 선택은 매장 안경사와 상담하세요. * 정확히 쓰지 않으면 렌즈 참고 정보는 달라질 수 있어요.</div>'+
     '</div>';
   }
+  function glassesTip(){
+    if(profile.hasGlasses===true) return '<div class="rxnote">📌 기존 안경이 있다면 안경 다리 안쪽 숫자나 예전 처방전·도수 기록을 확인해 보세요.</div>';
+    if(profile.hasGlasses===false) return '<div class="rxnote">📌 기존 안경이 없다면 도수를 먼저 측정해야 해요. 아래 "도수 측정 가능한 안경원만 보기"를 켜 보세요.</div>';
+    return "";
+  }
   function renderRx(){
     var p = $("rxPanel");
     if(!state.rxMode){ p.style.display="none"; return; }
@@ -1266,10 +1309,10 @@
       return;
     }
     if(state.rxMode==="unknown"){
-      p.innerHTML = rxRecordsHtml() + '<div class="rxq">도수를 모르셔도 괜찮아요</div>' + unknownActions();
+      p.innerHTML = rxRecordsHtml() + glassesTip() + '<div class="rxq">도수를 모르셔도 괜찮아요</div>' + unknownActions();
       return;
     }
-    var h = rxRecordsHtml() + '<div class="rxq">도수 값을 알고 있나요?</div>'+
+    var h = rxRecordsHtml() + glassesTip() + '<div class="rxq">도수 값을 알고 있나요?</div>'+
       '<div class="seg2"><button type="button" data-know="1" class="'+(state.rxKnow?"on":"")+'">값 입력하기</button>'+
       '<button type="button" data-know="0" class="'+(state.rxKnow?"":"on")+'">값은 몰라요</button></div>';
     if(state.rxKnow){
@@ -1294,7 +1337,12 @@
         [["1","값 입력"],["0","몰라요"]].map(function(x){
           return '<button type="button" data-pdk="'+x[0]+'" class="'+((x[0]==="1")===state.pdKnown?"on":"")+'">'+x[1]+'</button>';
         }).join("")+'</div></div>';
-      if(state.pdKnown) h += stepRow("pd","PD","동공 사이 거리 · 양쪽 공통",state.pd);
+      if(state.pdKnown){
+        h += stepRow("pd","PD","동공 사이 거리 · 양쪽 공통",state.pd);
+        if(!state.pdTouched) h += '<div class="rxnote">ⓘ '+(profile.gender
+          ? '회원 정보(성별) 기준 평균값이에요 (남성 약 64 · 여성 약 62mm). 실제 PD와 다를 수 있어서 매장에서 정확히 측정해요.'
+          : '마이페이지에서 회원가입을 하고 성별을 고르면 평균값으로 채워 드려요. 지금은 기본값 63mm예요.')+'</div>';
+      }
       else h += '<div class="rxnote">ⓘ PD를 몰라도 괜찮아요. 매장에서 측정해 드려요.</div>';
       if(rxHasUnknown()) h += '<button type="button" class="act'+(state.measure?" on":"")+'" data-act="measure"><span class="ic">🔍</span><span class="t">도수 측정 가능한 안경원만 보기<small>모르는 값은 방문해서 바로 잴 수 있는 곳만 찾아요</small></span><span class="tg"></span></button>';
       h += '<div class="rxdisc">* 정확히 쓰지 않으면 렌즈 참고 정보는 달라질 수 있어요.</div>';
@@ -1325,7 +1373,8 @@
     if(b.dataset.eye){ state.eye = b.dataset.eye; renderRx(); return; }
     if(b.dataset.f){
       var f = b.dataset.f, d = +b.dataset.d;
-      if(f==="pd"){ state.pd = Math.min(75, Math.max(50, state.pd + d*0.5)); }
+      state.rxTouched = true;
+      if(f==="pd"){ state.pd = Math.min(75, Math.max(50, state.pd + d*0.5)); state.pdTouched = true; }
       else{
         var c = RXF[f], o = state.rxv[state.eye];
         if(f==="axis" && o.axis===null) o.axis = 90; /* 처음 누르면 90°에서 시작 */
@@ -1954,7 +2003,7 @@
   function loadRx(id){
     var r = getRx().filter(function(x){ return x.id===id; })[0]; if(!r) return;
     state.rxMode = "have"; state.rxKnow = true; state.measure = false;
-    state.rxv = JSON.parse(JSON.stringify({R:r.R, L:r.L})); state.pd = r.pd; state.pdKnown = r.pdKnown;
+    state.rxv = JSON.parse(JSON.stringify({R:r.R, L:r.L})); state.pd = r.pd; state.pdKnown = r.pdKnown; state.pdTouched = true; state.rxTouched = true;
     setStep(2); updateS1();
     toast(1,"이전 도수를 불러왔어요 · 입력 칸에서 고칠 수 있어요");
   }
@@ -2097,7 +2146,10 @@
   function renderMy(){
     var v = getVault(), p = getPlaces(), h = "";
     var likedIds = Object.keys(state.liked).filter(function(k){ return state.liked[k] && shopById(k); });
-    h += '<div class="myprof"><div class="av">🙂</div><div><b>게스트</b><small>이 기기에만 저장돼요. 로그인하면 기기를 바꿔도 이어져요 (준비 중)</small></div></div>';
+    var gl = {m:"남성", f:"여성", x:"성별 선택 안 함"}[profile.gender];
+    h += profile.joined
+      ? '<div class="myprof"><div class="av">🙂</div><div><b>회원 (시연용)</b><small>'+(gl||"성별 미입력")+' · 기존 안경 '+(profile.hasGlasses===true?"있어요":profile.hasGlasses===false?"없어요":"미입력")+'<br>이 기기에만 저장돼요</small></div><button type="button" class="pfbtn" data-my="pfopen">수정</button></div>'
+      : '<div class="myprof"><div class="av">🙂</div><div><b>게스트</b><small>회원가입하면 성별에 맞는 PD 평균값을 채워 드려요. 이 기기에만 저장돼요</small></div><button type="button" class="pfbtn" data-my="pfopen">회원가입 · 로그인</button></div>';
     h += alertsHtml();
     h += '<div class="group-title">🧰 내 안경장 <span class="opt-badge">'+v.length+'/'+VMAX+'</span></div>';
     h += caseHtml(v);
@@ -2131,6 +2183,44 @@
     renderAlertCard();
   }
   $("alertCard").addEventListener("click", function(){ renderMy(); go("My"); $("myScroll").scrollTop = 0; });
+  /* 회원가입·로그인 (시연용): 계정은 만들지 않고 성별·기존 안경 유무만 이 기기에 저장해요 */
+  var pfDraft = null;
+  function renderPf(){
+    var d = pfDraft;
+    function chip(attr, val, label, on){ return '<button type="button" class="chip'+(on?" on":"")+'" data-'+attr+'="'+val+'">'+label+'</button>'; }
+    $("pfBody").innerHTML =
+      '<div style="font-size:13px;font-weight:700;padding:4px 12px 2px">회원가입 · 로그인 (시연용)</div>'+
+      '<div style="font-size:11px;color:var(--sub);padding:0 12px 4px">시연에서는 계정을 만들지 않고, 아래 정보만 이 기기에 저장해요.</div>'+
+      '<div style="padding:0 12px">'+
+      '<div class="pfrow">성별 (PD 평균값을 채우는 데만 써요)<div class="chips">'+chip("pg","m","남성",d.gender==="m")+chip("pg","f","여성",d.gender==="f")+chip("pg","x","선택 안 함",d.gender==="x")+'</div></div>'+
+      '<div class="pfrow">기존 안경이 있나요?<div class="chips">'+chip("ph","1","있어요",d.hasGlasses===true)+chip("ph","0","없어요",d.hasGlasses===false)+'</div></div>'+
+      '</div>'+
+      '<div class="notice">평균 PD는 남성 약 64mm · 여성 약 62mm예요. 사람마다 달라서 실제와 다를 수 있고, 정확한 값은 매장에서 측정해요.</div>'+
+      '<div class="cardbtns" style="grid-template-columns:'+(profile.joined?"1fr 1fr 1fr":"1fr 1fr")+'">'+
+        '<button type="button" data-pf="save" style="background:var(--main);color:#fff">저장</button>'+
+        (profile.joined ? '<button type="button" data-pf="out">로그아웃</button>' : '')+
+        '<button type="button" data-pf="close">닫기</button></div>';
+  }
+  function closePf(){ $("dimMy").classList.remove("show"); $("menuMy").classList.remove("show"); }
+  function applyProfile(){
+    if(!state.pdTouched) state.pd = pdDefault();
+    if(profile.hasGlasses===false && !state.rxTouched) state.rxMode = "unknown";
+    updateS1();
+  }
+  $("dimMy").addEventListener("click", closePf);
+  $("pfBody").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.pg){ pfDraft.gender = b.dataset.pg; renderPf(); return; }
+    if(b.dataset.ph){ pfDraft.hasGlasses = b.dataset.ph==="1"; renderPf(); return; }
+    if(b.dataset.pf==="close"){ closePf(); return; }
+    if(b.dataset.pf==="save"){
+      var np = {joined:true, gender:pfDraft.gender || "x"};
+      if(pfDraft.hasGlasses!==null) np.hasGlasses = pfDraft.hasGlasses;
+      saveProfile(np); applyProfile(); closePf(); renderMy();
+      toast("My","저장했어요 · PD 기본값 "+pdDefault().toFixed(1)+"mm"); return;
+    }
+    if(b.dataset.pf==="out"){ saveProfile({}); applyProfile(); closePf(); renderMy(); toast("My","회원 정보를 지웠어요"); }
+  });
   $("myBack").addEventListener("click", function(){ setStep(1); go(1); });
   $("myBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b || !b.dataset.my) return;
@@ -2162,6 +2252,10 @@
       toast("My","지웠어요 · 안경통 아래에서 되돌릴 수 있어요"); return;
     }
     if(a==="slot"){ caseSel = (caseSel===+b.dataset.i) ? -1 : +b.dataset.i; renderMy(); return; }
+    if(a==="pfopen"){
+      pfDraft = {gender: profile.gender || "", hasGlasses: profile.hasGlasses===undefined ? null : profile.hasGlasses};
+      renderPf(); $("dimMy").classList.add("show"); $("menuMy").classList.add("show"); return;
+    }
     if(a==="slotadd" || a==="addframe"){ vaultMode = true; go(1); setTimeout(function(){ $("frameCell").click(); }, 350); return; }
     if(a==="use"){
       var it = v[+b.dataset.i]; if(!it) return;
