@@ -344,6 +344,43 @@
   @keyframes sp{to{transform:rotate(360deg)}}
   .linkbtn{display:block;margin:8px auto 0;border:0;background:transparent;color:var(--sub);font-size:12px;text-decoration:underline}
 
+  /* 안경통 (내 안경장) — 와이어프레임 느낌(그라디언트·그림자 없음). 톤앤무드는 나중에 다시 다듬어요 */
+  .casewrap{margin-top:8px}
+  .case-closed{display:flex;align-items:center;gap:14px;width:100%;border:0;background:transparent;padding:4px 0;text-align:left}
+  .case-mini{position:relative;width:150px;height:68px;flex:0 0 150px;border-radius:10px;background:#fff;border:2px solid #1f2a44}
+  .case-mini::before{content:"";position:absolute;left:10px;right:10px;top:8px;bottom:20px;border-radius:6px;border:1.5px solid #1f2a44}
+  .case-mini::after{content:"";position:absolute;left:50%;bottom:5px;width:20px;height:7px;margin-left:-10px;border-radius:2px;border:1.5px solid #1f2a44;background:#fff}
+  .case-mini i{position:absolute;top:18px;width:24px;height:14px;border:2px solid #1f2a44;border-radius:40%;z-index:1}
+  .case-mini i:nth-child(1){left:32px}
+  .case-mini i:nth-child(2){right:32px}
+  .case-txt b{font-size:14px;display:block}
+  .case-txt small{font-size:11px;color:var(--sub)}
+  .case-open{perspective:700px}
+  .case-lid{display:block;position:relative;width:100%;height:56px;border:2px solid #1f2a44;padding:0;border-radius:12px 12px 0 0;background:#fff;transform-origin:50% 100%;transform:rotateX(38deg)}
+  .case-lid .win{position:absolute;inset:7px 12px;border-radius:6px;border:1.5px solid #1f2a44}
+  .case-lid .lidtxt{position:absolute;left:0;right:0;bottom:-1px;font-size:9.5px;color:#1f2a44}
+  .case-tray{background:#fff;border:2px solid #1f2a44;border-top:0;padding:8px;border-radius:0 0 12px 12px}
+  .slots{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .slot{position:relative;height:62px;border:1.5px solid #1f2a44;border-radius:8px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9.5px;color:#1f2a44;padding:2px 4px;overflow:hidden}
+  .slot.empty{border-style:dashed;border-color:#8b97b3;color:#8b97b3;font-size:20px}
+  .slot.sel{border-width:3px}
+  .slot .glasses{background:transparent;transform:scale(1.1)}
+  .slot img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid #1f2a44}
+  .slot .nm{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .slot .bell{position:absolute;top:2px;right:4px;font-size:11px}
+  .slot .xdel{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;border:1.5px solid #1f2a44;background:#fff;color:#1f2a44;font-size:11px;font-weight:700;display:grid;place-items:center;line-height:1}
+  .slot.deleting{border-color:#c2410c}
+  .case-cap{font-size:10.5px;color:var(--sub);text-align:center;margin-top:8px}
+  .case-tools{display:flex;gap:6px;margin-top:8px}
+  .case-tools button{flex:1;height:32px;border:1.5px solid #1f2a44;border-radius:8px;background:#fff;color:#1f2a44;font-size:11.5px;font-weight:700}
+  .case-tools button.on{background:#1f2a44;color:#fff}
+  .fc-del{display:block;width:100%;margin-top:6px;height:32px;border:1.5px solid #c2410c;border-radius:10px;background:#fff;color:#c2410c;font-size:12px;font-weight:700}
+  .case-open.anim .case-lid{animation:lidOpen .55s ease-out}
+  @keyframes lidOpen{from{transform:rotateX(0deg)}to{transform:rotateX(38deg)}}
+  .case-open.anim .slots{animation:traysIn .45s ease-out .15s both}
+  @keyframes traysIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){ .case-open.anim .case-lid,.case-open.anim .slots{animation:none} }
+
   /* 알림 */
   .alertcard{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 12px;padding:9px 12px;border:1px solid rgba(245,158,11,.45);background:rgba(254,243,199,.7);border-radius:12px;font-size:12px;font-weight:700;color:#92400e;text-align:left}
   .alertcard[hidden]{display:none}
@@ -1314,8 +1351,8 @@
       if(state.rim===null) return;
       var vm = vaultMode;
       if(vm){
-        var okAdd = addVault(null, true); closeSheets1(); renderMy(); go("My");
-        toast("My", okAdd ? "보관함에 넣었어요" : "이미 보관함에 있어요"); return;
+        var okAdd = addVault(null, true); closeSheets1(); caseOpen = true; caseSel = -1; renderMy(); go("My");
+        toast("My", okAdd ? "보관함에 넣었어요" : (getVault().length>=VMAX ? "보관함이 가득 찼어요" : "이미 보관함에 있어요")); return;
       }
       closeSheets1(); toast(1,"프레임 정보를 저장했어요"); return;
     }
@@ -1413,7 +1450,7 @@
     if(a==="ok"){
       var vm = vaultMode;
       applyPhotoPick(); var saved = (photo.save || vm) && addVault(photo.thumb, true); closeSheets1();
-      if(vm){ renderMy(); go("My"); toast("My", saved ? "보관함에 넣었어요" : "이미 보관함에 있어요"); }
+      if(vm){ caseOpen = true; caseSel = -1; renderMy(); go("My"); toast("My", saved ? "보관함에 넣었어요" : (getVault().length>=VMAX ? "보관함이 가득 찼어요" : "이미 보관함에 있어요")); }
       else toast(1,"사진으로 프레임을 채웠어요 (시연)"+(saved?" · 보관함에 넣었어요":""));
     }
     if(a==="edit"){
@@ -1467,8 +1504,8 @@
       return x.rim===state.rim && x.cat===state.cat && x.sub===state.sub && x.model===mi && x.conf===state.matConf && (x.thumb||null)===(thumb||null);
     }).length;
     if(dup){ if(!quiet) toast(1,"이미 보관함에 있어요"); return false; }
+    if(v.length>=VMAX){ if(!quiet) toast(1,"보관함이 가득 찼어요 (최대 "+VMAX+"개). 마이페이지에서 하나를 지워 주세요"); return false; }
     v.unshift({ id:Date.now(), rim:state.rim, cat:state.cat, sub:state.sub, conf:state.matConf, model:mi, thumb:thumb||null, lensDate:todayStr() });
-    if(v.length>VMAX) v.length = VMAX;
     persistVault();
     if(!quiet) toast(1,"보관함에 넣었어요 ("+v.length+"개)");
     return true;
@@ -1831,7 +1868,8 @@
       '<div class="fc-f"><span>별명</span><input type="text" maxlength="20" data-f="nick" data-i="'+i+'" placeholder="예: 내 최애 무테" value="'+esc(it.nick||"")+'">'+
       '<span>렌즈 맞춘 날</span><input type="date" data-f="lensDate" data-i="'+i+'" value="'+esc(it.lensDate||"")+'">'+
       '<span>메모</span><input type="text" maxlength="60" data-f="memo" data-i="'+i+'" placeholder="구매처, 느낌 등" value="'+esc(it.memo||"")+'"></div>'+
-      '<button type="button" class="fc-use" data-my="use" data-i="'+i+'">이 프레임으로 안경원 찾기</button></div>';
+      '<button type="button" class="fc-use" data-my="use" data-i="'+i+'">이 프레임으로 안경원 찾기</button>'+
+      '<button type="button" class="fc-del" data-my="vdel" data-i="'+i+'">🗑 이 프레임 지우기</button></div>';
   }
   /* ----- 교체 주기 · 점검 알림 (관리 정보만. 특정 안경원 추천·광고는 넣지 않아요) ----- */
   var CHECKS = ["코받침이 헐거워졌나요","나사가 풀렸나요","렌즈에 긁힘이 있나요","코팅이 벗겨졌나요","테가 휘었나요"];
@@ -1858,30 +1896,66 @@
     c.hidden = !n;
     if(n) $("alertCardTxt").textContent = "알림 "+n+"개 · 교체·점검 시기가 됐어요";
   }
+  /* ----- 알림 보여 주기: 알림 칸은 한 줄 카드, 자세한 알림은 안경통의 해당 안경 카드 안에서 (B안으로 확정) ----- */
+  function itemLabel(i){ var it = getVault()[i]; return esc(it.nick || vaultLabel(it)); }
+  function alertCardHtml(a){
+    var nm = itemLabel(a.i);
+    if(a.type==="lens"){
+      return '<div class="acard"><b>👓 '+nm+' · 렌즈 교체·시력 확인 시기예요</b>'+
+        '<div class="ab">렌즈를 맞춘 지 약 '+a.months+'개월이 지났어요. 눈이 피곤하거나 잘 안 보이면 안경원이나 안과에서 시력을 확인해 보세요. (참고용 안내예요)</div>'+
+        '<div class="abtns"><button type="button" data-my="lensack" data-i="'+a.i+'">시력 확인했어요</button>'+
+        '<button type="button" data-my="lensnew" data-i="'+a.i+'">새 렌즈 맞췄어요</button>'+
+        '<button type="button" class="pri" data-my="use" data-i="'+a.i+'">이 프레임으로 안경원 찾기</button></div></div>';
+    }
+    var ck = getVault()[a.i].chk || {};
+    return '<div class="acard"><b>🔧 '+nm+' · 안경 점검 시기예요</b>'+
+      '<div class="ab">마지막 점검 후 약 '+a.months+'개월이 지났어요. 아래를 확인해 보세요.</div>'+
+      CHECKS.map(function(t, k){ return '<label class="chk"><input type="checkbox" data-chk="'+k+'" data-i="'+a.i+'"'+(ck[k]?" checked":"")+'>'+t+'</label>'; }).join("")+
+      '<div class="ab">걸리는 곳이 있으면 안경원에서 점검받아 보세요.</div>'+
+      '<div class="abtns"><button type="button" class="pri" data-my="checkdone" data-i="'+a.i+'">점검 끝났어요</button></div></div>';
+  }
+  /* B안: 선택한 안경의 알림만 그 안경 카드 안에서 보여 줘요 */
+  function itemAlertsHtml(i){
+    return computeAlerts().filter(function(a){ return a.i===i; }).map(alertCardHtml).join("");
+  }
   function alertsHtml(){
-    var list = computeAlerts(), v = getVault(), h = '<div class="group-title">🔔 알림 <span class="opt-badge">'+list.length+'개</span></div>';
+    var list = computeAlerts(), h = '<div class="group-title">🔔 알림 <span class="opt-badge">'+list.length+'개</span></div>';
     if(!list.length) h += '<div class="notice">지금은 알림이 없어요. 렌즈를 맞춘 지 약 '+LENS_MONTHS+'개월이 지나거나, 점검한 지 약 '+CHECK_MONTHS+'개월이 지나면 여기에 알려 드려요.</div>';
-    list.forEach(function(a){
-      var it = v[a.i], nm = esc(it.nick || vaultLabel(it));
-      if(a.type==="lens"){
-        h += '<div class="acard"><b>👓 '+nm+' · 렌즈 교체·시력 확인 시기예요</b>'+
-          '<div class="ab">렌즈를 맞춘 지 약 '+a.months+'개월이 지났어요. 눈이 피곤하거나 잘 안 보이면 안경원이나 안과에서 시력을 확인해 보세요. (참고용 안내예요)</div>'+
-          '<div class="abtns"><button type="button" data-my="lensack" data-i="'+a.i+'">시력 확인했어요</button>'+
-          '<button type="button" data-my="lensnew" data-i="'+a.i+'">새 렌즈 맞췄어요</button>'+
-          '<button type="button" class="pri" data-my="use" data-i="'+a.i+'">이 프레임으로 안경원 찾기</button></div></div>';
-      }else{
-        var ck = it.chk || {};
-        h += '<div class="acard"><b>🔧 '+nm+' · 안경 점검 시기예요</b>'+
-          '<div class="ab">마지막 점검 후 약 '+a.months+'개월이 지났어요. 아래를 확인해 보세요.</div>'+
-          CHECKS.map(function(t, k){ return '<label class="chk"><input type="checkbox" data-chk="'+k+'" data-i="'+a.i+'"'+(ck[k]?" checked":"")+'>'+t+'</label>'; }).join("")+
-          '<div class="ab">걸리는 곳이 있으면 안경원에서 점검받아 보세요.</div>'+
-          '<div class="abtns"><button type="button" class="pri" data-my="checkdone" data-i="'+a.i+'">점검 끝났어요</button></div></div>';
-      }
-    });
+    else h += '<div class="acard"><b>🔔 알림 '+list.length+'개</b>'+
+      '<div class="ab">안경통에서 🔔이 붙은 칸을 누르면 그 안경의 알림이 열려요.</div>'+
+      '<div class="abtns"><button type="button" class="pri" data-my="opencase" data-i="'+list[0].i+'">안경통 열어서 확인하기</button></div></div>';
     h += '<div class="demo-shift"><span>시연용 · 지금 날짜: '+todayStr()+(shiftMonths?' ('+shiftMonths+'개월 뒤로 본 상태)':'')+'<br>알림이 뜨는 모습을 보려고 날짜를 앞당겨 봐요.</span>'+
       '<button type="button" class="'+(shiftMonths?"on":"")+'" data-my="shift">'+(shiftMonths?"되돌리기":"13개월 뒤 보기")+'</button></div>';
     h += '<div class="notice">알림에는 특정 안경원 추천이나 광고가 들어가지 않아요. 건강에 대한 안내는 참고용이에요.</div>';
     return h;
+  }
+
+  /* 안경통: 닫혀 있다가 누르면 뚜껑이 열리고 칸마다 프레임이 보여요 (칸 수 = 보관함 최대 개수) */
+  var caseOpen = false, caseAnim = false, caseSel = -1, delMode = false, undoDel = null;
+  function slotName(it){ return it.nick || (RIMS[it.rim].name + (it.cat!==null && it.cat>=0 ? " "+(it.sub>=0 ? MATCATS[it.cat].subs[it.sub][0] : MATCATS[it.cat].name) : "")); }
+  function caseHtml(v){
+    if(!caseOpen){
+      return '<div class="casewrap"><button type="button" class="case-closed" data-my="case" aria-expanded="false" aria-label="안경통 열기">'+
+        '<span class="case-mini"><i></i><i></i></span><span class="case-txt"><b>내 안경장</b><small>'+v.length+'/'+VMAX+' · 눌러서 열어 보기</small></span></button></div>';
+    }
+    var bell = {}; computeAlerts().forEach(function(a){ bell[a.i] = true; });
+    var slots = "";
+    for(var i=0; i<VMAX; i++){
+      var it = v[i];
+      slots += it
+        ? '<button type="button" class="slot'+(i===caseSel&&!delMode?" sel":"")+(delMode?" deleting":"")+'" data-my="'+(delMode?"slotdel":"slot")+'" data-i="'+i+'" aria-label="'+esc(slotName(it))+(delMode?" 지우기":"")+'">'+
+          (it.thumb ? '<img alt="" src="'+it.thumb+'">' : '<span class="glasses '+RIMS[it.rim].cls+'"></span>')+
+          '<span class="nm">'+esc(slotName(it))+'</span>'+
+          (delMode ? '<span class="xdel" aria-hidden="true">✕</span>' : (bell[i]?'<span class="bell" aria-label="알림">🔔</span>':''))+'</button>'
+        : '<button type="button" class="slot empty" data-my="slotadd" aria-label="프레임 추가">＋</button>';
+    }
+    return '<div class="casewrap"><div class="case-open'+(caseAnim?" anim":"")+'">'+
+      '<button type="button" class="case-lid" data-my="case" aria-expanded="true" aria-label="안경통 닫기"><span class="win"></span><span class="lidtxt">눌러서 닫기</span></button>'+
+      '<div class="case-tray"><div class="slots">'+slots+'</div></div>'+
+      (v.length || undoDel ? '<div class="case-tools">'+
+        (v.length ? '<button type="button" class="'+(delMode?"on":"")+'" data-my="delmode">'+(delMode?"지우기 끝내기":"🗑 지우기")+'</button>' : '')+
+        (undoDel ? '<button type="button" data-my="undo">↩ 방금 지운 프레임 되돌리기</button>' : '')+'</div>' : '')+
+      '<div class="case-cap">'+(delMode ? '지울 프레임을 눌러 주세요' : (v.length ? '칸을 누르면 자세히 보여요' : '아직 비어 있어요')+(v.length<VMAX ? ' · ＋ 칸을 누르면 프레임을 넣어요' : ''))+'</div></div></div>';
   }
   function renderMy(){
     var v = getVault(), p = getPlaces(), h = "";
@@ -1889,8 +1963,11 @@
     h += '<div class="myprof"><div class="av">🙂</div><div><b>게스트</b><small>이 기기에만 저장돼요. 로그인하면 기기를 바꿔도 이어져요 (준비 중)</small></div></div>';
     h += alertsHtml();
     h += '<div class="group-title">🧰 내 안경장 <span class="opt-badge">'+v.length+'/'+VMAX+'</span></div>';
-    h += v.length ? v.map(frameCard).join("") : '<div class="notice">아직 비어 있어요. 아래에서 프레임을 추가해 보세요.</div>';
-    h += '<button type="button" class="vault-add" data-my="addframe">＋ 프레임 추가 (사진 · 검색 · 직접 고르기)</button>';
+    h += caseHtml(v);
+    if(caseOpen && v[caseSel]) h += itemAlertsHtml(caseSel) + frameCard(v[caseSel], caseSel);
+    h += v.length<VMAX
+      ? '<button type="button" class="vault-add" data-my="addframe">＋ 프레임 추가 (사진 · 검색 · 직접 고르기)</button>'
+      : '<div class="notice">안경장이 가득 찼어요 (최대 '+VMAX+'개). 하나를 지우면 새로 넣을 수 있어요.</div>';
     h += '<div class="group-title">📍 내 장소 <span class="opt-badge">동네·역 이름만</span></div><div class="group">'+
       placeCell("home","🏠","본가",p.home)+placeCell("work","🏢","직장",p.work)+
       (p.extra||[]).map(function(x,i){ return placeCell("x"+i,"📌",x.label,x); }).join("")+'</div>';
@@ -1921,6 +1998,7 @@
     var b = e.target.closest("button"); if(!b || !b.dataset.my) return;
     var a = b.dataset.my, v = getVault();
     if(a==="shift"){ shiftMonths = shiftMonths ? 0 : 13; renderMy(); toast("My", shiftMonths ? "시연: 13개월 뒤 날짜로 봐요" : "오늘 날짜로 돌아왔어요"); return; }
+    if(a==="opencase"){ caseOpen = true; caseAnim = true; caseSel = +b.dataset.i; delMode = false; renderMy(); caseAnim = false; return; }
     if(a==="lensack" || a==="lensnew" || a==="checkdone"){
       var ai = v[+b.dataset.i]; if(!ai) return;
       if(a==="lensack"){ ai.lensAck = todayStr(); toast("My","확인했어요. 약 "+LENS_MONTHS+"개월 뒤에 다시 알려 드려요"); }
@@ -1928,8 +2006,20 @@
       if(a==="checkdone"){ ai.checkedAt = todayStr(); ai.chk = {}; toast("My","점검 완료! 약 "+CHECK_MONTHS+"개월 뒤에 다시 알려 드려요"); }
       persistVault(); return;
     }
-    if(a==="addframe"){ vaultMode = true; go(1); setTimeout(function(){ $("frameCell").click(); }, 350); return; }
-    if(a==="vdel"){ v.splice(+b.dataset.i, 1); persistVault(); renderRecent(); toast("My","보관함에서 지웠어요"); return; }
+    if(a==="case"){ caseOpen = !caseOpen; caseAnim = caseOpen; caseSel = -1; delMode = false; renderMy(); caseAnim = false; return; }
+    if(a==="delmode"){ delMode = !delMode; caseSel = -1; renderMy(); return; }
+    if(a==="undo"){
+      if(undoDel && v.length<VMAX){ v.splice(Math.min(undoDel.idx, v.length), 0, undoDel.item); undoDel = null; persistVault(); renderRecent(); toast("My","되돌렸어요"); }
+      else toast("My","보관함이 가득 차서 되돌릴 수 없어요");
+      return;
+    }
+    if(a==="slotdel" || a==="vdel"){
+      var di = +b.dataset.i; if(!v[di]) return;
+      undoDel = {item:v[di], idx:di}; v.splice(di, 1); caseSel = -1; persistVault(); renderRecent();
+      toast("My","지웠어요 · 안경통 아래에서 되돌릴 수 있어요"); return;
+    }
+    if(a==="slot"){ caseSel = (caseSel===+b.dataset.i) ? -1 : +b.dataset.i; renderMy(); return; }
+    if(a==="slotadd" || a==="addframe"){ vaultMode = true; go(1); setTimeout(function(){ $("frameCell").click(); }, 350); return; }
     if(a==="use"){
       var it = v[+b.dataset.i]; if(!it) return;
       applyVault(it);
