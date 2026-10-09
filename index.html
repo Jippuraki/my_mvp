@@ -344,6 +344,21 @@
   @keyframes sp{to{transform:rotate(360deg)}}
   .linkbtn{display:block;margin:8px auto 0;border:0;background:transparent;color:var(--sub);font-size:12px;text-decoration:underline}
 
+  /* 프레임 보관함 */
+  .recent{display:flex;gap:6px;overflow-x:auto;padding:8px 4px 0;scrollbar-width:none;align-items:center}
+  .recent::-webkit-scrollbar{display:none}
+  .recent small{font-size:10px;color:var(--faint);flex:0 0 auto}
+  .recent .chip{flex:0 0 auto;white-space:nowrap}
+  .vault-add{display:block;width:calc(100% - 8px);margin:12px 4px 0;height:40px;border:1px solid rgba(37,99,235,.35);background:var(--glass-strong);color:var(--main);border-radius:12px;font-size:12.5px;font-weight:700}
+  .vault-add[disabled]{opacity:.45}
+  .vitem{display:flex;align-items:center}
+  .vitem .menu-item{flex:1;min-width:0}
+  .vmini{width:36px;height:36px;border-radius:9px;object-fit:cover;flex:0 0 36px}
+  .vdel{border:0;background:transparent;color:var(--faint);font-size:16px;padding:10px}
+  .vdate{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--sub);padding:0 12px 8px 58px}
+  .vdate input{font:inherit;font-size:11px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 6px;color:var(--ink)}
+  .notice{font-size:10.5px;color:var(--sub);background:rgba(15,27,51,.05);border-radius:10px;padding:8px 10px;margin:8px 4px 0;line-height:1.5}
+
   /* ===== 매장 목록 ===== */
   .map{
     position:absolute;inset:0 0 auto 0;height:52%;
@@ -582,6 +597,7 @@
           <div class="sh-title">내 프레임 알려 주기</div>
           <div class="sh-sub">모양과 소재에 따라 가공할 수 있는 안경원이 달라져요.</div>
           <button type="button" class="photo-btn" id="btnPhoto">📷 사진으로 찾기</button>
+          <div class="recent" id="recentFrames"></div>
           <label class="search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
             <input type="search" id="fsearch" placeholder="브랜드나 모델명으로 찾기 (예: 루미, OB-7)" autocomplete="off">
@@ -1124,7 +1140,7 @@
   function norm(s){ return s.toLowerCase().replace(/[\s\-]/g,""); }
   function renderSearch(){
     var q = norm($("fsearch").value), box = $("facResults");
-    var picked = state.model ? '<div class="picked">✓ '+state.model.brand+' '+state.model.model+' — 모양·소재를 자동으로 채웠어요<button type="button" data-clear="1">해제</button></div>' : "";
+    var picked = state.model ? '<div class="picked">✓ '+state.model.brand+' '+state.model.model+' — 모양·소재를 자동으로 채웠어요<button type="button" data-save="1">📦 보관함에 넣기</button><button type="button" data-clear="1">해제</button></div>' : "";
     if(!q){ box.innerHTML = picked; return; }
     var hits = MODELS.filter(function(m){ return norm(m.brand+m.model).indexOf(q)>-1 || norm(m.model).indexOf(q)>-1; }).slice(0,5);
     box.innerHTML = '<div class="ac">' + (hits.length ? hits.map(function(m){
@@ -1167,14 +1183,16 @@
       '<div class="sh-pad tiles c2" style="margin-top:7px">'+w.map(function(x,i){
         return '<button type="button" class="tile row2'+(i===state.where?" on":"")+'" data-where="'+i+'"><span class="em">'+x.e+'</span><b>'+x.name+'</b></button>';
       }).join("")+'</div>'+
+      '<button type="button" class="vault-add" data-vault="1"'+(state.rim===null?" disabled":"")+'>📦 내 프레임 보관함에 넣기</button>'+
       '<button type="button" class="cta sh-done" data-done="1"'+(state.rim===null?" disabled":"")+'>'+(state.rim===null?"테 모양을 골라 주세요":"선택 완료")+'</button>';
   }
   $("frameCell").addEventListener("click", function(){
-    renderSearch(); renderFrameSheet(); openSheet("frameSheet"); setStep(1);
+    renderSearch(); renderFrameSheet(); renderRecent(); openSheet("frameSheet"); setStep(1);
   });
   $("fsearch").addEventListener("input", renderSearch);
   $("facResults").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.save){ if(addVault(null)) renderRecent(); return; }
     if(b.dataset.clear){ state.model = null; renderSearch(); updateS1(); return; }
     var m = MODELS[+b.dataset.model];
     state.model = m; state.rim = m.rim; state.cat = m.cat; state.sub = m.sub;
@@ -1184,6 +1202,7 @@
   });
   $("frameBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.vault){ if(addVault(null)) renderRecent(); return; }
     if(b.dataset.done){ if(state.rim===null) return; closeSheets1(); toast(1,"프레임 정보를 저장했어요"); return; }
     if(b.dataset.conf){ state.matConf = b.dataset.conf; renderFrameSheet(); updateS1(); return; }
     var manual = b.dataset.rim || b.dataset.cat || b.dataset.sub;
@@ -1197,7 +1216,7 @@
   });
 
   /* ----- 사진으로 찾기 (시연용: 실제로 분석하지 않아요) ----- */
-  var photo = { thumb:null, pick:null, job:0 };
+  var photo = { thumb:null, pick:null, job:0, save:true };
   function swapSheet(id){
     ["menu1","frameSheet","photoSheet"].forEach(function(s){ $(s).classList.remove("show"); });
     $("dim1").classList.add("show"); $(id).classList.add("show");
@@ -1238,6 +1257,8 @@
       '<div class="shot">'+(photo.thumb ? '<img alt="고른 사진" src="'+photo.thumb+'">' : '<div class="glasses '+r.cls+'"></div>')+
         '<div><b>'+r.name+'</b><small>'+r.cap+'</small><small>소재 후보: '+mat[0]+' — '+mat[1]+'</small></div></div>'+
       '<div class="priv">정확한 소재는 매장에서 실물로 확인해요.</div>'+
+      '<button type="button" class="act'+(photo.save?" on":"")+'" data-p="save" style="width:calc(100% - 8px);margin:10px 4px 0"><span class="ic">📦</span>'+
+        '<span class="t">내 프레임 보관함에도 넣기<small>이 기기에만 저장돼요. 사진은 서버에 올리지 않아요.</small></span><span class="tg"></span></button>'+
       '<button type="button" class="cta sh-done" data-p="ok">맞아요, 이 프레임으로</button>'+
       '<button type="button" class="linkbtn" data-p="edit">직접 고칠래요</button>'+
       '<button type="button" class="linkbtn" data-p="retry">다시 찍기</button>';
@@ -1273,8 +1294,16 @@
     if(a==="pick") $("photoFile").click();
     if(a==="back") swapSheet("frameSheet");
     if(a==="retry") photoGuide();
-    if(a==="ok"){ applyPhotoPick(); closeSheets1(); toast(1,"사진으로 프레임을 채웠어요 (시연)"); }
-    if(a==="edit"){ applyPhotoPick(); renderSearch(); renderFrameSheet(); swapSheet("frameSheet"); toast(1,"필요하면 고쳐 주세요"); }
+    if(a==="save"){ photo.save = !photo.save; photoResult(); }
+    if(a==="ok"){
+      applyPhotoPick(); var saved = photo.save && addVault(photo.thumb, true); closeSheets1();
+      toast(1,"사진으로 프레임을 채웠어요 (시연)"+(saved?" · 보관함에 넣었어요":""));
+    }
+    if(a==="edit"){
+      applyPhotoPick(); var saved2 = photo.save && addVault(photo.thumb, true);
+      renderSearch(); renderFrameSheet(); renderRecent(); swapSheet("frameSheet");
+      toast(1,"필요하면 고쳐 주세요"+(saved2?" · 보관함에 넣었어요":""));
+    }
   });
   $("photoFile").addEventListener("change", function(){
     var f = this.files && this.files[0]; this.value = "";
@@ -1287,6 +1316,60 @@
       photo.pick = MODELS[(f.size + f.name.length) % MODELS.length];
       setTimeout(function(){ if(job===photo.job) photoResult(); }, 1400);
     });
+  });
+
+  /* ----- 프레임 보관함 (이 기기 localStorage 에만 저장) ----- */
+  var VKEY = "afterframe.vault.v1", VMAX = 8, vault = null;
+  function getVault(){
+    if(vault===null){
+      try{ var v = JSON.parse(localStorage.getItem(VKEY) || "[]"); vault = Array.isArray(v) ? v : []; }
+      catch(e){ vault = []; }
+    }
+    return vault;
+  }
+  function persistVault(){ try{ localStorage.setItem(VKEY, JSON.stringify(vault)); }catch(e){} }
+  function todayStr(){
+    var d = new Date(), p = function(n){ return (n<10?"0":"")+n; };
+    return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate());
+  }
+  function vaultLabel(it){
+    var l = RIMS[it.rim].name;
+    if(it.cat!==null && it.cat>=0) l += " · " + (it.sub>=0 ? MATCATS[it.cat].subs[it.sub][0] : MATCATS[it.cat].name);
+    if(it.model>=0) l = MODELS[it.model].brand + " " + MODELS[it.model].model + " (" + l + ")";
+    return l;
+  }
+  /* 지금 고른 프레임을 보관함에 넣어요. 넣었으면 true */
+  function addVault(thumb, quiet){
+    if(state.rim===null){ if(!quiet) toast(1,"테 모양을 먼저 골라 주세요"); return false; }
+    var v = getVault(), mi = state.model ? MODELS.indexOf(state.model) : -1;
+    var dup = v.filter(function(x){
+      return x.rim===state.rim && x.cat===state.cat && x.sub===state.sub && x.model===mi && x.conf===state.matConf && (x.thumb||null)===(thumb||null);
+    }).length;
+    if(dup){ if(!quiet) toast(1,"이미 보관함에 있어요"); return false; }
+    v.unshift({ id:Date.now(), rim:state.rim, cat:state.cat, sub:state.sub, conf:state.matConf, model:mi, thumb:thumb||null, lensDate:todayStr() });
+    if(v.length>VMAX) v.length = VMAX;
+    persistVault();
+    if(!quiet) toast(1,"보관함에 넣었어요 ("+v.length+"개)");
+    return true;
+  }
+  function applyVault(it){
+    state.rim = it.rim; state.cat = it.cat; state.sub = it.sub; state.matConf = it.conf || "sure";
+    state.model = it.model>=0 ? MODELS[it.model] : null;
+    updateS1();
+  }
+  function renderRecent(){
+    var box = $("recentFrames"), v = getVault().slice(0,3);
+    if(!v.length){ box.style.display = "none"; box.innerHTML = ""; return; }
+    box.style.display = "";
+    box.innerHTML = '<small>📦 보관함</small>' + v.map(function(it,i){
+      return '<button type="button" class="chip" data-vi="'+i+'">'+vaultLabel(it)+'</button>';
+    }).join("");
+  }
+  $("recentFrames").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    var it = getVault()[+b.dataset.vi]; if(!it) return;
+    applyVault(it); renderSearch(); renderFrameSheet();
+    toast(1,"보관함에서 불러왔어요");
   });
 
   /* ----- 지역 · 메뉴 ----- */
@@ -1326,16 +1409,33 @@
           if(state.region!==0) toast(1,"이 지역은 아직 준비 중이에요");
         });
       });
+    }else if(kind==="vault"){
+      var v = getVault();
+      b.innerHTML = '<div style="font-size:13px;font-weight:700;padding:4px 12px 6px">📦 내 프레임 보관함</div>'+
+        (v.length ? v.map(function(it,i){
+          return '<div class="vitem"><button type="button" class="menu-item" data-vi="'+i+'">'+
+            (it.thumb ? '<img class="vmini" alt="" src="'+it.thumb+'">' : '<span>👓</span>')+
+            '<span style="min-width:0"><b style="font-size:13px">'+vaultLabel(it)+'</b>'+
+            (it.conf && it.conf!=="sure" ? '<span style="display:block;font-size:10.5px;color:var(--faint)">소재는 매장에서 확인</span>' : '')+
+            '</span><span class="sub">불러오기</span></button>'+
+            '<button type="button" class="vdel" data-vd="'+i+'" aria-label="삭제">✕</button></div>'+
+            '<label class="vdate">렌즈 맞춘 날 <input type="date" data-vdate="'+i+'" value="'+(it.lensDate||"")+'"></label>';
+        }).join("") : '<div class="notice">아직 비어 있어요. 프레임을 고른 뒤 "보관함에 넣기"를 눌러 주세요.</div>')+
+        '<div class="notice">이 기기에만 저장돼요. 사진은 서버에 올리지 않아요. 렌즈 맞춘 날은 교체 알림에 쓰여요.</div>'+
+        '<button type="button" class="menu-item" data-vb="back"><span>←</span>메뉴로 돌아가기</button>';
     }else{
       var likedN = Object.keys(state.liked).filter(function(k){return state.liked[k];}).length;
       b.innerHTML =
         '<button class="menu-item" data-a="list"><span>🗺️</span>매장 목록 보기</button>'+
+        '<button class="menu-item" data-a="vault"><span>📦</span>내 프레임 보관함<span class="sub">'+getVault().length+'개</span></button>'+
         '<button class="menu-item" data-a="detail"><span>🏬</span>최근 본 매장<span class="sub">'+shopById(state.selected).name+'</span></button>'+
         '<button class="menu-item" data-a="liked"><span>♡</span>저장한 안경원<span class="sub">'+likedN+'곳</span></button>'+
         '<button class="menu-item" data-a="reset"><span>↺</span>조건 초기화</button>';
       b.querySelectorAll("[data-a]").forEach(function(btn){
         btn.addEventListener("click", function(){
-          var a = btn.dataset.a; closeSheets1();
+          var a = btn.dataset.a;
+          if(a==="vault"){ renderMenu("vault"); return; }
+          closeSheets1();
           if(a==="list"){ renderList(false); setStep(4); go(2); }
           if(a==="detail"){ renderDetail(); setStep(5); go(3); }
           if(a==="liked"){
@@ -1348,6 +1448,24 @@
       });
     }
   }
+  /* 보관함 목록: 불러오기 · 삭제 · 렌즈 맞춘 날 */
+  $("menuBody").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.vb){ renderMenu("main"); return; }
+    if(b.dataset.vd!==undefined){
+      getVault().splice(+b.dataset.vd, 1); persistVault(); renderMenu("vault"); renderRecent();
+      toast(1,"보관함에서 지웠어요"); return;
+    }
+    if(b.dataset.vi!==undefined){
+      var it = getVault()[+b.dataset.vi]; if(!it) return;
+      applyVault(it); closeSheets1(); toast(1,"보관함에서 불러왔어요");
+    }
+  });
+  $("menuBody").addEventListener("change", function(e){
+    var i = e.target.dataset.vdate; if(i===undefined) return;
+    var it = getVault()[+i]; if(!it) return;
+    it.lensDate = e.target.value || null; persistVault(); toast(1,"렌즈 맞춘 날을 저장했어요");
+  });
   function resetS1(){
     var keep = {sort:state.sort, selected:state.selected, liked:state.liked, photo:state.photo, shareRx:false};
     state = INIT(); for(var k in keep) state[k] = keep[k];
