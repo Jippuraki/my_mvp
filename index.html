@@ -611,7 +611,7 @@
       <div class="label">
         <div class="num">화면 01 · 단계 1·2·3</div>
         <h2>조건 입력</h2>
-        <p>내 프레임 · 도수·렌즈 기능 · 위치</p>
+        <p>내 프레임 · 도수 · 지역</p>
       </div>
       <div class="phone" id="p1"><div class="display">
         <div class="status">
@@ -660,17 +660,6 @@
             </div>
             <div class="rxpanel" id="rxPanel"></div>
 
-            <!-- 3. 렌즈 기능 -->
-            <div class="group-title">원하는 렌즈 기능 <span class="opt-badge">선택</span></div>
-            <button type="button" class="fold" id="funcsHead" aria-expanded="false" aria-controls="funcs">
-              <span class="fold-t" id="funcsSum"></span><span class="chev">▾</span>
-            </button>
-            <div class="funcs" id="funcs" hidden></div>
-
-            <!-- 예상 비용 -->
-            <div class="group-title">예상 비용 미리보기 <span class="opt-badge">참고</span></div>
-            <div class="price" id="priceCard"></div>
-
             <!-- 4. 지역 -->
             <div class="group-title">지역 <span class="req">필수</span></div>
             <div class="group">
@@ -680,10 +669,11 @@
         </div>
 
         <div class="bottom" style="flex-direction:column;gap:6px">
-          <div class="sel-count" id="selCount"></div>
-          <button class="cta" type="button" id="btnFind">가능한 안경원 보기
+          <div class="sel-count" id="selCount1"></div>
+          <button class="cta" type="button" id="btnNext">다음: 렌즈 기능
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
+          <button type="button" class="linkbtn" id="btnSkip" style="margin:0">렌즈 기능은 건너뛰고 바로 안경원 보기</button>
         </div>
 
         <div class="dim" id="dim1"></div>
@@ -715,10 +705,60 @@
       </div></div>
     </div>
 
-    <!-- ===== 화면 2 : 마이페이지 ===== -->
+    <!-- ===== 화면 2 : 렌즈 기능 · 예상 비용 ===== -->
+    <div class="screen-wrap" id="sFn">
+      <div class="label">
+        <div class="num">화면 02 · 단계 2</div>
+        <h2>렌즈 기능</h2>
+        <p>원하는 기능 · 예상 비용 미리보기</p>
+      </div>
+      <div class="phone" id="pFn"><div class="display">
+        <div class="status">
+          <span>9:41</span><div class="island"></div>
+          <div class="sys">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg>
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 2.2c2.2 0 4.2.9 5.7 2.3l1.1-1.1A9.6 9.6 0 0 0 7.5.6 9.6 9.6 0 0 0 .7 3.4l1.1 1.1a8 8 0 0 1 5.7-2.3Zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1a6.4 6.4 0 0 0-9 0l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3Zm0 3.2c-.5 0-1 .2-1.3.5L7.5 10.4l1.3-1.3a1.9 1.9 0 0 0-1.3-.5Z"/></svg>
+            <div class="batt"><i></i></div>
+          </div>
+        </div>
+        <div class="scroll" id="fnScroll">
+          <div class="nav">
+            <button class="icon-btn" type="button" aria-label="조건 입력으로" id="fnBack">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <div class="t">렌즈 기능</div>
+            <span></span>
+          </div>
+          <div class="content">
+            <div class="large">어떤 렌즈 기능이<br>필요하세요?</div>
+            <div class="hint">필요 없으면 바로 안경원을 찾아도 돼요.</div>
+
+            <div class="group-title">원하는 렌즈 기능 <span class="opt-badge">선택</span></div>
+            <button type="button" class="fold" id="funcsHead" aria-expanded="true" aria-controls="funcs" hidden>
+              <span class="fold-t" id="funcsSum"></span><span class="chev">▾</span>
+            </button>
+            <div class="funcs" id="funcs"></div>
+
+            <div class="group-title">예상 비용 미리보기 <span class="opt-badge">참고</span></div>
+            <div class="price" id="priceCard"></div>
+          </div>
+        </div>
+
+        <div class="bottom" style="flex-direction:column;gap:6px">
+          <div class="sel-count" id="selCount"></div>
+          <button class="cta" type="button" id="btnFind">가능한 안경원 보기
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="toast" id="toastFn"></div>
+        <div class="homebar"></div>
+      </div></div>
+    </div>
+
+    <!-- ===== 화면 3 : 마이페이지 ===== -->
     <div class="screen-wrap" id="sMy">
       <div class="label">
-        <div class="num">화면 02 · 마이페이지</div>
+        <div class="num">화면 03 · 마이페이지</div>
         <h2>마이페이지</h2>
         <p>내 안경장 · 내 장소 · 저장한 안경원</p>
       </div>
@@ -749,7 +789,7 @@
     <!-- ===== 화면 3 : 매장 목록 ===== -->
     <div class="screen-wrap" id="s2">
       <div class="label">
-        <div class="num">화면 03 · 단계 4</div>
+        <div class="num">화면 04 · 단계 4</div>
         <h2>매장 목록</h2>
         <p>지도 · 안경원 카드 · 가공 가능 태그</p>
       </div>
@@ -802,7 +842,7 @@
     <!-- ===== 화면 3 : 매장 상세 ===== -->
     <div class="screen-wrap" id="s3">
       <div class="label">
-        <div class="num">화면 04 · 단계 5</div>
+        <div class="num">화면 05 · 단계 5</div>
         <h2>매장 상세</h2>
         <p>가공 가능 항목 · 외부 프레임 정책·작업 기간 · 위치·영업 정보</p>
       </div>
@@ -1134,7 +1174,7 @@
     head.setAttribute("aria-expanded", funcsOpen ? "true" : "false");
     $("funcs").hidden = !funcsOpen;
   }
-  var funcsOpen = false;
+  var funcsOpen = true; /* 렌즈 기능은 이제 별도 화면이라 항상 펼쳐서 보여 줘요 */
   $("funcsHead").addEventListener("click", function(){ funcsOpen = !funcsOpen; renderFuncs(); });
   $("funcs").addEventListener("click", function(e){
     var f = e.target.closest(".func"); if(!f) return;
@@ -1150,10 +1190,12 @@
     prog[2].classList.toggle("on", state.funcs.length>0);
     prog[3].classList.toggle("on", state.region===0);
     var rxTxt = {have: state.rxKnow ? (axisMissing().length ? "AXIS 입력 필요" : "도수 입력") : "도수 있음", none:"무도수", unknown:"도수 모름"}[state.rxMode] || "도수 미선택";
-    $("selCount").textContent = state.rim===null
-      ? "테 모양을 먼저 알려 주세요"
-      : frameLabel()+" · "+rxTxt+(state.funcs.length?" · 기능 "+state.funcs.length+"개":"")+" · "+REGIONS[state.region].replace(/ /g,"");
+    var baseTxt = frameLabel()+" · "+rxTxt;
+    var regTxt = REGIONS[state.region].replace(/ /g,"");
+    $("selCount1").textContent = state.rim===null ? "테 모양을 먼저 알려 주세요" : baseTxt+" · "+regTxt+(state.funcs.length?" · 기능 "+state.funcs.length+"개":"");
+    $("selCount").textContent = state.rim===null ? "테 모양을 먼저 알려 주세요" : baseTxt+(state.funcs.length?" · 기능 "+state.funcs.length+"개":" · 기능 선택 안 함")+" · "+regTxt;
     $("btnFind").disabled = state.rim===null;
+    $("btnNext").disabled = state.rim===null;
     $("rxMode").querySelectorAll(".chip").forEach(function(c){ c.classList.toggle("on", c.dataset.v===state.rxMode); });
     renderFrameCell(); renderRx(); renderPrice();
   }
@@ -1557,17 +1599,27 @@
     $("top").scrollIntoView({behavior:"smooth"});
     setStep(0);
   });
-  $("btnFind").addEventListener("click", function(){
-    if(state.rim===null){ toast(1,"테 모양을 먼저 알려 주세요"); return; }
+  /* 화면 01 조건에 문제가 있으면 안내 글을 돌려줘요 (없으면 null) */
+  function s1Problem(){
+    if(state.rim===null) return "테 모양을 먼저 알려 주세요";
     var miss = (state.rxMode==="have" && state.rxKnow) ? axisMissing() : [];
-    if(miss.length){
-      state.eye = miss[0]; setStep(2); updateS1();
-      toast(1,"난시(CYL)가 있으면 AXIS도 꼭 입력해 주세요");
-      return;
-    }
-    if(state.region!==0){ toast(1,"이 지역은 아직 준비 중이에요"); return; }
+    if(miss.length){ state.eye = miss[0]; setStep(2); updateS1(); return "난시(CYL)가 있으면 AXIS도 꼭 입력해 주세요"; }
+    if(state.region!==0) return "이 지역은 아직 준비 중이에요";
+    return null;
+  }
+  function tryFind(){
+    var m = s1Problem();
+    if(m){ go(1); toast(1, m); return; }
     renderList(true); renderDetail(); setStep(4); go(2);
+  }
+  $("btnFind").addEventListener("click", tryFind);
+  $("btnSkip").addEventListener("click", tryFind);
+  $("btnNext").addEventListener("click", function(){
+    var m = s1Problem();
+    if(m){ toast(1, m); return; }
+    setStep(2); go("Fn");
   });
+  $("fnBack").addEventListener("click", function(){ setStep(1); go(1); });
 
   function renderMenu(kind){
     var b = $("menuBody");
