@@ -391,6 +391,12 @@
   .searchpill .mini{background:var(--main-soft);color:var(--main);font-weight:700;border-radius:999px;padding:2px 8px}
   .searchpill .edit{margin-left:auto;color:var(--main);font-weight:700;padding:4px 8px;border:0;background:transparent;font-size:11px;flex:0 0 auto}
   .locate{right:14px;top:calc(52% - 52px)}
+  .locpill{position:absolute;z-index:25;top:90px;left:14px;max-width:calc(100% - 28px);display:flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:15px;border:1px solid var(--line);background:rgba(255,255,255,.9);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);box-shadow:0 4px 14px rgba(15,27,51,.12);font-size:11.5px;font-weight:700;color:var(--ink)}
+  .locpill #locName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .locpill .chev{margin:0;font-size:12px}
+  .locbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 4px 0}
+  .locbtns button{height:38px;border:1px solid rgba(37,99,235,.35);background:var(--glass-strong);color:var(--main);border-radius:12px;font-size:12px;font-weight:700}
+  .locq{display:flex;flex-wrap:wrap;gap:6px;margin:8px 4px 0}
 
   .sheet{
     position:absolute;left:0;right:0;bottom:0;top:calc(52% - 16px);z-index:20;
@@ -649,6 +655,7 @@
           <div class="pills" id="pills"></div>
           <button class="edit" type="button" id="editCond">변경</button>
         </div>
+        <button type="button" class="locpill" id="locPill" aria-label="찾을 위치 바꾸기"><span id="locName">📍 현재 위치</span><span class="chev">▾</span></button>
         <button class="icon-btn float locate" type="button" aria-label="내 위치" id="btnLocate">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
         </button>
@@ -657,6 +664,11 @@
           <div class="grab"></div>
           <div class="sheet-head"><b id="countTitle"></b><button class="sort" type="button" id="btnSort">거리순 ▾</button></div>
           <div class="scroll" id="list"></div>
+        </div>
+        <div class="dim" id="dim2"></div>
+        <div class="menu" id="menu2">
+          <div class="grab"></div>
+          <div id="locBody"></div>
         </div>
         <div class="toast" id="toast2"></div>
         <div class="homebar"></div>
@@ -792,6 +804,13 @@
     {k:"블루라이트", d:"화면에서 나오는 푸른빛을 줄여요", sw:"blue"}
   ];
   var REGIONS = ["홍대 · 연남 · 신촌","합정 · 망원","이대 · 아현"];
+  /* 위치 바꾸기 시연용 데이터: x,y 는 지도 위 위치(%). 지금은 홍대·연남·신촌만 매장이 있어요 */
+  var GPS = {kind:"gps", name:"현재 위치", sub:"홍대입구역 근처 (예시)", x:44, y:64, covered:true};
+  var KNOWN = [
+    {name:"홍대입구역", kw:["홍대","홍익","서교"], x:14, y:74},
+    {name:"연남동", kw:["연남"], x:62, y:28},
+    {name:"신촌역", kw:["신촌"], x:68, y:86}
+  ];
 
   /* 시연용 가상 가격 (단위: 만 원, 렌즈 한 쌍) — 실제 시세 아님 */
   var LENS_PRICE = {
@@ -811,6 +830,7 @@
     funcs:[], region:0, pIdx:null, pDesign:null }; };
   var state = INIT();
   state.sort = "dist"; state.selected = "A"; state.liked = {}; state.photo = 0; state.shareRx = false;
+  state.loc = Object.assign({}, GPS);
 
   var $ = function(id){ return document.getElementById(id); };
 
@@ -1467,7 +1487,7 @@
     it.lensDate = e.target.value || null; persistVault(); toast(1,"렌즈 맞춘 날을 저장했어요");
   });
   function resetS1(){
-    var keep = {sort:state.sort, selected:state.selected, liked:state.liked, photo:state.photo, shareRx:false};
+    var keep = {sort:state.sort, selected:state.selected, liked:state.liked, photo:state.photo, shareRx:false, loc:state.loc};
     state = INIT(); for(var k in keep) state[k] = keep[k];
     state.rim = null; state.cat = null; state.sub = -1; state.rxMode = null;
     $("regionName").textContent = REGIONS[0];
@@ -1479,13 +1499,21 @@
   function shopById(id){ return SHOPS.filter(function(s){return s.id===id;})[0]; }
   function matches(){
     var w = wanted();
+    if(!state.loc.covered) return [];
     var list = SHOPS.filter(function(s){ return w.every(function(v){ return s.caps.indexOf(v)>-1; }); });
     list.sort(function(a,b){
-      if(state.sort==="dist") return a.dist-b.dist;
-      if(state.sort==="price") return costItems(a).total[0]-costItems(b).total[0] || a.dist-b.dist;
-      return b.caps.length-a.caps.length || a.dist-b.dist;
+      if(state.sort==="dist") return dOf(a)-dOf(b);
+      if(state.sort==="price") return costItems(a).total[0]-costItems(b).total[0] || dOf(a)-dOf(b);
+      return b.caps.length-a.caps.length || dOf(a)-dOf(b);
     });
     return list;
+  }
+  /* 지금 고른 위치에서 매장까지 거리(km). 현재 위치는 원래 값, 다른 위치는 지도 위 거리로 계산(시연용) */
+  function dOf(s){
+    var l = state.loc;
+    if(!l.covered) return null;
+    if(l.kind==="gps") return s.dist;
+    return Math.max(0.1, Math.round(Math.hypot(l.x-s.x, l.y-s.y)*0.025*10)/10);
   }
   function renderList(autoSelect){
     var w = wanted(), list = matches();
@@ -1498,6 +1526,7 @@
     var ids = list.map(function(s){return s.id;});
     $("map").querySelectorAll(".mk").forEach(function(m){ m.remove(); });
     SHOPS.forEach(function(s){
+      if(!state.loc.covered) return;
       var m = document.createElement("button");
       m.type="button"; m.className = "mk" + (s.id===state.selected && ids.indexOf(s.id)>-1 ? " on":"") + (ids.indexOf(s.id)<0?" dimmed":"");
       m.style.left = s.x+"%"; m.style.top = s.y+"%";
@@ -1510,6 +1539,12 @@
       $("map").appendChild(m);
     });
 
+    if(!list.length && !state.loc.covered){
+      $("countTitle").textContent = "이 위치 근처는 아직 준비 중이에요";
+      $("list").innerHTML = '<div class="empty"><b>'+esc(state.loc.name)+' 근처는 아직 준비 중이에요</b>지금은 홍대·연남·신촌 근처만 볼 수 있어요.<br><button type="button" id="emptyLoc">현재 위치로 보기</button></div>';
+      $("emptyLoc").addEventListener("click", function(){ selectLoc(Object.assign({}, GPS)); });
+      return;
+    }
     if(!list.length){
       $("list").innerHTML = '<div class="empty"><b>조건에 맞는 안경원이 없어요</b>렌즈 기능을 조금 줄여 보세요.<br><button type="button" id="emptyEdit">조건 바꾸기</button></div>';
       $("emptyEdit").addEventListener("click", function(){ setStep(1); go(1); });
@@ -1525,7 +1560,7 @@
       return '<div class="shop tap'+(s.id===state.selected?" sel":"")+'" data-id="'+s.id+'">'+
         '<div class="thumb">'+s.id+'</div><div class="info-col">'+
         '<div class="nm">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+(state.liked[s.id]?' <span style="color:#e11d48">♥</span>':'')+'</div>'+
-        '<div class="meta">'+s.dist+'km · '+(s.open?"영업 중":"영업 종료")+' · '+s.addr.split(",")[0]+'</div>'+
+        '<div class="meta">'+dOf(s)+'km · '+(s.open?"영업 중":"영업 종료")+' · '+s.addr.split(",")[0]+'</div>'+
         (function(){ var t = costItems(s).total; return '<div class="pline">예상 <span>'+range(t[0],t[1])+'</span></div>'; })()+
         '<div class="tags">'+tags+'</div></div><span class="chev">›</span></div>';
     }).join("");
@@ -1547,8 +1582,108 @@
     toast(2, SORT_TOAST[state.sort]);
   });
   $("btnLocate").addEventListener("click", function(){
+    if(state.loc.kind!=="gps"){ selectLoc(Object.assign({}, GPS)); return; }
     var me = $("me"); me.classList.remove("ping"); void me.offsetWidth; me.classList.add("ping");
     toast(2,"현재 위치: 홍대입구역 근처 (예시)");
+  });
+
+  /* ----- 찾을 위치 바꾸기: 현재 위치 · 본가 · 직장 · 동네/역 검색 ----- */
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  var PKEY = "afterframe.places.v1", places = null;
+  function getPlaces(){
+    if(places===null){
+      try{ var p = JSON.parse(localStorage.getItem(PKEY) || "{}"); places = (p && typeof p==="object") ? p : {}; }
+      catch(e){ places = {}; }
+    }
+    return places;
+  }
+  function persistPlaces(){ try{ localStorage.setItem(PKEY, JSON.stringify(places)); }catch(e){} }
+  /* 입력한 동네·역 이름을 시연용 지역(홍대·연남·신촌)과 맞춰 봐요. 없으면 '준비 중' */
+  function resolvePlace(q){
+    var n = norm(q), hit = null;
+    if(n.length>=2) KNOWN.forEach(function(k){
+      if(!hit && (norm(k.name).indexOf(n)>-1 || k.kw.some(function(w){ return n.indexOf(norm(w))>-1; }))) hit = k;
+    });
+    return hit ? {name:hit.name, covered:true, x:hit.x, y:hit.y} : {name:q.trim(), covered:false};
+  }
+  function applyLoc(){
+    var l = state.loc, me = $("me");
+    me.style.display = l.covered ? "" : "none";
+    if(l.covered){ me.style.left = l.x+"%"; me.style.top = l.y+"%"; }
+    var label = l.kind==="gps" ? "📍 현재 위치"
+      : l.kind==="home" ? "🏠 본가 · "+l.name
+      : l.kind==="work" ? "🏢 직장 · "+l.name
+      : "🔎 "+l.name;
+    $("locName").textContent = label;
+  }
+  function closeLoc(){ $("dim2").classList.remove("show"); $("menu2").classList.remove("show"); }
+  function selectLoc(l){
+    state.loc = l; applyLoc(); renderList(true); renderDetail(); closeLoc();
+    toast(2, l.kind==="gps" ? "현재 위치 근처로 찾아요" : l.covered ? l.name+" 근처로 찾아요" : l.name+" 근처는 아직 준비 중이에요");
+  }
+  function renderLocRes(q){
+    var box = $("locRes");
+    q = (q||"").trim();
+    if(!q){
+      box.innerHTML = '<div class="locq">'+KNOWN.map(function(k){ return '<button type="button" class="chip" data-q="'+esc(k.name)+'">'+esc(k.name)+'</button>'; }).join("")+'</div>';
+      return;
+    }
+    var r = resolvePlace(q), e = esc(q);
+    box.innerHTML = '<div class="ac"><div class="ac-item" style="cursor:default"><span><span class="br">'+(r.covered?"지원 지역":"아직 준비 중인 지역")+'</span><b>'+esc(r.name)+'</b></span></div></div>'+
+      '<div class="locbtns"><button type="button" data-ra="go" data-rq="'+e+'">여기서 찾기</button>'+
+      '<button type="button" data-ra="home" data-rq="'+e+'">🏠 본가 저장</button>'+
+      '<button type="button" data-ra="work" data-rq="'+e+'">🏢 직장 저장</button></div>';
+  }
+  function renderLoc(){
+    var p = getPlaces(), cur = state.loc.kind;
+    function row(kind, icon, title){
+      var pl = p[kind];
+      if(!pl) return '<div class="menu-item" style="cursor:default"><span>'+icon+'</span>'+title+'<span class="sub">아래에서 검색해 저장해요</span></div>';
+      return '<div class="vitem"><button type="button" class="menu-item" data-loc="'+kind+'"><span>'+icon+'</span>'+title+' · '+esc(pl.name)+
+        '<span class="sub">'+(pl.covered?"":"준비 중 ")+(cur===kind?"✓":"")+'</span></button>'+
+        '<button type="button" class="vdel" data-ldel="'+kind+'" aria-label="'+title+' 지우기">✕</button></div>';
+    }
+    $("locBody").innerHTML =
+      '<div style="font-size:13px;font-weight:700;padding:4px 12px 2px">어느 위치 근처에서 찾을까요?</div>'+
+      '<div style="font-size:11px;color:var(--sub);padding:0 12px 6px">본가나 직장 근처도 찾아볼 수 있어요.</div>'+
+      '<button type="button" class="menu-item" data-loc="gps"><span>📍</span>현재 위치<span class="sub">'+GPS.sub+(cur==="gps"?" ✓":"")+'</span></button>'+
+      row("home","🏠","본가")+row("work","🏢","직장")+
+      '<label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>'+
+      '<input type="search" id="locSearch" placeholder="동네나 역 이름 (예: 연남동, 신촌역)" autocomplete="off"></label>'+
+      '<div id="locRes"></div>'+
+      '<div class="notice">동네·역 이름만 저장하고, 이 기기에만 보관해요. 정확한 주소는 저장하지 않아요. 지금은 홍대·연남·신촌만 시연해요.</div>'+
+      '<button type="button" class="menu-item" data-lc="close"><span>✕</span>닫기</button>';
+    renderLocRes("");
+  }
+  $("locPill").addEventListener("click", function(){
+    renderLoc(); $("dim2").classList.add("show"); $("menu2").classList.add("show");
+  });
+  $("dim2").addEventListener("click", closeLoc);
+  $("locBody").addEventListener("input", function(e){ if(e.target.id==="locSearch") renderLocRes(e.target.value); });
+  $("locBody").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    var p = getPlaces();
+    if(b.dataset.lc==="close"){ closeLoc(); return; }
+    if(b.dataset.loc){
+      var k = b.dataset.loc;
+      if(k==="gps") selectLoc(Object.assign({}, GPS));
+      else if(p[k]) selectLoc({kind:k, name:p[k].name, covered:p[k].covered, x:p[k].x, y:p[k].y});
+      return;
+    }
+    if(b.dataset.ldel){
+      delete p[b.dataset.ldel]; persistPlaces();
+      if(state.loc.kind===b.dataset.ldel){ state.loc = Object.assign({}, GPS); applyLoc(); renderList(true); renderDetail(); }
+      renderLoc(); toast(2,"저장한 장소를 지웠어요"); return;
+    }
+    if(b.dataset.q){ $("locSearch").value = b.dataset.q; renderLocRes(b.dataset.q); return; }
+    if(b.dataset.rq!==undefined){
+      var r = resolvePlace(b.dataset.rq), a = b.dataset.ra;
+      if(a==="go") selectLoc({kind:"search", name:r.name, covered:r.covered, x:r.x, y:r.y});
+      else{
+        p[a] = {name:r.name, covered:r.covered, x:r.x, y:r.y}; persistPlaces();
+        renderLoc(); toast(2,(a==="home"?"본가":"직장")+"로 저장했어요");
+      }
+    }
   });
 
   /* ================= 화면 3 ================= */
@@ -1561,7 +1696,7 @@
     $("detail").innerHTML =
       '<div class="title">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+'</div>'+
       '<div class="desc">'+s.desc+'</div>'+
-      '<div class="summary"><span class="tag ok">'+s.dist+'km</span><span class="tag '+(s.open?"ok":"closed")+'">'+(s.open?"영업 중":"영업 종료")+'</span>'+
+      '<div class="summary">'+(dOf(s)!==null?'<span class="tag ok">'+dOf(s)+'km</span>':'')+'<span class="tag '+(s.open?"ok":"closed")+'">'+(s.open?"영업 중":"영업 종료")+'</span>'+
         (s.ship?'<span class="tag ship">방문 결제 후 택배 수령</span>':'<span class="tag closed">매장 방문 수령</span>')+'</div>'+
       '<div class="group-title">가공 가능 항목</div><div class="group caps">'+caps+'</div>'+
       (function(){
