@@ -655,7 +655,7 @@
     var st = document.createElement("style");
     st.textContent = ".langsw{position:fixed;top:10px;right:10px;z-index:200;display:flex;border:1.5px solid #1f2a44;border-radius:999px;overflow:hidden;background:#fff;font:700 12px/1 -apple-system,BlinkMacSystemFont,sans-serif}"+
       ".langsw button{border:0;background:#fff;color:#1f2a44;padding:8px 12px;cursor:pointer}.langsw button.on{background:#1f2a44;color:#fff}"+
-      "html[lang=en] .chip,html[lang=en] .pc,html[lang=en] .step{white-space:normal}html[lang=en] #rxMode .chip{white-space:normal;font-size:11px;padding:7px 4px;line-height:1.25}html[lang=en] .menu-item{font-size:13px}html[lang=en] .large{font-size:19px}html[lang=en] .cta{font-size:14px}";
+      "html[lang=en] .chip,html[lang=en] .pc,html[lang=en] .step{white-space:normal}html[lang=en] #rxMode .chip{white-space:normal;font-size:11px;padding:7px 4px;line-height:1.25}html[lang=en] .menu-item{font-size:13px}html[lang=en] .large{font-size:19px}";
     document.head.appendChild(st);
     var box = document.createElement("div"); box.className = "langsw"; box.setAttribute("data-noi18n","");
     box.innerHTML = '<button type="button" data-lang="ko">한국어</button><button type="button" data-lang="en">English</button>';
