@@ -363,39 +363,32 @@
   /* 안경통 (내 안경장) — 와이어프레임 느낌(그라디언트·그림자 없음). 톤앤무드는 나중에 다시 다듬어요 */
   .casewrap{margin-top:8px}
   .case-closed{display:flex;align-items:center;gap:14px;width:100%;border:0;background:transparent;padding:4px 0;text-align:left}
-  .case-mini{position:relative;width:150px;height:68px;flex:0 0 150px;border-radius:10px;background:#fff;border:2px solid #1f2a44}
-  .case-mini::before{content:"";position:absolute;left:10px;right:10px;top:8px;bottom:20px;border-radius:6px;border:1.5px solid #1f2a44}
-  .case-mini::after{content:"";position:absolute;left:50%;bottom:5px;width:20px;height:7px;margin-left:-10px;border-radius:2px;border:1.5px solid #1f2a44;background:#fff}
-  .case-mini i{position:absolute;top:18px;width:24px;height:14px;border:2px solid #1f2a44;border-radius:40%;z-index:1}
-  .case-mini i:nth-child(1){left:32px}
-  .case-mini i:nth-child(2){right:32px}
+  .case-mini{display:block;width:150px;height:auto;flex:0 0 150px}
   .case-txt b{font-size:14px;display:block}
   .case-txt small{font-size:11px;color:var(--sub)}
   .case-open{perspective:700px}
-  .case-lid{display:block;position:relative;width:100%;height:56px;border:2px solid #1f2a44;padding:0;border-radius:12px 12px 0 0;background:#fff;transform-origin:50% 100%;transform:rotateX(38deg)}
-  .case-lid .win{position:absolute;inset:7px 12px;border-radius:6px;border:1.5px solid #1f2a44}
-  .case-lid .lidtxt{position:absolute;left:0;right:0;bottom:-1px;font-size:9.5px;color:#1f2a44}
-  .case-tray{background:#fff;border:2px solid #1f2a44;border-top:0;padding:8px;border-radius:0 0 12px 12px}
-  .slots{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-  .slot{position:relative;height:62px;border:1.5px solid #1f2a44;border-radius:8px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9.5px;color:#1f2a44;padding:2px 4px;overflow:hidden}
-  .slot.empty{border-style:dashed;border-color:#8b97b3;color:#8b97b3;font-size:20px}
-  .slot.sel{border-width:3px}
-  .slot .glasses{background:transparent;transform:scale(1.1)}
-  .slot img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid #1f2a44}
-  .slot .nm{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .slot .bell{position:absolute;top:2px;right:4px;font-size:11px}
-  .slot .xdel{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;border:1.5px solid #1f2a44;background:#fff;color:#1f2a44;font-size:11px;font-weight:700;display:grid;place-items:center;line-height:1}
+  .case-stage{position:relative}
+  .case-stage>img{display:block;width:100%;height:auto;pointer-events:none}
+  .case-lid{position:absolute;left:0;right:0;top:0;height:40%;border:0;background:transparent;padding:0;color:#5b3a29;font-size:10px;display:flex;align-items:flex-end;justify-content:center}
+  .case-lid span{background:rgba(255,255,255,.7);border-radius:8px;padding:1px 8px;margin-bottom:4px}
+  .slot{position:absolute;width:17%;height:9.5%;margin:-4.75% 0 0 -8.5%;border:1.5px solid transparent;border-radius:6px;background:transparent;display:grid;place-items:center;padding:0;color:#5b3a29;font-size:15px;line-height:1}
+  .slot .glasses{background:transparent;transform:scale(.55);margin:-6px}
+  .slot img{width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid #5b3a29}
+  .slot.sel{border-color:#5b3a29;background:rgba(255,255,255,.35)}
+  .slot.empty{color:#7a5f3a;font-size:18px;font-weight:700}
+  .slot .glasses::before,.slot .glasses::after{border-color:#5b3a29}
+  .slot .glasses.semi::before,.slot .glasses.semi::after{border-bottom-color:transparent}
   .slot.deleting{border-color:#c2410c}
+  .slot .bell{position:absolute;top:-4px;right:0;font-size:10px}
+  .slot .xdel{position:absolute;top:-4px;right:-2px;width:16px;height:16px;border-radius:50%;border:1.5px solid #5b3a29;background:#fff;color:#5b3a29;font-size:9px;font-weight:700;display:grid;place-items:center;line-height:1}
   .case-cap{font-size:10.5px;color:var(--sub);text-align:center;margin-top:8px}
   .case-tools{display:flex;gap:6px;margin-top:8px}
   .case-tools button{flex:1;height:32px;border:1.5px solid #1f2a44;border-radius:8px;background:#fff;color:#1f2a44;font-size:11.5px;font-weight:700}
   .case-tools button.on{background:#1f2a44;color:#fff}
   .fc-del{display:block;width:100%;margin-top:6px;height:32px;border:1.5px solid #c2410c;border-radius:10px;background:#fff;color:#c2410c;font-size:12px;font-weight:700}
-  .case-open.anim .case-lid{animation:lidOpen .55s ease-out}
-  @keyframes lidOpen{from{transform:rotateX(0deg)}to{transform:rotateX(38deg)}}
-  .case-open.anim .slots{animation:traysIn .45s ease-out .15s both}
-  @keyframes traysIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-  @media (prefers-reduced-motion:reduce){ .case-open.anim .case-lid,.case-open.anim .slots{animation:none} }
+  .case-open.anim .case-stage{animation:caseIn .45s ease-out}
+  @keyframes caseIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){ .case-open.anim .case-stage{animation:none} }
 
   /* 이전 도수 기록 */
   .rxrec{margin-bottom:10px;padding-bottom:10px;border-bottom:.5px solid var(--sep)}
@@ -2119,25 +2112,26 @@
   /* 안경통: 닫혀 있다가 누르면 뚜껑이 열리고 칸마다 프레임이 보여요 (칸 수 = 보관함 최대 개수) */
   var caseOpen = false, caseAnim = false, caseSel = -1, delMode = false, undoDel = null;
   function slotName(it){ return it.nick || (RIMS[it.rim].name + (it.cat!==null && it.cat>=0 ? " "+(it.sub>=0 ? MATCATS[it.cat].subs[it.sub][0] : MATCATS[it.cat].name) : "")); }
+  /* 열린 안경통 그림(720x519) 위 8칸의 중심 위치(%): 뒤 줄 4칸 → 앞 줄 4칸 */
+  var SLOTPOS = [[23.6,49.7],[42.8,54.3],[61.1,58.8],[80.6,63.6],[16.7,60.1],[37.2,65.1],[55.6,69.7],[77.1,74.2]];
   function caseHtml(v){
     if(!caseOpen){
       return '<div class="casewrap"><button type="button" class="case-closed" data-my="case" aria-expanded="false" aria-label="안경통 열기">'+
-        '<span class="case-mini"><i></i><i></i></span><span class="case-txt"><b>내 안경장</b><small>'+v.length+'/'+VMAX+' · 눌러서 열어 보기</small></span></button></div>';
+        '<img class="case-mini" alt="" src="assets/case-closed.webp"><span class="case-txt"><b>내 안경장</b><small>'+v.length+'/'+VMAX+' · 눌러서 열어 보기</small></span></button></div>';
     }
     var bell = {}; computeAlerts().forEach(function(a){ bell[a.i] = true; });
     var slots = "";
     for(var i=0; i<VMAX; i++){
-      var it = v[i];
+      var it = v[i], pos = ' style="left:'+SLOTPOS[i][0]+'%;top:'+SLOTPOS[i][1]+'%"';
       slots += it
-        ? '<button type="button" class="slot'+(i===caseSel&&!delMode?" sel":"")+(delMode?" deleting":"")+'" data-my="'+(delMode?"slotdel":"slot")+'" data-i="'+i+'" aria-label="'+esc(slotName(it))+(delMode?" 지우기":"")+'">'+
+        ? '<button type="button"'+pos+' class="slot'+(i===caseSel&&!delMode?" sel":"")+(delMode?" deleting":"")+'" data-my="'+(delMode?"slotdel":"slot")+'" data-i="'+i+'" aria-label="'+esc(slotName(it))+(delMode?" 지우기":"")+'">'+
           (it.thumb ? '<img alt="" src="'+it.thumb+'">' : '<span class="glasses '+RIMS[it.rim].cls+'"></span>')+
-          '<span class="nm">'+esc(slotName(it))+'</span>'+
           (delMode ? '<span class="xdel" aria-hidden="true">✕</span>' : (bell[i]?'<span class="bell" aria-label="알림">🔔</span>':''))+'</button>'
-        : '<button type="button" class="slot empty" data-my="slotadd" aria-label="프레임 추가">＋</button>';
+        : '<button type="button"'+pos+' class="slot empty" data-my="slotadd" aria-label="프레임 추가">＋</button>';
     }
     return '<div class="casewrap"><div class="case-open'+(caseAnim?" anim":"")+'">'+
-      '<button type="button" class="case-lid" data-my="case" aria-expanded="true" aria-label="안경통 닫기"><span class="win"></span><span class="lidtxt">눌러서 닫기</span></button>'+
-      '<div class="case-tray"><div class="slots">'+slots+'</div></div>'+
+      '<div class="case-stage"><img alt="" src="assets/case-open.webp">'+
+      '<button type="button" class="case-lid" data-my="case" aria-expanded="true" aria-label="안경통 닫기"><span>눌러서 닫기</span></button>'+slots+'</div>'+
       (v.length || undoDel ? '<div class="case-tools">'+
         (v.length ? '<button type="button" class="'+(delMode?"on":"")+'" data-my="delmode">'+(delMode?"지우기 끝내기":"🗑 지우기")+'</button>' : '')+
         (undoDel ? '<button type="button" data-my="undo">↩ 방금 지운 프레임 되돌리기</button>' : '')+'</div>' : '')+
