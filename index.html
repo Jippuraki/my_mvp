@@ -474,6 +474,59 @@
   .vdel{border:0;background:transparent;color:var(--faint);font-size:16px;padding:10px}
   .vdate{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--sub);padding:0 12px 8px 58px}
   .vdate input{font:inherit;font-size:11px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 6px;color:var(--ink)}
+  /* ===== 안경원 단계별 입력 ===== */
+  .shprog{margin:2px 0 10px}
+  .shprog .bar{height:5px;border-radius:3px;background:rgba(15,27,51,.1);overflow:hidden}
+  .shprog .bar i{display:block;height:100%;background:var(--main);border-radius:3px;transition:width .3s ease}
+  .shprog .lb{font-size:11px;color:var(--sub);margin-top:6px;font-weight:600}
+  .shdots{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .shdots button{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--glass-strong);font-size:10px;color:var(--sub);padding:0}
+  .shdots button.now{background:var(--main);color:#fff;border-color:var(--main)}
+  .shstep{animation:shin .28s ease both}
+  .shstep.back{animation-name:shinb}
+  @keyframes shin{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+  @keyframes shinb{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+  .rv{max-height:0;opacity:0;overflow:hidden;transition:max-height .35s ease,opacity .25s ease,margin .25s ease;margin-top:0}
+  .rv.open{max-height:1200px;opacity:1;margin-top:8px}
+  @media (prefers-reduced-motion:reduce){.rv{transition:none}.shstep{animation:none}.shprog .bar i{transition:none}}
+  .searchbox{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.85);padding:2px 12px;margin-top:6px}
+  .searchbox .ainp{border:0;background:transparent;margin:0;padding:10px 0;outline:none}
+  .goal{display:block;width:100%;text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.75);border-radius:14px;padding:11px 12px;margin-top:8px;font-size:13px;color:var(--ink)}
+  .goal small{display:block;font-size:10.5px;color:var(--sub);margin-top:2px}
+  .goal.on{border-color:rgba(37,99,235,.55);background:rgba(219,234,254,.7)}
+  .dayblock{border-bottom:.5px solid var(--sep)}
+  .dayrow{display:flex;align-items:center;gap:10px;padding:6px 0}
+  .dayrow b{width:26px;font-size:12px}
+  .dsub{font-size:11px;color:var(--sub)}
+  .dtg{width:38px;height:22px;border-radius:999px;border:0;background:#d3daea;position:relative;flex:0 0 38px;transition:background .2s;padding:0}
+  .dtg i{position:absolute;left:2px;top:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
+  .dtg.on{background:var(--main)}
+  .dtg.on i{left:18px}
+  .dtimes{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;padding:0 0 8px 36px}
+  .dtimes .ainp{margin-top:0;min-width:0;width:100%;padding:8px 6px;font-size:12px}
+  .dtimes span{color:var(--sub)}
+  .csw{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0}
+  .csw.on{box-shadow:0 0 0 3px var(--ink)}
+  .colorprev{border-radius:12px;color:#fff;font-size:11px;padding:10px 12px}
+  .logoline{display:flex;gap:12px;align-items:center;margin-top:6px}
+  .logobox{width:72px;height:72px;border-radius:18px;background:var(--main-soft);display:grid;place-items:center;overflow:hidden;font-size:11px;color:var(--sub)}
+  .logobox img{width:100%;height:100%;object-fit:cover}
+  .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+  .ph{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;background:var(--main-soft);border:0;display:grid;place-items:center;font-size:20px;color:var(--main);padding:0}
+  .ph img{width:100%;height:100%;object-fit:cover}
+  .ph .x{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(15,27,51,.6);color:#fff;font-size:11px;padding:0}
+  .ph.add small{display:block;font-size:10px}
+  .mrow{display:grid;grid-template-columns:1fr 1fr 34px;gap:6px;align-items:center;margin-top:6px}
+  .mrow .ainp{margin-top:0}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .g2 label{display:block;font-size:11px;color:var(--sub)}
+  .pvbox{border:1px dashed var(--line);border-radius:14px;padding:8px;max-height:360px;overflow:auto;background:rgba(255,255,255,.5);margin-top:6px}
+  .tabs3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 10px}
+  .tabs3 button{border:1px solid var(--line);background:var(--glass-strong);border-radius:12px;padding:8px 4px;font-size:11.5px;color:var(--sub)}
+  .tabs3 button.on{background:var(--main);color:#fff;border-color:var(--main)}
+  .themebar{height:4px;border-radius:2px;margin-bottom:8px}
+  .tag.mood{background:rgba(15,27,51,.06);color:var(--sub)}
+  .hero.photo{background-size:cover;background-position:center}
   .atext,.ainp{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.85);padding:9px 11px;font-size:12px;color:var(--ink);font-family:inherit;resize:none}
   .ainp{margin-top:6px}
   .qchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
@@ -967,6 +1020,8 @@
           <div class="content" id="shBody"></div>
         </div>
         <div class="toast" id="toastSh"></div>
+        <input type="file" accept="image/*" id="shLogoFile" hidden>
+        <input type="file" accept="image/*" id="shPhotoFile" hidden>
         <div class="homebar"></div>
       </div></div>
     </div>
@@ -1023,6 +1078,12 @@
   /* 영업 중 여부: 안경원이 입력한 영업시간("월–토 10:00–20:00")으로 지금 시각에 맞춰 계산해요 */
   var DAYCH = "일월화수목금토";
   function openNow(sh, now){
+    if(sh.week){
+      now = now || new Date();
+      var e = sh.week[now.getDay()]; if(!e) return false;
+      var tm = now.getHours()*60 + now.getMinutes(), p1 = e.o.split(":"), p2 = e.c.split(":");
+      return tm >= (+p1[0])*60 + (+p1[1]) && tm < (+p2[0])*60 + (+p2[1]);
+    }
     var m = /^(매일|[월화수목금토일])(?:–([월화수목금토일]))?\s+(\d\d):(\d\d)–(\d\d):(\d\d)/.exec(sh.hours || "");
     if(!m) return false;
     now = now || new Date();
@@ -2026,6 +2087,30 @@
     if(l.kind==="gps") return s.dist;
     return Math.max(0.1, Math.round(Math.hypot(l.x-s.x, l.y-s.y)*0.025*10)/10);
   }
+  /* 매장 카드 한 장 (목록과 안경원의 미리 보기가 같이 써요) */
+  function shopCard(s, preview){
+    var w = preview ? [] : wanted();
+      var first = w.filter(function(c){ return s.caps.indexOf(c)>-1; });
+      var rest = s.caps.filter(function(c){ return w.indexOf(c)<0 && c!=="도수 렌즈"; });
+      var tags = first.concat(rest).slice(0,4).map(function(c){
+        return '<span class="tag '+(w.indexOf(c)>-1?"ok":"")+'">'+capName(c)+'</span>';
+      }).join("");
+      if(s.ship) tags += '<span class="tag ship">택배 가능</span>';
+      if(s.policy==="paid") tags += '<span class="tag">가공비 별도</span>';
+      if(s.policy==="ask") tags += '<span class="tag closed">정책 확인 필요</span>';
+      if(s.goal==="sell") tags += '<span class="tag mood">프레임 판매</span>';
+      (s.mood||[]).slice(0,2).forEach(function(m){ tags += '<span class="tag mood">'+esc(m)+'</span>'; });
+      return '<div class="shop'+(preview?"":" tap")+(s.id===state.selected&&!preview?" sel":"")+'" data-id="'+s.id+'">'+
+        '<div class="thumb"'+(s.logo||s.color ? ' style="'+(s.logo?'padding:0;overflow:hidden;background:#fff;':'')+(s.color?'border:2px solid '+s.color+';':'')+'"' : '')+'>'+(s.logo ? '<img src="'+s.logo+'" alt="" style="width:100%;height:100%;object-fit:cover">' : s.id)+'</div><div class="info-col">'+
+        '<div class="nm">'+esc(s.name)+(s.verified?' <span class="badge">확인됨</span>':'')+(state.liked[s.id]?' <span style="color:#e11d48">♥</span>':'')+'</div>'+
+        '<div class="meta">'+dOf(s)+'km · '+(openNow(s)?"영업 중":"영업 종료")+' · '+esc(s.addr.split(",")[0])+'</div>'+
+        (function(){
+          if(!isPub(s)) return '<div class="pline" style="color:var(--faint)">가격 비공개</div>';
+          var c = costItems(s);
+          return '<div class="pline">예상 <span>'+range(c.total[0],c.total[1])+'</span>'+(c.items.some(function(i){ return i.txt; }) ? ' + 가공비 문의' : '')+'</div>';
+        })()+
+        '<div class="tags">'+tags+'</div></div><span class="chev">›</span></div>';
+  }
   function renderList(autoSelect){
     var w = wanted(), list = matches();
     $("pills").innerHTML = (w.length? w.map(capName) : ["조건 없음"]).map(function(v){ return '<span class="mini">'+v+'</span>'; }).join("");
@@ -2061,26 +2146,7 @@
       $("emptyEdit").addEventListener("click", function(){ setStep(2); go("Fn"); });
       return;
     }
-    $("list").innerHTML = list.map(function(s){
-      var first = w.filter(function(c){ return s.caps.indexOf(c)>-1; });
-      var rest = s.caps.filter(function(c){ return w.indexOf(c)<0 && c!=="도수 렌즈"; });
-      var tags = first.concat(rest).slice(0,4).map(function(c){
-        return '<span class="tag '+(w.indexOf(c)>-1?"ok":"")+'">'+capName(c)+'</span>';
-      }).join("");
-      if(s.ship) tags += '<span class="tag ship">택배 가능</span>';
-      if(s.policy==="paid") tags += '<span class="tag">가공비 별도</span>';
-      if(s.policy==="ask") tags += '<span class="tag closed">정책 확인 필요</span>';
-      return '<div class="shop tap'+(s.id===state.selected?" sel":"")+'" data-id="'+s.id+'">'+
-        '<div class="thumb">'+s.id+'</div><div class="info-col">'+
-        '<div class="nm">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+(state.liked[s.id]?' <span style="color:#e11d48">♥</span>':'')+'</div>'+
-        '<div class="meta">'+dOf(s)+'km · '+(openNow(s)?"영업 중":"영업 종료")+' · '+s.addr.split(",")[0]+'</div>'+
-        (function(){
-          if(!isPub(s)) return '<div class="pline" style="color:var(--faint)">가격 비공개</div>';
-          var c = costItems(s);
-          return '<div class="pline">예상 <span>'+range(c.total[0],c.total[1])+'</span>'+(c.items.some(function(i){ return i.txt; }) ? ' + 가공비 문의' : '')+'</div>';
-        })()+
-        '<div class="tags">'+tags+'</div></div><span class="chev">›</span></div>';
-    }).join("");
+    $("list").innerHTML = list.map(function(s){ return shopCard(s); }).join("");
     $("list").querySelectorAll(".shop").forEach(function(c){
       c.addEventListener("click", function(){
         state.selected = c.dataset.id; state.photo = 0;
@@ -2577,18 +2643,19 @@
   });
 
   /* ================= 화면 3 ================= */
-  function renderDetail(){
-    var s = shopById(state.selected), w = wanted();
+  /* 매장 상세 내용 (손님 상세 화면과 안경원의 미리 보기가 같이 써요) */
+  function detailHtml(s, preview){
+    var w = preview ? [] : wanted();
     var caps = CAP_ORDER.map(function(c){
       var ok = s.caps.indexOf(c)>-1;
       return '<div class="cap'+(ok?"":" no")+(ok&&w.indexOf(c)>-1?" want":"")+'"><span class="ck">'+(ok?"✓":"–")+'</span>'+capName(c)+'</div>';
     }).join("");
-    $("detail").innerHTML =
-      '<div class="title">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+'</div>'+
-      '<div class="desc">'+s.desc+'</div>'+
+    return (s.color ? '<div class="themebar" style="background:'+s.color+'"></div>' : '')+'<div class="title">'+esc(s.name)+(s.verified?' <span class="badge">확인됨</span>':'')+'</div>'+
+      '<div class="desc">'+esc(s.desc)+'</div>'+
       '<div class="summary">'+(dOf(s)!==null?'<span class="tag ok">'+dOf(s)+'km</span>':'')+'<span class="tag '+(openNow(s)?"ok":"closed")+'">'+(openNow(s)?"영업 중":"영업 종료")+'</span>'+
-        (s.ship?'<span class="tag ship">택배 가능</span>':'<span class="tag closed">매장 방문 수령</span>')+'</div>'+
+        (s.ship?'<span class="tag ship">택배 가능</span>':'<span class="tag closed">매장 방문 수령</span>')+(s.goal==="sell"?'<span class="tag mood">프레임 판매</span>':'')+(s.mood||[]).map(function(m){ return '<span class="tag mood">'+esc(m)+'</span>'; }).join("")+'</div>'+
       '<div class="group-title">가공 가능 항목</div><div class="group caps">'+caps+'</div>'+
+      ((s.models||[]).length ? '<div class="group-title">취급 프레임</div><div class="group">'+s.models.map(function(m){ return '<div class="cell"><span class="k">'+esc(m.brand||"–")+'</span><span class="v">'+esc(m.model||"")+'</span></div>'; }).join("")+'</div>' : '')+
       (function(){
         if(isPub(s)){
           var c = costItems(s), dd = daysSince(s.price.at);
@@ -2604,19 +2671,28 @@
         '<div class="cell"><span class="k">외부 프레임</span><span class="v">'+POLICY[s.policy].label+'</span></div>'+
         '<div class="cell"><span class="k">방문 전 확인</span><span class="v">'+POLICY[s.policy].pre+'</span></div>'+
         (s.policyNote ? '<div class="cell"><span class="k">매장 안내</span><span class="v">'+esc(s.policyNote)+'</span></div>' : '')+
-        '<div class="cell"><span class="k">예상 작업 기간</span><span class="v">'+s.period+'</span></div>'+
+        '<div class="cell"><span class="k">예상 작업 기간</span><span class="v">'+esc(s.period)+'</span></div>'+
         '<div class="cell"><span class="k">완성품 수령</span><span class="v">'+(s.ship?"택배 가능 (매장이 알려 준 정보)":"매장 방문 수령 · 택배는 문의해 주세요")+'</span></div></div>'+
       '<div class="policy-note">온라인 주문·결제·예약은 받지 않아요. 상담·도수 확인·결제는 매장 방문 시 진행돼요.</div>'+
       '<div class="group-title">위치 · 영업 정보</div><div class="group">'+
-        '<div class="cell"><span class="k">주소</span><span class="v">'+s.addr+'</span></div>'+
-        '<div class="cell"><span class="k">영업시간</span><span class="v">'+s.hours+'</span></div>'+
-        '<div class="cell"><span class="k">휴무</span><span class="v">'+s.off+'</span></div>'+
+        '<div class="cell"><span class="k">주소</span><span class="v">'+esc(s.addr)+'</span></div>'+
+        '<div class="cell"><span class="k">영업시간</span><span class="v">'+esc(s.hours)+'</span></div>'+
+        '<div class="cell"><span class="k">휴무</span><span class="v">'+esc(s.off)+'</span></div>'+
         (s.phone ? '<div class="cell"><span class="k">매장 전화</span><span class="v">'+esc(s.phone)+(s.userMade ? '' : ' (예시)')+'</span></div>' : '')+
         (s.confirmedAt ? '<div class="cell"><span class="k">정보 확인일</span><span class="v">'+esc(s.confirmedAt)+(daysSince(s.confirmedAt)>30 ? ' · 오래됐어요' : '')+'</span></div>' : '')+'</div>'+
-      '<button type="button" class="linkbtn" id="btnReport">정보가 달라요 · 알려 주기</button>';
+      (preview ? '' : '<button type="button" class="linkbtn" id="btnReport">정보가 달라요 · 알려 주기</button>');
+  }
+  function paintHero(s){
+    var ph = s.photos || [], n = ph.length;
+    $("hero").className = "hero" + (n ? " photo" : (state.photo ? " v"+state.photo : ""));
+    $("hero").style.backgroundImage = n ? 'url("'+ph[state.photo % n]+'")' : "";
+    $("dots").querySelectorAll("i").forEach(function(d,i){ d.style.display = (n ? i<n : true) ? "" : "none"; d.classList.toggle("on", i===(n ? state.photo % n : state.photo)); });
+  }
+  function renderDetail(){
+    var s = shopById(state.selected);
+    $("detail").innerHTML = detailHtml(s);
     $("btnLike").classList.toggle("liked", !!state.liked[s.id]);
-    $("hero").className = "hero" + (state.photo ? " v"+state.photo : "");
-    $("dots").querySelectorAll("i").forEach(function(d,i){ d.classList.toggle("on", i===state.photo); });
+    paintHero(s);
     $("s3scroll").scrollTo({top:0});
   }
   $("back3").addEventListener("click", function(){ setStep(4); go(2); });
@@ -2628,9 +2704,9 @@
   });
   document.querySelectorAll("#hero .zone").forEach(function(z){
     z.addEventListener("click", function(){
-      state.photo = (state.photo + (+z.dataset.dir) + 3) % 3;
-      $("hero").className = "hero" + (state.photo ? " v"+state.photo : "");
-      $("dots").querySelectorAll("i").forEach(function(d,i){ d.classList.toggle("on", i===state.photo); });
+      var sh = shopById(state.selected), n = (sh.photos || []).length || 3;
+      state.photo = (state.photo + (+z.dataset.dir) + n) % n;
+      paintHero(sh);
     });
   });
 
@@ -2781,31 +2857,51 @@
   });
 
   /* ================= 안경원 전용 화면 (시연용) =================
-     안경원이 가입하고 매장 정보(영업시간·외부 프레임 정책·택배·가공 항목)를 직접 입력해요.
-     입력한 정보는 이 기기에 저장되고, 손님 화면의 목록·상세에 바로 나와요. 받은 문의와 '정보가 달라요' 신고도 여기서 봐요. */
+     안경원이 한 단계씩 매장 정보를 입력해요. 입력한 정보는 이 기기에 저장되고, 손님 화면의 목록·상세에 바로 나와요.
+     받은 문의와 '정보가 달라요' 신고도 여기서 봐요. 답을 누르면 이어지는 질문이 펼쳐져요. */
   var SHKEY = "afterframe.shops.v1", OWKEY = "afterframe.owner.v1", RPKEY = "afterframe.reports.v1";
-  var DAYOPTS = ["월","화","수","목","금","토","일"], MAPS = ["네이버 지도","구글 지도","카카오맵"];
+  var DAYOPTS = ["월","화","수","목","금","토","일"], DAYIDX = {"월":1,"화":2,"수":3,"목":4,"금":5,"토":6,"일":0};
+  var MAPS = ["네이버 지도","구글 지도","카카오맵"];
   var CAPS_PICK = CAP_ORDER.concat(["빈티지 테"]);
   var AREAS = KNOWN.map(function(k){ return k.name; });
   var REPORT_WHY = ["영업시간이 달라요","외부 프레임 정책이 달라요","택배 가능 여부가 달라요","가공 가능 항목이 달라요","문을 닫았거나 이전했어요","기타"];
+  var MOODS = ["미니멀","모던","클래식","빈티지","레트로","캐주얼","스포티","키즈","하이패션"];
+  var COLORS = [["파랑","#2563eb"],["보라","#7c3aed"],["초록","#059669"],["주황","#ea580c"],["분홍","#db2777"],["회색","#475569"]];
+  var GOALS = [["sell","안경테 판매","프레임을 파는 게 중심이에요"],["models","취급 프레임 모델 정리","가진 프레임 모델을 정리해서 보여 줘요"],["book","예약 받기","손님 예약을 받고 싶어요"]];
+  var SELL_TYPES = ["자체 브랜드","편집숍 브랜드","중고·빈티지","여러 가지"];
+  var STEPS = [
+    ["안경원을 검색해요","이름과 동네, 주소를 알려 주세요"],
+    ["연락처와 영업시간","손님이 연락하고 방문할 때 필요해요"],
+    ["앱을 쓰는 목적","가장 중요한 한 가지를 골라 주세요"],
+    ["매장 무드와 색","손님 화면에 이 분위기로 보여요"],
+    ["매장 사진과 로고","사진은 이 기기에만 저장돼요"],
+    ["가공과 택배","외부에서 산 프레임을 어떻게 받나요?"],
+    ["취급하는 프레임 모델","건너뛰어도 괜찮아요"],
+    ["가격과 공개","공개할지는 안경원이 정해요"],
+    ["손님에게 보이는 모습","확인하고 등록해요"]
+  ];
   function lsGet(k, d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
-  function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
   function ymd(d){ d = d || new Date(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
   function daysSince(ds){ var t = Date.parse(ds); return isNaN(t) ? null : Math.floor((Date.now()-t)/86400000); }
   function userPlace(name){ return KNOWN.filter(function(k){ return k.name===name; })[0] || KNOWN[0]; }
-  function applyUserShop(u){
+  /* 저장된 매장 정보 → 손님 화면에서 쓰는 매장 모양 */
+  function shopFromRec(u){
     var pl = userPlace(u.area), j = (u.id.charCodeAt(0)%5)*3-6;
     var sh = { id:u.id, name:u.name, verified:false, userMade:true, confirmedAt:u.confirmedAt,
       x:Math.max(4,Math.min(94,pl.x+j)), y:Math.max(6,Math.min(92,pl.y-j)),
-      addr:u.addr, hours:u.hours, off:u.off, period:u.period, ship:u.ship, policy:u.policy, policyNote:u.policyNote,
-      phone:u.phone, desc:u.desc || "안경원이 직접 등록한 정보예요", caps:u.caps, price:u.price || {public:false} };
+      addr:u.addr, hours:u.hours, off:u.off, week:u.week || null, period:u.period || "문의", ship:!!u.ship, policy:u.policy, policyNote:u.policyNote,
+      phone:u.phone, desc:u.desc || "안경원이 직접 등록한 정보예요", caps:u.caps || [], price:u.price || {public:false},
+      logo:u.logo || null, photos:u.photos || [], mood:u.mood || [], color:u.color || null, models:u.models || [], goal:u.goal || null };
     sh.dist = Math.max(0.1, Math.round(Math.hypot(GPS.x-sh.x, GPS.y-sh.y)*0.025*10)/10);
-    var i = SHOPS.map(function(s){ return s.id; }).indexOf(u.id);
+    return sh;
+  }
+  function applyUserShop(u){
+    var sh = shopFromRec(u), i = SHOPS.map(function(s){ return s.id; }).indexOf(u.id);
     if(i>-1) SHOPS[i] = sh; else SHOPS.push(sh);
   }
   lsGet(SHKEY, []).forEach(applyUserShop);
 
-  var shDraft = null, shEdit = false;
   var LIDX = ["1.56","1.60","1.67","1.74"], FKEYS = FUNCS.map(function(f){ return f.k; });
   function bandLabel(r){
     if(!r) return BANDS[0][0];
@@ -2827,159 +2923,398 @@
     var m = /^(매일|[월화수목금토일])(?:–([월화수목금토일]))?\s+(\d\d:\d\d)–(\d\d:\d\d)/.exec(h||"");
     return m ? {d1:m[1], d2:m[2]||m[1], t1:m[3], t2:m[4]} : null;
   }
-  function blankDraft(){ return {name:"", area:AREAS[0], addr:"", phone:"", d1:"월", d2:"토", t1:"10:00", t2:"20:00", off:"일요일", policy:"", policyNote:"", ship:null, period:"2 ~ 5일", desc:"", caps:["도수 렌즈"], maps:[], pubPrice:true, lens:{}, funcs:{}, outL:"문의 후 안내", drillL:"문의 후 안내", grooveL:"문의 후 안내"}; }
+  /* 요일별 영업시간: week[0..6] = 일~토. 쉬는 날은 {on:false} */
+  function emptyWeek(){ var w = []; for(var i=0;i<7;i++) w.push({on:false, o:"10:00", c:"20:00"}); return w; }
+  function weekFromRec(u){
+    var w = emptyWeek();
+    if(u.week){ u.week.forEach(function(e,i){ if(e) w[i] = {on:true, o:e.o, c:e.c}; }); return w; }
+    var p = parseHours(u.hours); if(!p) return w;
+    for(var i=0;i<7;i++){
+      var on = false;
+      if(p.d1==="매일") on = true;
+      else for(var k = DAYIDX[p.d1]; ; k = (k+1)%7){ if(k===i){ on = true; break; } if(k===DAYIDX[p.d2]) break; }
+      w[i] = {on:on, o:p.t1, c:p.t2};
+    }
+    return w;
+  }
+  /* 같은 시간으로 이어지는 요일을 묶어서 "월–금 10:00–19:00 · 토 11:00–17:00"처럼 */
+  function weekSummary(week){
+    var order = [1,2,3,4,5,6,0], parts = [], i = 0;
+    while(i<7){
+      var e = week[order[i]];
+      if(!e){ i++; continue; }
+      var j = i;
+      while(j+1<7 && week[order[j+1]] && week[order[j+1]].o===e.o && week[order[j+1]].c===e.c) j++;
+      var nm = DAYOPTS[i], nm2 = DAYOPTS[j];
+      parts.push((j>i ? nm+"–"+nm2 : nm)+" "+e.o+"–"+e.c);
+      i = j+1;
+    }
+    return parts.join(" · ");
+  }
+  function offSummary(week){
+    var off = []; DAYOPTS.forEach(function(d){ if(!week[DAYIDX[d]]) off.push(d+"요일"); });
+    return off.length ? off.join("·") : "없음";
+  }
+  function blankDraft(){
+    return {name:"", area:"", addr:"", phone:"", week:emptyWeek(), maps:[], goal:"", sellType:"", mood:[], color:"", desc:"", logo:null, photos:[],
+      policy:"", policyNote:"", ship:null, period:"", caps:[], models:[], pubPrice:null, lens:{}, funcs:{}, outL:BANDS[0][0], drillL:BANDS[0][0], grooveL:BANDS[0][0]};
+  }
   function draftFrom(u){
-    var p = parseHours(u.hours) || {d1:"월", d2:"토", t1:"10:00", t2:"20:00"};
-    return {name:u.name, area:u.area, addr:u.addr, phone:u.phone||"", d1:p.d1, d2:p.d2, t1:p.t1, t2:p.t2, off:u.off, policy:u.policy, policyNote:u.policyNote||"", ship:u.ship, period:u.period, desc:u.desc||"", caps:u.caps.slice(), maps:(u.maps||[]).slice(),
+    return {name:u.name, area:u.area, addr:u.addr, phone:u.phone||"", week:weekFromRec(u), maps:(u.maps||[]).slice(), goal:u.goal||"", sellType:u.sellType||"",
+      mood:(u.mood||[]).slice(), color:u.color||"", desc:u.desc||"", logo:u.logo||null, photos:(u.photos||[]).slice(),
+      policy:u.policy, policyNote:u.policyNote||"", ship:u.ship===undefined ? null : !!u.ship, period:u.period||"", caps:(u.caps||[]).slice(), models:(u.models||[]).map(function(m){ return {brand:m.brand, model:m.model}; }),
       pubPrice:!!(u.price && u.price.public), lens:Object.assign({}, u.price && u.price.lens), funcs:Object.assign({}, u.price && u.price.funcs),
       outL:bandLabel(u.price && u.price.outside), drillL:bandLabel(u.price && u.price.drill), grooveL:bandLabel(u.price && u.price.groove)};
   }
-  function readSh(){
-    if(!shDraft || !$("shName")) return;
-    var m = {name:"shName", addr:"shAddr", phone:"shPhone", off:"shOff", policyNote:"shNote", period:"shPeriod", desc:"shDesc", d1:"shD1", d2:"shD2", t1:"shT1", t2:"shT2"};
-    for(var k in m) if($(m[k])) shDraft[k] = $(m[k]).value;
-    LIDX.forEach(function(i,n){ if($("shPL"+n)) shDraft.lens[i] = $("shPL"+n).value; });
-    FKEYS.forEach(function(f,n){ if($("shPF"+n)) shDraft.funcs[f] = $("shPF"+n).value; });
-    if($("shOut")) shDraft.outL = $("shOut").value;
-    if($("shDrill")) shDraft.drillL = $("shDrill").value;
-    if($("shGroove")) shDraft.grooveL = $("shGroove").value;
-  }
-  function shChip(attr, val, label, on){ return '<button type="button" class="chip'+(on?" on":"")+'" data-'+attr+'="'+esc(val)+'">'+esc(label)+'</button>'; }
-  function shDaySel(id, all, cur){
-    var days = (all ? ["매일"] : []).concat(DAYOPTS);
-    return '<select id="'+id+'" class="ainp">'+days.map(function(d){ return '<option value="'+d+'"'+(d===cur?" selected":"")+'>'+(d==="매일" ? "매일" : d+"요일")+'</option>'; }).join("")+'</select>';
-  }
-  function shSel(id, opts, cur){ return '<select id="'+id+'" class="ainp">'+opts.map(function(o){ return '<option'+(o===cur?" selected":"")+'>'+o+'</option>'; }).join("")+'</select>'; }
-  function shInp(id, ph, val, type, max){ return '<input type="'+(type||"text")+'" id="'+id+'" class="ainp" maxlength="'+(max||60)+'" placeholder="'+esc(ph)+'" value="'+esc(val)+'">'; }
-  function shopFormHtml(edit){
-    var d = shDraft;
-    return '<div class="large" style="font-size:20px">'+(edit?"매장 정보 수정":"안경원 가입")+'</div>'+
-      '<div class="hint">입력한 정보는 손님 앱의 목록과 상세에 그대로 나와요. 시연에서는 이 기기에만 저장돼요.</div>'+
-      '<div class="group-title">기본 정보 <span class="req">필수</span></div>'+
-      '<div class="pfrow" style="margin-top:0">'+shInp("shName","안경원 이름",d.name,"text",30)+
-        '<div style="margin-top:8px">동네</div><div class="chips">'+AREAS.map(function(a){ return shChip("sha", a, a, d.area===a); }).join("")+'</div>'+
-        shInp("shAddr","주소 (예: 마포구 와우산로 00, 1층)",d.addr,"text",60)+
-        shInp("shPhone","매장 전화번호",d.phone,"tel",13)+'</div>'+
-      '<div class="group-title">영업시간 · 휴무 <span class="req">필수</span></div>'+
-      '<div class="pfrow" style="margin-top:0"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+
-        '<div>시작 요일'+shDaySel("shD1",true,d.d1)+'</div><div>끝 요일'+shDaySel("shD2",false,d.d2)+'</div>'+
-        '<div>여는 시간<input type="time" id="shT1" class="ainp" value="'+d.t1+'"></div><div>닫는 시간<input type="time" id="shT2" class="ainp" value="'+d.t2+'"></div></div>'+
-        shInp("shOff","휴무일 (예: 일요일, 없음)",d.off,"text",20)+'</div>'+
-      '<div class="group-title">외부 프레임 정책 <span class="req">필수</span></div>'+
-      '<div class="pfrow" style="margin-top:0"><div class="chips">'+
-        [["free","추가 비용 없이 가공"],["paid","가공비 별도"],["no","외부 프레임은 안 받아요"],["ask","아직 정하지 않았어요"]].map(function(x){ return shChip("shp", x[0], x[1], d.policy===x[0]); }).join("")+'</div>'+
-        shInp("shNote","정책 안내 한 줄 (선택, 금액은 쓰지 않아요)",d.policyNote,"text",60)+
-        '<div style="font-size:10px;color:var(--faint);margin-top:4px">가공비가 있으면 \'가공비 별도\'를 고르고, 금액은 아래 \'가격 · 공개 여부\'에서 정해요.</div></div>'+
-      '<div class="group-title">완성품 택배 <span class="req">필수</span></div>'+
-      '<div class="pfrow" style="margin-top:0"><div class="chips">'+shChip("shs","1","택배 가능",d.ship===true)+shChip("shs","0","방문 수령만",d.ship===false)+'</div>'+
-        shInp("shPeriod","보통 작업 기간 (예: 2 ~ 5일)",d.period,"text",12)+'</div>'+
-      '<div class="group-title">가공 가능 항목 <span class="req">필수</span></div>'+
-      '<div class="chips">'+CAPS_PICK.map(function(c){ return shChip("shc", c, capName(c), d.caps.indexOf(c)>-1); }).join("")+'</div>'+
-      '<div class="group-title">가격 · 공개 여부 <span class="opt-badge">선택</span></div>'+
-      '<div class="pfrow" style="margin-top:0"><div class="chips">'+shChip("shv","1","손님에게 공개",d.pubPrice)+shChip("shv","0","비공개",!d.pubPrice)+'</div>'+
-        '<div style="font-size:10px;color:var(--faint);margin-top:4px">비공개로 해도 손님에게는 이 지역 렌즈 가격대(시연용 시세)가 보여요. 공개하면 내 가격과 합계가 목록·상세에 나와요.</div>'+
-        (d.pubPrice ?
-          '<div style="margin-top:8px">렌즈 가격 (비구면 한 쌍, 만 원 단위)</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+
-            LIDX.map(function(i,n){ return '<label style="display:block">'+i+'<input type="number" inputmode="decimal" min="0" step="0.5" id="shPL'+n+'" class="ainp" placeholder="예) 6" value="'+esc(d.lens[i]||"")+'"></label>'; }).join("")+'</div>'+
-          '<div style="margin-top:8px">렌즈 기능 추가 가격 (만 원, 비우면 지역 가격대로 보여요)</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+
-            FKEYS.map(function(f,n){ return '<label style="display:block">'+f+'<input type="number" inputmode="decimal" min="0" step="0.5" id="shPF'+n+'" class="ainp" placeholder="예) 2" value="'+esc(d.funcs[f]||"")+'"></label>'; }).join("")+'</div>'+
-          '<div style="margin-top:8px">외부 프레임 가공비</div>'+shSel("shOut",BANDS.map(function(b){ return b[0]; }),d.outL)+
-          '<div style="margin-top:8px">무테 구멍 뚫기 가공비</div>'+shSel("shDrill",BANDS.map(function(b){ return b[0]; }),d.drillL)+
-          '<div style="margin-top:8px">하금 홈파기 가공비</div>'+shSel("shGroove",BANDS.map(function(b){ return b[0]; }),d.grooveL)
-        : '')+'</div>'+
-      '<div class="group-title">지도에 등록돼 있나요? <span class="opt-badge">선택</span></div>'+
-      '<div class="chips">'+MAPS.map(function(m){ return shChip("shm", m, m, d.maps.indexOf(m)>-1); }).join("")+'</div>'+
-      '<div class="hint" style="margin-top:4px">지도 정보를 가져와 영업시간을 자동으로 채우는 데 쓸 수 있어요 (다음 단계).</div>'+
-      '<div class="group-title">매장 소개 한 줄 <span class="opt-badge">선택</span></div>'+
-      '<div class="pfrow" style="margin-top:0">'+shInp("shDesc","예) 무테·하금 가공 경험이 많아요",d.desc,"text",50)+'</div>'+
-      '<div class="cardbtns" style="grid-template-columns:'+(edit?"1fr 1fr":"1fr")+';margin-top:14px"><button type="button" data-sh="save" style="background:var(--main);color:#fff">'+(edit?"저장":"가입하고 등록하기")+'</button>'+(edit?'<button type="button" data-sh="cancel">취소</button>':'')+'</div>';
-  }
-  function shopDashHtml(u){
-    var inq = getInquiries().filter(function(q){ return q.shopId===u.id; });
-    var reps = lsGet(RPKEY, []).filter(function(r){ return r.shopId===u.id; });
-    var ds = daysSince(u.confirmedAt), stale = ds!==null && ds>30;
-    var h = '<div class="myprof"><div class="av">🏪</div><div><b>'+esc(u.name)+'</b><small>'+esc(u.area)+' · 손님 앱에 나오고 있어요<br>'+(u.price && u.price.public ? '가격 공개 중' : '가격 비공개 (지역 렌즈 가격대만 보여요)')+'<br>정보 확인일 '+esc(u.confirmedAt)+(stale?' · <b style="color:var(--warn)">한 달 넘게 확인하지 않았어요</b>':'')+'</small></div></div>'+
-      '<div class="cardbtns" style="grid-template-columns:1fr 1fr"><button type="button" data-sh="confirm">정보 최신이에요</button><button type="button" data-sh="edit">정보 수정</button></div>';
-    h += '<div class="group-title">✉️ 받은 문의 <span class="opt-badge">'+inq.length+'개</span></div>';
-    h += inq.length ? inq.map(function(q){
-      var d = new Date(q.at), t = (d.getMonth()+1)+"/"+d.getDate()+" "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);
-      return '<div class="condcard" style="margin:8px 0 0"><div class="ct">'+t+' · '+esc(q.contact.name||"손님")+' · '+esc(q.contact.phone)+(q.status==="read"?' · 확인함':' · 새 문의')+'</div>'+
-        (q.text ? '<div style="font-size:12px;margin:4px 0">'+esc(q.text)+'</div>' : '')+
-        (q.card ? '<dl>'+q.card.map(function(r){ return '<dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd>'; }).join("")+'</dl>' : '')+
-        (q.status==="read" ? '' : '<div class="cardbtns" style="grid-template-columns:1fr"><button type="button" data-sh="read" data-id="'+q.id+'">확인했어요</button></div>')+'</div>';
-    }).join("") : '<div class="notice">아직 받은 문의가 없어요. 손님이 매장 상세의 "문의"에서 보내면 여기에 와요. 손님이 안경 카드를 함께 보내면 프레임·필요한 가공이 한 번에 정리돼 있어요.</div>';
-    h += '<div class="group-title">⚠️ 정보가 달라요 신고 <span class="opt-badge">'+reps.length+'개</span></div>';
-    h += reps.length ? reps.map(function(r){ var d = new Date(r.at); return '<div class="scard inq"><span>⚠️</span><span style="flex:1;min-width:0"><b>'+esc(r.reason)+'</b><small>'+(d.getMonth()+1)+'/'+d.getDate()+' · 손님이 알려 줬어요. 맞는지 확인하고 정보를 고쳐 주세요</small></span></div>'; }).join("")
-      : '<div class="notice">손님이 "정보가 달라요"를 누르면 여기에 모여요.</div>';
-    h += '<button type="button" class="linkbtn" data-sh="del" style="margin-top:16px">이 기기에서 매장 정보 지우기</button>';
-    return h;
-  }
-  function renderShop(){
-    var sc = $("shScroll"), top = sc ? sc.scrollTop : 0, u = ownerShop();
-    if(u && !shEdit) $("shBody").innerHTML = '<div class="large" style="font-size:20px">내 안경원</div>'+shopDashHtml(u);
-    else { if(!shDraft) shDraft = u ? draftFrom(u) : blankDraft(); $("shBody").innerHTML = shopFormHtml(!!u); }
-    sc.scrollTop = top;
-  }
-  function buildHours(d){
-    var t = d.t1+"–"+d.t2;
-    if(d.d1==="매일") return "매일 "+t;
-    return (d.d2 && d.d2!==d.d1 ? d.d1+"–"+d.d2 : d.d1)+" "+t;
-  }
-  function saveShop(){
-    readSh(); var d = shDraft, u = ownerShop(), phone = d.phone.replace(/[^0-9]/g,"");
-    var err = d.name.trim().length<2 ? "안경원 이름을 입력해 주세요"
-      : !d.addr.trim() ? "주소를 입력해 주세요"
-      : phone.length<8 ? "매장 전화번호를 입력해 주세요"
-      : (!d.t1 || !d.t2) ? "영업시간을 입력해 주세요"
-      : !d.policy ? "외부 프레임 정책을 골라 주세요"
-      : d.ship===null ? "택배 가능 여부를 골라 주세요"
-      : !d.caps.length ? "가공 가능 항목을 하나 이상 골라 주세요"
-      : (d.pubPrice && !LIDX.some(function(i){ return numOrNull(d.lens[i]); })) ? "가격을 공개하려면 렌즈 가격을 하나 이상 입력해 주세요" : "";
-    if(err){ toast("Sh", err); return; }
-    var id = u ? u.id : newShopId();
-    if(!id){ toast("Sh","시연에서 등록할 수 있는 매장 수를 넘었어요"); return; }
-    var rec = {id:id, name:d.name.trim(), area:d.area, addr:d.addr.trim(), phone:d.phone.trim(), hours:buildHours(d), off:d.off.trim()||"없음",
-      period:d.period.trim()||"문의", ship:d.ship, policy:d.policy, policyNote:d.policyNote.trim(), desc:d.desc.trim(), caps:d.caps.slice(), maps:d.maps.slice(), confirmedAt:ymd()};
-    var pr = {public:!!d.pubPrice, at:ymd()};
-    if(d.pubPrice){
+  function recFromDraft(d, id){
+    var wk = d.week.map(function(e){ return e.on ? {o:e.o, c:e.c} : null; });
+    var rec = {id:id, name:d.name.trim(), area:d.area, addr:d.addr.trim(), phone:d.phone.trim(), week:wk, hours:weekSummary(wk), off:offSummary(wk),
+      goal:d.goal, sellType:d.sellType, mood:d.mood.slice(), color:d.color, logo:d.logo, photos:d.photos.slice(),
+      period:d.period.trim()||"문의", ship:d.policy==="no" ? false : !!d.ship, policy:d.policy, policyNote:d.policyNote.trim(), desc:d.desc.trim(),
+      caps:d.policy==="no" ? [] : d.caps.slice(), maps:d.maps.slice(), models:d.models.filter(function(m){ return m.brand.trim() || m.model.trim(); }).map(function(m){ return {brand:m.brand.trim(), model:m.model.trim()}; }),
+      confirmedAt:ymd()};
+    var pr = {public:d.pubPrice===true, at:ymd()};
+    if(pr.public){
       pr.lens = {}; LIDX.forEach(function(i){ var n = numOrNull(d.lens[i]); if(n) pr.lens[i] = n; });
       pr.funcs = {}; FKEYS.forEach(function(f){ var n = numOrNull(d.funcs[f]); if(n) pr.funcs[f] = n; });
       pr.outside = d.policy==="free" ? [0,0] : bandVal(d.outL);
       pr.drill = bandVal(d.drillL); pr.groove = bandVal(d.grooveL);
     }
     rec.price = pr;
+    return rec;
+  }
+
+  /* ---------- 화면 상태 ---------- */
+  var shDraft = null, shEdit = false, shStep = 0, shTab = "shop", shBackAnim = false;
+  /* 단계별 입력 확인: 문제가 있으면 안내 글을 돌려줘요 */
+  function stepErr(i){
+    var d = shDraft;
+    if(i===0){
+      if(d.name.trim().length<2) return "안경원 이름을 입력해 주세요";
+      if(!d.area) return "동네를 골라 주세요";
+      if(!d.addr.trim()) return "주소를 입력해 주세요";
+    }
+    if(i===1){
+      if(d.phone.replace(/[^0-9]/g,"").length<8) return "매장 전화번호를 입력해 주세요";
+      if(!d.week.some(function(e){ return e.on; })) return "영업하는 요일을 하나 이상 켜 주세요";
+      if(d.week.some(function(e){ return e.on && (!e.o || !e.c); })) return "영업시간을 모두 입력해 주세요";
+    }
+    if(i===2 && !d.goal) return "앱을 쓰는 목적을 골라 주세요";
+    if(i===5){
+      if(!d.policy) return "외부 프레임 정책을 골라 주세요";
+      if(d.policy!=="no"){
+        if(d.ship===null) return "택배 가능 여부를 골라 주세요";
+        if(!d.caps.length) return "가공 가능 항목을 하나 이상 골라 주세요";
+      }
+    }
+    if(i===7 && d.pubPrice===true && !LIDX.some(function(k){ return numOrNull(d.lens[k]); })) return "가격을 공개하려면 렌즈 가격을 하나 이상 입력해 주세요";
+    return "";
+  }
+  function firstErr(){ for(var i=0;i<STEPS.length;i++){ var m = stepErr(i); if(m) return {i:i, m:m}; } return null; }
+
+  function chip(g, v, label, extra){ return '<button type="button" class="chip" data-g="'+g+'" data-v="'+esc(v)+'"'+(extra||"")+'>'+esc(label)+'</button>'; }
+  function inp(f, ph, type, max){ return '<input type="'+(type||"text")+'" class="ainp" data-f="'+f+'" maxlength="'+(max||60)+'" placeholder="'+esc(ph)+'">'; }
+  function bandSel(f){ return '<select class="ainp" data-f="'+f+'">'+BANDS.map(function(b){ return '<option>'+b[0]+'</option>'; }).join("")+'</select>'; }
+  function rv(key, inner){ return '<div class="rv" data-rv="'+key+'">'+inner+'</div>'; }
+
+  function stepHtml(i){
+    var d = shDraft;
+    if(i===0) return '<div class="searchbox"><span>🔍</span>'+inp("name","안경원 이름을 입력해요","text",30)+'</div>'+
+      '<div class="pfrow">동네를 골라 주세요<div class="chips">'+AREAS.map(function(a){ return chip("area", a, a); }).join("")+'</div></div>'+
+      rv("addr", '<div class="pfrow" style="margin-top:0">주소</div>'+inp("addr","예) 마포구 와우산로 00, 1층","text",60));
+    if(i===1){
+      var rows = DAYOPTS.map(function(nm){
+        var k = DAYIDX[nm];
+        return '<div class="dayblock"><div class="dayrow"><b>'+nm+'</b><button type="button" class="dtg" data-day="'+k+'" aria-label="'+nm+'요일 영업"><i></i></button><span class="dsub" data-dsub="'+k+'">쉬어요</span></div>'+
+          rv("day"+k, '<div class="dtimes"><input type="time" class="ainp" data-wo="'+k+'"><span>~</span><input type="time" class="ainp" data-wc="'+k+'"></div>')+'</div>';
+      }).join("");
+      return '<div class="pfrow" style="margin-top:0">매장 전화번호'+inp("phone","예) 02-000-0000","tel",13)+'</div>'+
+        '<div class="pfrow">요일별 영업시간 <span style="color:var(--faint)">(켜면 시간이 나와요)</span><div class="chips" style="margin-top:6px">'+
+          '<button type="button" class="chip" data-q="wk">평일만</button><button type="button" class="chip" data-q="sat">월–토</button><button type="button" class="chip" data-q="all">매일</button></div></div>'+
+        '<div class="daylist">'+rows+'</div>'+
+        '<div class="pfrow">지도 서비스에 등록돼 있나요? <span class="opt-badge">선택</span><div class="chips" style="margin-top:6px">'+MAPS.map(function(m){ return chip("maps", m, m); }).join("")+'</div></div>'+
+        '<div class="hint" style="margin-top:4px">지도 정보를 가져와 영업시간을 채우는 데 쓸 수 있어요 (다음 단계).</div>';
+    }
+    if(i===2) return GOALS.map(function(g){ return '<button type="button" class="goal" data-g="goal" data-v="'+g[0]+'"><b>'+g[1]+'</b>'+(g[0]==="book"?'<small>선택만 기록돼요. 앱은 아직 예약을 받지 않아요 (준비 중)</small>':'<small>'+g[2]+'</small>')+'</button>'; }).join("")+
+      rv("sell", '<div class="pfrow" style="margin-top:0">어떤 프레임을 파나요?<div class="chips" style="margin-top:6px">'+SELL_TYPES.map(function(t){ return chip("sellType", t, t); }).join("")+'</div></div>')+
+      rv("models", '<div class="notice" style="margin:0">다음 단계들을 지나 "취급하는 프레임 모델"에서 브랜드와 모델명을 적어요.</div>')+
+      rv("book", '<div class="notice" style="margin:0">앱은 아직 예약을 받지 않아요. 선택은 기록만 되고, 손님 화면에는 예약이 나타나지 않아요. 손님은 문의로 연락해요.</div>');
+    if(i===3) return '<div class="pfrow" style="margin-top:0">매장에 있는 안경테의 무드 <span class="opt-badge">여러 개 선택</span><div class="chips" style="margin-top:6px">'+MOODS.map(function(m){ return chip("mood", m, m); }).join("")+'</div></div>'+
+      '<div class="pfrow">매장 페이지 색<div class="chips" style="margin-top:6px">'+COLORS.map(function(c){ return '<button type="button" class="csw" data-g="color" data-v="'+c[1]+'" style="background:'+c[1]+'" aria-label="'+c[0]+'"></button>'; }).join("")+'</div></div>'+
+      rv("colorprev", '<div class="colorprev" data-cprev>손님 화면에서 이 색이 포인트로 쓰여요</div>')+
+      '<div class="pfrow">매장 소개 한 줄 <span class="opt-badge">선택</span>'+inp("desc","예) 무테·하금 가공 경험이 많아요","text",50)+'</div>';
+    if(i===4) return '<div class="pfrow" style="margin-top:0">로고 <span class="opt-badge">선택</span></div><div class="logoline"><div class="logobox" data-logo></div><div><button type="button" class="chip" data-act="logo">로고 올리기</button> <button type="button" class="chip" data-act="dellogo" data-rv-logo>지우기</button></div></div>'+
+      '<div class="pfrow">매장 사진 <span class="opt-badge">선택 · 최대 3장</span></div><div class="pgrid" data-photos></div>'+
+      '<div class="hint" style="margin-top:6px">사진은 작게 줄여서 이 기기에만 저장돼요. 손님 상세 화면 맨 위에 보여요.</div>';
+    if(i===5) return '<div class="pfrow" style="margin-top:0">외부에서 산 프레임, 어떻게 받나요?<div class="chips" style="margin-top:6px">'+
+        [["free","추가 비용 없이 가공"],["paid","가공비 별도"],["no","외부 프레임은 안 받아요"],["ask","아직 정하지 않았어요"]].map(function(x){ return chip("policy", x[0], x[1]); }).join("")+'</div></div>'+
+      rv("polno", '<div class="notice" style="margin:0">외부 프레임을 안 받으면 손님이 찾는 목록에서 빠져요. 다음 단계로 넘어가도 돼요.</div>')+
+      rv("polrest", inp("policyNote","정책 안내 한 줄 (선택, 금액은 쓰지 않아요)","text",60)+
+        '<div class="pfrow">가공 가능 항목<div class="chips" style="margin-top:6px">'+CAPS_PICK.map(function(c){ return chip("caps", c, capName(c)); }).join("")+'</div></div>'+
+        '<div class="pfrow">완성품 택배<div class="chips" style="margin-top:6px">'+chip("ship","1","택배 가능")+chip("ship","0","방문 수령만")+'</div></div>'+
+        '<div class="pfrow">보통 작업 기간'+inp("period","예) 2 ~ 5일","text",12)+'</div>');
+    if(i===6) return '<div class="hint" style="margin:0 0 6px">'+(shDraft.goal==="models" ? "목적으로 고른 항목이에요. " : "")+'매장에서 취급하는 프레임을 적어 두면 손님 상세에 보여요. 없으면 건너뛰어도 돼요.</div>'+
+      '<div data-models></div><button type="button" class="vault-add" data-act="addmodel">＋ 프레임 모델 추가</button>';
+    if(i===7) return '<div class="chips">'+chip("pub","1","손님에게 공개")+chip("pub","0","비공개")+'</div>'+
+      rv("pubprivate", '<div class="notice" style="margin:0">비공개여도 손님에게는 이 지역 렌즈 가격대(시연용 시세)가 보여요.</div>')+
+      rv("pubfields",
+        '<div class="notice" style="margin:0 0 8px">공개하면 내 가격과 합계가 목록·상세에 나와요.</div>'+
+        '<div>렌즈 가격 (비구면 한 쌍, 만 원 단위)</div><div class="g2">'+LIDX.map(function(k){ return '<label>'+k+'<input type="number" inputmode="decimal" min="0" step="0.5" class="ainp" data-lens="'+k+'" placeholder="예) 6"></label>'; }).join("")+'</div>'+
+        '<div style="margin-top:8px">렌즈 기능 추가 가격 (만 원, 비우면 지역 가격대로 보여요)</div><div class="g2">'+FKEYS.map(function(f){ return '<label>'+f+'<input type="number" inputmode="decimal" min="0" step="0.5" class="ainp" data-func="'+f+'" placeholder="예) 2"></label>'; }).join("")+'</div>'+
+        '<div style="margin-top:8px">외부 프레임 가공비</div>'+bandSel("outL")+
+        '<div style="margin-top:8px">무테 구멍 뚫기 가공비</div>'+bandSel("drillL")+
+        '<div style="margin-top:8px">하금 홈파기 가공비</div>'+bandSel("grooveL"));
+    if(i===8){
+      var pe = firstErr();
+      if(pe) return '<div class="notice" style="margin:0">아직 비어 있는 곳이 있어요: '+esc(pe.m)+' ('+(pe.i+1)+'단계)</div>';
+      var tmp = shopFromRec(recFromDraft(d, ownerShop() ? ownerShop().id : (newShopId() || "G")));
+      return '<div class="pfrow" style="margin-top:0">손님 목록에서는 이렇게 보여요</div><div class="pvbox" style="padding:0;border:0;background:transparent">'+shopCard(tmp, true)+'</div>'+
+        '<div class="pfrow">손님 상세 화면에서는 이렇게 보여요</div><div class="pvbox">'+detailHtml(tmp, true)+'</div>'+
+        '<div class="hint" style="margin-top:6px">빠진 곳이 있으면 위쪽 번호를 눌러 돌아가서 고칠 수 있어요.</div>';
+    }
+    return "";
+  }
+
+  /* 입력값 → 화면 반영 (다시 그리지 않고 클래스만 바꿔서 펼침 모션이 보여요) */
+  function gselected(g, v){
+    var d = shDraft;
+    if(g==="area") return d.area===v;
+    if(g==="goal") return d.goal===v;
+    if(g==="sellType") return d.sellType===v;
+    if(g==="policy") return d.policy===v;
+    if(g==="color") return d.color===v;
+    if(g==="ship") return d.ship===(v==="1") && d.ship!==null;
+    if(g==="pub") return d.pubPrice!==null && d.pubPrice===(v==="1");
+    if(g==="mood") return d.mood.indexOf(v)>-1;
+    if(g==="caps") return d.caps.indexOf(v)>-1;
+    if(g==="maps") return d.maps.indexOf(v)>-1;
+    return false;
+  }
+  function rvOpen(key){
+    var d = shDraft;
+    if(key==="addr") return !!d.area;
+    if(key==="sell") return d.goal==="sell";
+    if(key==="models") return d.goal==="models";
+    if(key==="book") return d.goal==="book";
+    if(key==="colorprev") return !!d.color;
+    if(key==="polno") return d.policy==="no";
+    if(key==="polrest") return !!d.policy && d.policy!=="no";
+    if(key==="pubprivate") return d.pubPrice===false;
+    if(key==="pubfields") return d.pubPrice===true;
+    if(key.indexOf("day")===0) return d.week[+key.slice(3)].on;
+    return false;
+  }
+  function syncUI(){
+    var root = $("shBody"), d = shDraft;
+    root.querySelectorAll("[data-g]").forEach(function(b){ b.classList.toggle("on", gselected(b.dataset.g, b.dataset.v)); });
+    root.querySelectorAll("[data-rv]").forEach(function(e){ e.classList.toggle("open", rvOpen(e.dataset.rv)); });
+    root.querySelectorAll(".dtg").forEach(function(b){ b.classList.toggle("on", d.week[+b.dataset.day].on); b.setAttribute("aria-pressed", d.week[+b.dataset.day].on); });
+    root.querySelectorAll("[data-dsub]").forEach(function(e){ e.textContent = d.week[+e.dataset.dsub].on ? "영업해요" : "쉬어요"; });
+    var cp = root.querySelector("[data-cprev]"); if(cp && d.color){ cp.style.background = d.color; }
+    var lg = root.querySelector("[data-logo]"); if(lg){ lg.innerHTML = d.logo ? '<img src="'+d.logo+'" alt="">' : '<span>로고</span>'; }
+    var dl = root.querySelector("[data-rv-logo]"); if(dl) dl.style.display = d.logo ? "" : "none";
+    var ph = root.querySelector("[data-photos]");
+    if(ph){
+      ph.innerHTML = d.photos.map(function(p,i){ return '<div class="ph"><img src="'+p+'" alt=""><button type="button" class="x" data-act="delphoto" data-i="'+i+'" aria-label="사진 지우기">✕</button></div>'; }).join("")+
+        (d.photos.length<3 ? '<button type="button" class="ph add" data-act="photo">＋<small>사진</small></button>' : '');
+    }
+    var ml = root.querySelector("[data-models]");
+    if(ml && !ml.dataset.built){ buildModels(); }
+  }
+  function buildModels(){
+    var ml = $("shBody").querySelector("[data-models]"); if(!ml) return;
+    ml.dataset.built = "1";
+    ml.innerHTML = shDraft.models.map(function(m,i){
+      return '<div class="mrow"><input type="text" class="ainp" data-mb="'+i+'" maxlength="20" placeholder="브랜드" value="'+esc(m.brand)+'"><input type="text" class="ainp" data-mm="'+i+'" maxlength="24" placeholder="모델명" value="'+esc(m.model)+'">'+
+        '<button type="button" class="vdel" data-act="delmodel" data-i="'+i+'" aria-label="모델 지우기">✕</button></div>';
+    }).join("");
+  }
+  /* 입력칸에 처음 값을 넣어 줘요 (초안 → 화면) */
+  function fillInputs(){
+    var root = $("shBody"), d = shDraft;
+    root.querySelectorAll("[data-f]").forEach(function(e){ var v = d[e.dataset.f]; e.value = v===undefined ? "" : v; });
+    root.querySelectorAll("[data-wo]").forEach(function(e){ e.value = d.week[+e.dataset.wo].o; });
+    root.querySelectorAll("[data-wc]").forEach(function(e){ e.value = d.week[+e.dataset.wc].c; });
+    root.querySelectorAll("[data-lens]").forEach(function(e){ e.value = d.lens[e.dataset.lens] || ""; });
+    root.querySelectorAll("[data-func]").forEach(function(e){ e.value = d.funcs[e.dataset.func] || ""; });
+  }
+
+  function headHtml(){
+    var edit = !!ownerShop();
+    var h = '<div class="large" style="font-size:20px">'+(edit ? "매장 정보 수정" : "안경원 가입")+'</div>'+
+      '<div class="shprog"><div class="bar"><i style="width:'+Math.round((shStep+1)/STEPS.length*100)+'%"></i></div>'+
+      '<div class="lb">'+(shStep+1)+' / '+STEPS.length+' · '+STEPS[shStep][0]+'</div>';
+    if(edit) h += '<div class="shdots">'+STEPS.map(function(s,i){ return '<button type="button" class="'+(i===shStep?"now":"")+'" data-act="jump" data-i="'+i+'" aria-label="'+(i+1)+'단계 '+s[0]+'">'+(i+1)+'</button>'; }).join("")+'</div>';
+    return h+'</div>';
+  }
+  function renderWizard(){
+    var edit = !!ownerShop(), last = shStep===STEPS.length-1;
+    $("shBody").innerHTML = headHtml()+
+      '<div class="shstep'+(shBackAnim?" back":"")+'"><div class="group-title">'+STEPS[shStep][0]+'</div><div class="hint" style="margin-top:-4px">'+STEPS[shStep][1]+'</div>'+stepHtml(shStep)+'</div>'+
+      '<div class="cardbtns" style="grid-template-columns:'+(shStep>0?"1fr 1fr":"1fr")+';margin-top:14px">'+
+        (shStep>0 ? '<button type="button" data-act="prev">이전</button>' : '')+
+        (last ? '<button type="button" data-act="save" style="background:var(--main);color:#fff">'+(edit?"저장":"가입하고 등록하기")+'</button>'
+              : '<button type="button" data-act="next" style="background:var(--main);color:#fff">다음</button>')+'</div>'+
+      (edit && !last ? '<button type="button" class="linkbtn" data-act="save">저장하고 끝내기</button>' : '')+
+      (edit ? '<button type="button" class="linkbtn" data-act="cancel">수정 그만두기</button>' : '');
+    shBackAnim = false;
+    fillInputs(); syncUI();
+  }
+
+  /* ---------- 가입 후 화면 ---------- */
+  function shopDashHtml(u){
+    var inq = getInquiries().filter(function(q){ return q.shopId===u.id; });
+    var reps = lsGet(RPKEY, []).filter(function(r){ return r.shopId===u.id; });
+    var ds = daysSince(u.confirmedAt), stale = ds!==null && ds>30;
+    var newCount = inq.filter(function(q){ return q.status!=="read"; }).length;
+    var h = '<div class="large" style="font-size:20px">내 안경원</div>'+
+      '<div class="tabs3">'+[["shop","내 매장"],["inbox","받은 문의"+(newCount?" · 새 "+newCount:"")],["reports","신고 "+reps.length]].map(function(t){ return '<button type="button" class="'+(shTab===t[0]?"on":"")+'" data-tab="'+t[0]+'">'+t[1]+'</button>'; }).join("")+'</div>';
+    if(shTab==="shop"){
+      var g = GOALS.filter(function(x){ return x[0]===u.goal; })[0];
+      h += '<div class="myprof"><div class="av" style="'+(u.logo?'padding:0;overflow:hidden;background:#fff':'')+'">'+(u.logo?'<img src="'+u.logo+'" alt="" style="width:100%;height:100%;object-fit:cover">':'🏪')+'</div><div><b>'+esc(u.name)+'</b><small>'+esc(u.area)+' · 손님 앱에 나오고 있어요<br>'+(u.price && u.price.public ? '가격 공개 중' : '가격 비공개 (지역 렌즈 가격대만 보여요)')+
+        '<br>정보 확인일 '+esc(u.confirmedAt)+(stale?' · <b style="color:var(--warn)">한 달 넘게 확인하지 않았어요</b>':'')+'</small></div></div>'+
+        '<div class="cardbtns" style="grid-template-columns:1fr 1fr"><button type="button" data-sh="confirm">정보 최신이에요</button><button type="button" data-sh="edit">정보 수정</button></div>'+
+        '<div class="group-title">우리 매장 정보</div><div class="group">'+
+          '<div class="cell"><span class="k">쓰는 목적</span><span class="v">'+(g?esc(g[1]):"–")+'</span></div>'+
+          '<div class="cell"><span class="k">영업시간</span><span class="v">'+esc(u.hours)+'</span></div>'+
+          '<div class="cell"><span class="k">외부 프레임</span><span class="v">'+esc(POLICY[u.policy].label)+'</span></div>'+
+          '<div class="cell"><span class="k">무드</span><span class="v">'+((u.mood||[]).length?esc(u.mood.join(" · ")):"–")+'</span></div>'+
+          '<div class="cell"><span class="k">취급 모델</span><span class="v">'+((u.models||[]).length+"개")+'</span></div>'+
+          '<div class="cell"><span class="k">사진</span><span class="v">'+((u.photos||[]).length+"장")+'</span></div></div>'+
+        '<button type="button" class="linkbtn" data-sh="del" style="margin-top:16px">이 기기에서 매장 정보 지우기</button>';
+    }else if(shTab==="inbox"){
+      h += inq.length ? inq.map(function(q){
+        var d = new Date(q.at), t = (d.getMonth()+1)+"/"+d.getDate()+" "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);
+        return '<div class="condcard" style="margin:8px 0 0"><div class="ct">'+t+' · '+esc(q.contact.name||"손님")+' · '+esc(q.contact.phone)+(q.status==="read"?' · 확인함':' · 새 문의')+'</div>'+
+          (q.text ? '<div style="font-size:12px;margin:4px 0">'+esc(q.text)+'</div>' : '')+
+          (q.card ? '<dl>'+q.card.map(function(r){ return '<dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd>'; }).join("")+'</dl>' : '')+
+          (q.status==="read" ? '' : '<div class="cardbtns" style="grid-template-columns:1fr"><button type="button" data-sh="read" data-id="'+q.id+'">확인했어요</button></div>')+'</div>';
+      }).join("") : '<div class="notice">아직 받은 문의가 없어요. 손님이 매장 상세의 "문의"에서 보내면 여기에 와요. 손님이 안경 카드를 함께 보내면 프레임·필요한 가공이 한 번에 정리돼 있어요.</div>';
+    }else{
+      h += reps.length ? reps.map(function(r){ var d = new Date(r.at); return '<div class="scard inq"><span>⚠️</span><span style="flex:1;min-width:0"><b>'+esc(r.reason)+'</b><small>'+(d.getMonth()+1)+'/'+d.getDate()+' · 손님이 알려 줬어요. 맞는지 확인하고 정보를 고쳐 주세요</small></span></div>'; }).join("")
+        : '<div class="notice">손님이 "정보가 달라요"를 누르면 여기에 모여요.</div>';
+    }
+    return h;
+  }
+  function renderShop(){
+    var sc = $("shScroll"), top = sc ? sc.scrollTop : 0, u = ownerShop();
+    if(u && !shEdit){ $("shBody").innerHTML = shopDashHtml(u); }
+    else { if(!shDraft) shDraft = u ? draftFrom(u) : blankDraft(); renderWizard(); }
+    sc.scrollTop = top;
+  }
+  function saveShop(){
+    var e = firstErr();
+    if(e){ shStep = e.i; renderWizard(); toast("Sh", e.m); return; }
+    var u = ownerShop(), id = u ? u.id : newShopId();
+    if(!id){ toast("Sh","시연에서 등록할 수 있는 매장 수를 넘었어요"); return; }
+    var rec = recFromDraft(shDraft, id);
     var all = lsGet(SHKEY, []).filter(function(x){ return x.id!==id; }); all.push(rec);
-    lsSet(SHKEY, all); lsSet(OWKEY, {shopId:id});
-    applyUserShop(rec); shEdit = false; shDraft = null;
+    if(!lsSet(SHKEY, all)){ toast("Sh","저장 공간이 부족해요. 사진을 줄이거나 지워 주세요"); return; }
+    lsSet(OWKEY, {shopId:id});
+    applyUserShop(rec); shEdit = false; shDraft = null; shStep = 0; shTab = "shop";
     renderShop(); renderList(false); renderDetail(); refreshMy();
     toast("Sh", u ? "저장했어요 · 손님 화면에 바로 반영돼요" : "가입했어요 · 손님 앱 목록에 나와요 (시연용)");
   }
-  $("shBody").addEventListener("click", function(e){
+  /* 사진을 작게 줄여서 글자 형태(dataURL)로 만들어요 */
+  function imgToData(file, max, square, cb){
+    var done = false; function fin(t){ if(!done){ done = true; cb(t); } }
+    try{
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function(){
+        try{
+          var c = document.createElement("canvas"), cx = c.getContext("2d");
+          if(square){
+            var s = Math.min(img.width, img.height); c.width = c.height = max;
+            cx.drawImage(img, (img.width-s)/2, (img.height-s)/2, s, s, 0, 0, max, max);
+          }else{
+            var k = Math.min(1, max/Math.max(img.width, img.height)); c.width = Math.round(img.width*k); c.height = Math.round(img.height*k);
+            cx.drawImage(img, 0, 0, c.width, c.height);
+          }
+          fin(c.toDataURL("image/jpeg", .72));
+        }catch(e){ fin(null); }
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); fin(null); };
+      img.src = url;
+    }catch(e){ fin(null); }
+  }
+  var shBody = $("shBody");
+  shBody.addEventListener("input", function(e){
+    var t = e.target, d = shDraft; if(!d) return;
+    if(t.dataset.f){ d[t.dataset.f] = t.value; }
+    else if(t.dataset.wo!==undefined) d.week[+t.dataset.wo].o = t.value;
+    else if(t.dataset.wc!==undefined) d.week[+t.dataset.wc].c = t.value;
+    else if(t.dataset.lens) d.lens[t.dataset.lens] = t.value;
+    else if(t.dataset.func) d.funcs[t.dataset.func] = t.value;
+    else if(t.dataset.mb!==undefined) d.models[+t.dataset.mb].brand = t.value;
+    else if(t.dataset.mm!==undefined) d.models[+t.dataset.mm].model = t.value;
+  });
+  shBody.addEventListener("change", function(e){
+    var t = e.target, d = shDraft; if(!d) return;
+    if(t.dataset.f==="outL"||t.dataset.f==="drillL"||t.dataset.f==="grooveL") d[t.dataset.f] = t.value;
+  });
+  shBody.addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
-    var d = shDraft, t;
-    if(b.dataset.sha!==undefined){ readSh(); d.area = b.dataset.sha; renderShop(); return; }
-    if(b.dataset.shp!==undefined){ readSh(); d.policy = b.dataset.shp; renderShop(); return; }
-    if(b.dataset.shv!==undefined){ readSh(); d.pubPrice = b.dataset.shv==="1"; renderShop(); return; }
-    if(b.dataset.shs!==undefined){ readSh(); d.ship = b.dataset.shs==="1"; renderShop(); return; }
-    if(b.dataset.shc!==undefined){ readSh(); t = d.caps.indexOf(b.dataset.shc); if(t>-1) d.caps.splice(t,1); else d.caps.push(b.dataset.shc); renderShop(); return; }
-    if(b.dataset.shm!==undefined){ readSh(); t = d.maps.indexOf(b.dataset.shm); if(t>-1) d.maps.splice(t,1); else d.maps.push(b.dataset.shm); renderShop(); return; }
-    var a = b.dataset.sh, u = ownerShop();
+    var d = shDraft, a, t, u = ownerShop();
+    if(b.dataset.tab){ shTab = b.dataset.tab; renderShop(); return; }
+    if(b.dataset.sh){
+      a = b.dataset.sh;
+      if(a==="edit"){ shEdit = true; shDraft = draftFrom(u); shStep = 0; renderShop(); return; }
+      if(a==="confirm"){
+        var all = lsGet(SHKEY, []); all.forEach(function(x){ if(x.id===u.id) x.confirmedAt = ymd(); }); lsSet(SHKEY, all);
+        applyUserShop(all.filter(function(x){ return x.id===u.id; })[0]); renderShop(); renderDetail(); toast("Sh","확인 날짜를 오늘로 바꿨어요"); return;
+      }
+      if(a==="read"){
+        var qs = getInquiries(); qs.forEach(function(q){ if(String(q.id)===b.dataset.id) q.status = "read"; }); saveInquiries(qs); renderShop(); return;
+      }
+      if(a==="del"){
+        if(!window.confirm("이 기기에 저장된 내 매장 정보를 지울까요? 손님 앱 목록에서도 사라져요.")) return;
+        lsSet(SHKEY, lsGet(SHKEY, []).filter(function(x){ return x.id!==u.id; })); try{ localStorage.removeItem(OWKEY); }catch(er){}
+        var i = SHOPS.map(function(s){ return s.id; }).indexOf(u.id); if(i>-1) SHOPS.splice(i,1);
+        shDraft = null; shEdit = false; shStep = 0; renderShop(); renderList(true); renderDetail(); refreshMy(); toast("Sh","지웠어요"); return;
+      }
+      return;
+    }
+    if(!d) return;
+    if(b.dataset.g){
+      var g = b.dataset.g, v = b.dataset.v;
+      if(g==="area") d.area = v;
+      else if(g==="goal") d.goal = v;
+      else if(g==="sellType") d.sellType = v;
+      else if(g==="policy") d.policy = v;
+      else if(g==="color") d.color = v;
+      else if(g==="ship") d.ship = v==="1";
+      else if(g==="pub") d.pubPrice = v==="1";
+      else { var arr = d[g]; t = arr.indexOf(v); if(t>-1) arr.splice(t,1); else arr.push(v); }
+      syncUI(); return;
+    }
+    if(b.dataset.day!==undefined){ var e1 = d.week[+b.dataset.day]; e1.on = !e1.on; syncUI(); return; }
+    if(b.dataset.q){
+      var days = b.dataset.q==="wk" ? [1,2,3,4,5] : b.dataset.q==="sat" ? [1,2,3,4,5,6] : [0,1,2,3,4,5,6];
+      var base = d.week.filter(function(x){ return x.on; })[0] || {o:"10:00", c:"20:00"};
+      d.week.forEach(function(x,i){ x.on = days.indexOf(i)>-1; if(x.on){ x.o = base.o; x.c = base.c; } });
+      fillInputs(); syncUI(); return;
+    }
+    a = b.dataset.act; if(!a) return;
+    if(a==="next"){ var m = stepErr(shStep); if(m){ toast("Sh", m); return; } shStep++; renderWizard(); $("shScroll").scrollTo({top:0}); return; }
+    if(a==="prev"){ shStep--; shBackAnim = true; renderWizard(); $("shScroll").scrollTo({top:0}); return; }
+    if(a==="jump"){ shBackAnim = +b.dataset.i < shStep; shStep = +b.dataset.i; renderWizard(); $("shScroll").scrollTo({top:0}); return; }
     if(a==="save"){ saveShop(); return; }
-    if(a==="edit"){ shEdit = true; shDraft = draftFrom(u); renderShop(); return; }
-    if(a==="cancel"){ shEdit = false; shDraft = null; renderShop(); return; }
-    if(a==="confirm"){
-      var all = lsGet(SHKEY, []); all.forEach(function(x){ if(x.id===u.id) x.confirmedAt = ymd(); }); lsSet(SHKEY, all);
-      applyUserShop(all.filter(function(x){ return x.id===u.id; })[0]); renderShop(); renderDetail(); toast("Sh","확인 날짜를 오늘로 바꿨어요"); return;
-    }
-    if(a==="read"){
-      var qs = getInquiries(); qs.forEach(function(q){ if(String(q.id)===b.dataset.id) q.status = "read"; }); saveInquiries(qs); renderShop(); return;
-    }
-    if(a==="del"){
-      if(!window.confirm("이 기기에 저장된 내 매장 정보를 지울까요? 손님 앱 목록에서도 사라져요.")) return;
-      lsSet(SHKEY, lsGet(SHKEY, []).filter(function(x){ return x.id!==u.id; })); try{ localStorage.removeItem(OWKEY); }catch(er){}
-      var i = SHOPS.map(function(s){ return s.id; }).indexOf(u.id); if(i>-1) SHOPS.splice(i,1);
-      shDraft = null; shEdit = false; renderShop(); renderList(true); renderDetail(); refreshMy(); toast("Sh","지웠어요"); return;
-    }
+    if(a==="cancel"){ shEdit = false; shDraft = null; shStep = 0; renderShop(); return; }
+    if(a==="logo"){ $("shLogoFile").click(); return; }
+    if(a==="dellogo"){ d.logo = null; syncUI(); return; }
+    if(a==="photo"){ $("shPhotoFile").click(); return; }
+    if(a==="delphoto"){ d.photos.splice(+b.dataset.i, 1); syncUI(); return; }
+    if(a==="addmodel"){ if(d.models.length>=10){ toast("Sh","최대 10개까지 적을 수 있어요"); return; } d.models.push({brand:"", model:""}); $("shBody").querySelector("[data-models]").dataset.built = ""; buildModels(); return; }
+    if(a==="delmodel"){ d.models.splice(+b.dataset.i, 1); $("shBody").querySelector("[data-models]").dataset.built = ""; buildModels(); return; }
+  });
+  $("shLogoFile").addEventListener("change", function(){
+    var f = this.files && this.files[0]; this.value = ""; if(!f || !shDraft) return;
+    imgToData(f, 160, true, function(t){ if(!t){ toast("Sh","사진을 읽지 못했어요"); return; } shDraft.logo = t; syncUI(); });
+  });
+  $("shPhotoFile").addEventListener("change", function(){
+    var f = this.files && this.files[0]; this.value = ""; if(!f || !shDraft || shDraft.photos.length>=3) return;
+    imgToData(f, 640, false, function(t){ if(!t){ toast("Sh","사진을 읽지 못했어요"); return; } shDraft.photos.push(t); syncUI(); });
   });
   $("shBack").addEventListener("click", function(){ setStep(1); go(1); });
   $("toShop").addEventListener("click", function(){ renderShop(); go("Sh"); });
