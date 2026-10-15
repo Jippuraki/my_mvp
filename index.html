@@ -522,6 +522,8 @@
   .shop.sel{border-color:rgba(37,99,235,.5);background:rgba(219,234,254,.85)}
   .thumb{width:54px;height:54px;flex:0 0 54px;border-radius:12px;background:linear-gradient(135deg,#bfd4fb,#eef4ff);display:grid;place-items:center;font-weight:800;color:#5b74a8}
   .shop .info-col{min-width:0;flex:1}
+  .pline{font-size:11px;font-weight:700;color:var(--ink);margin:-3px 0 6px}
+  .pline span{color:var(--main)}
   .shop .nm{font-size:13px;font-weight:700;display:flex;align-items:center;gap:5px}
   .shop .meta{font-size:11px;color:var(--sub);margin:1px 0 6px}
   .tags{display:flex;flex-wrap:wrap;gap:4px}
@@ -605,7 +607,7 @@
   <section class="three">
     <div class="row"><b>문제</b><p>패션 프레임을 구매한 뒤 무테, 틴팅, 미러, 도수렌즈 등의 특수 가공을 어디서 해야 할지 몰라 여러 안경원을 직접 찾아다니며 발품을 팔게 된다.</p></div>
     <div class="row"><b>고객</b><p>패션 프레임을 구매했지만 가공을 맡길 곳을 몰라 여러 안경원을 탐색하는 고객</p></div>
-    <div class="row"><b>핵심 가치</b><p>원하는 가공이 가능한 안경원을 앱에서 바로 찾고, 위치와 택배 수령 가능 여부까지 한 번에 확인한다.<small>온라인 구매 ✕ · 택배 가능 여부는 안경원이 직접 알려 준 정보만 보여 줘요</small></p></div>
+    <div class="row"><b>핵심 가치</b><p>원하는 가공이 가능한 안경원을 앱에서 바로 찾고, 위치와 완성품 택배 수령 가능 여부까지 한 번에 확인한다.<small>온라인 구매 ✕ · 방문 결제 후 택배 수령 ○</small></p></div>
   </section>
 
   <div style="text-align:center;margin:-8px 0 14px"><button type="button" class="linkbtn" id="toShop">안경원이신가요? 안경원 전용 화면 보기 ›</button></div>
@@ -724,7 +726,7 @@
       <div class="label">
         <div class="num">화면 02 · 단계 2</div>
         <h2>렌즈 기능</h2>
-        <p>원하는 기능 · 렌즈 사양</p>
+        <p>원하는 기능 · 렌즈 사양 · 가격대</p>
       </div>
       <div class="phone" id="pFn"><div class="display">
         <div class="status">
@@ -753,7 +755,7 @@
             </button>
             <div class="funcs" id="funcs"></div>
 
-            <div class="group-title">렌즈 사양 <span class="opt-badge">참고</span></div>
+            <div class="group-title">렌즈 사양 · 가격대 <span class="opt-badge">참고</span></div>
             <div class="price" id="priceCard"></div>
           </div>
         </div>
@@ -961,31 +963,37 @@
     { id:"A", name:"렌즈공방 홍대점", verified:true, dist:0.3, x:27, y:44,
       addr:"마포구 예시로 12, 1층", hours:"월–토 10:00–20:00", off:"일요일", period:"2 ~ 5일", ship:true,
       policy:"free", policyNote:"일반 프레임은 대부분 가공해 드려요 (예시)",
+      price:{public:true, at:"2026-09-22", lens:{"1.56":5,"1.60":8,"1.67":12,"1.74":20}, funcs:{"틴팅":2,"변색":8,"블루라이트":2}, outside:[0,0], drill:[1,2], groove:[0.5,1]},
       desc:"무테·고난시 가공 경험이 많은 동네 안경원 (예시)",
       caps:["도수 렌즈","무테","하금·반무테","틴팅","변색","블루라이트","고도수","고난시","도수 측정"] },
     { id:"B", name:"연남 아이랩", verified:false, dist:0.6, x:58, y:36,
       addr:"마포구 예시로 45, 2층", hours:"매일 11:00–21:00", off:"없음", period:"1 ~ 3일", ship:false,
       policy:"paid", policyNote:"외부 프레임은 가공비가 따로 있어요. 프레임에 따라 달라요 (예시)",
+      price:{public:false, at:"2026-08-20"},
       desc:"컬러 틴팅과 편광 렌즈를 자주 다루는 안경원 (예시)",
       caps:["도수 렌즈","무테","틴팅","편광","변색","블루라이트","고도수"] },
     { id:"C", name:"신촌 글라스웍스", verified:true, dist:1.1, x:72, y:60,
       addr:"서대문구 예시로 88, 1층", hours:"화–일 10:30–19:30", off:"월요일", period:"3 ~ 7일", ship:true,
       policy:"free", policyNote:"천연 소재 테는 먼저 사진을 보여 주세요 (예시)",
+      price:{public:true, at:"2026-09-15", lens:{"1.56":5,"1.60":9,"1.67":14,"1.74":23}, funcs:{"미러":4,"편광":7,"블루라이트":2}, outside:[0,0], drill:[1,1.5], groove:[0.5,1]},
       desc:"하금·미러·천연 소재 테 등 특수 가공을 전문으로 하는 작업실 (예시)",
       caps:["도수 렌즈","무테","하금·반무테","미러","편광","블루라이트","고도수","고난시","도수 측정","천연 소재","빈티지 테"] },
     { id:"D", name:"합정 프레임랩", verified:false, dist:1.4, x:16, y:24,
       addr:"마포구 예시로 70, 지하 1층", hours:"매일 12:00–21:00", off:"없음", period:"2 ~ 4일", ship:true,
       policy:"paid", policyNote:"가공비는 방문 전에 문의해 주세요 (예시)",
+      price:{public:true, at:"2026-08-20", lens:{"1.56":4,"1.60":7,"1.67":11,"1.74":19}, funcs:{"틴팅":1.5}, outside:[2,3], drill:[1.5,2]},
       desc:"편집숍에서 산 프레임 가공을 자주 맡는 작은 안경원 (예시)",
       caps:["도수 렌즈","무테","틴팅","블루라이트","도수 측정"] },
     { id:"E", name:"이대 아이웍스", verified:false, dist:1.8, x:90, y:76,
       addr:"서대문구 예시로 31, 2층", hours:"월–금 10:00–19:00", off:"토·일요일", period:"3 ~ 5일", ship:false,
       policy:"ask", policyNote:"",
+      price:{public:false, at:"2026-10-01"},
       desc:"외부 프레임 정책을 아직 알려 주지 않은 안경원 (예시)",
       caps:["도수 렌즈","틴팅","편광","블루라이트","고도수"] },
     { id:"F", name:"홍대 렌즈하우스", verified:true, dist:0.5, x:36, y:70,
       addr:"마포구 예시로 5, 1층", hours:"매일 10:00–22:00", off:"없음", period:"1 ~ 2일", ship:true,
       policy:"no", policyNote:"외부에서 산 프레임은 받지 않아요 (예시)",
+      price:{public:false, at:"2026-10-01"},
       desc:"자사 프레임만 취급하는 체인점 (예시)",
       caps:["도수 렌즈","무테","틴팅","변색","블루라이트","고도수","고난시","도수 측정"] }
   ];
@@ -1059,6 +1067,19 @@
     {k:"변색", d:"햇빛을 받으면 렌즈가 어두워져요", sw:"photo"},
     {k:"블루라이트", d:"화면에서 나오는 푸른빛을 줄여요", sw:"blue"}
   ];
+  /* 시연용 가상 시세 (단위: 만 원, 렌즈 한 쌍) — 실제 시세 아님. 안경원이 가격을 공개하지 않아도 손님이 대략 가늠하도록 항상 보여 줘요 */
+  var LENS_PRICE = {
+    "1.56":{"구면":[3,5],"비구면":[4,7],"양면비구면":[8,14]},
+    "1.60":{"구면":[5,8],"비구면":[6,12],"양면비구면":[12,20]},
+    "1.67":{"구면":[8,12],"비구면":[10,18],"양면비구면":[18,30]},
+    "1.74":{"구면":[16,24],"비구면":[18,28],"양면비구면":[28,45]}
+  };
+  var NOPOWER_PRICE = [2,4];
+  var FUNC_PRICE = {"틴팅":[1,3],"미러":[3,6],"편광":[5,10],"변색":[6,12],"블루라이트":[1,3]};
+  var DESIGN_X = {"구면":0.7, "비구면":1, "양면비구면":1.8};
+  var OUT_REF = [0,2], DRILL_REF = [1,2.5], GROOVE_REF = [0.5,1];
+  /* 안경원이 고르는 가공비 구간 (단위: 만 원) */
+  var BANDS = [["문의 후 안내",null],["무료",[0,0]],["1만 원 이하",[0,1]],["1~2만 원",[1,2]],["2~3만 원",[2,3]],["3~5만 원",[3,5]],["5만 원 이상",[5,10]]];
   var REGIONS = ["신촌 · 홍대 · 합정 · 연남 · 이대"];
   /* 위치 바꾸기 시연용 데이터: x,y 는 지도 위 위치(%). 신촌·홍대·합정·연남·이대에 매장이 있어요 */
   var GPS = {kind:"gps", name:"현재 위치", sub:"홍대입구역 근처 (예시)", x:44, y:64, covered:true};
@@ -1184,6 +1205,65 @@
     var rec = (state.rxMode==="have" && state.rxKnow) ? recommend() : null;
     return { idx: (state.pIdx && idxState(state.pIdx).ok) ? state.pIdx : (rec ? rec.idx : "1.60"), design: state.pDesign || (rec ? rec.design : "비구면"), rec: rec };
   }
+  function won(x){
+    x = x>=10 ? Math.round(x) : Math.round(x*2)/2;
+    if(x===0) return "0";
+    if(x<1) return (x*10)+"천";
+    return (x%1 ? x.toFixed(1) : x)+"만";
+  }
+  function range(lo,hi){
+    if(hi===0) return "무료";
+    if(Math.round(lo*2)===Math.round(hi*2)) return won(lo)+" 원";
+    return won(lo)+"~"+won(hi)+" 원";
+  }
+  function isPub(s){ return !!(s && s.price && s.price.public); }
+  /* 공개한 안경원들의 값 범위. 아직 없으면 기준값 */
+  function pubRange(key, ref){
+    var lo = Infinity, hi = 0;
+    SHOPS.forEach(function(s){ var r = isPub(s) && s.price[key]; if(r){ lo = Math.min(lo, r[0]); hi = Math.max(hi, r[1]); } });
+    return lo===Infinity ? ref : [lo, hi];
+  }
+  function scaledMkt(r){ return [r[0]*0.9, r[1]*1.15]; }
+  /* 렌즈·기능 가격대: 안경원이 공개하지 않아도 항상 보여 줘요 (시연용 가상 시세) */
+  function lensItems(){
+    var sp = lensSpec(), items = [];
+    if(sp.none) items.push({k:"무도수 렌즈", r:scaledMkt(NOPOWER_PRICE)});
+    else items.push({k:sp.idx+" "+sp.design+" 렌즈", r:scaledMkt(LENS_PRICE[sp.idx][sp.design])});
+    state.funcs.forEach(function(f){ items.push({k:f+" 추가", r:scaledMkt(FUNC_PRICE[f])}); });
+    return items;
+  }
+  function sumItems(items){ var lo = 0, hi = 0; items.forEach(function(i){ if(i.r){ lo += i.r[0]; hi += i.r[1]; } }); return [lo, hi]; }
+  function jobItems(shop){
+    var items = [], job = state.rim!==null ? RIMS[state.rim].job : null;
+    function add(label, key, ref){
+      var r = shop ? shop.price[key] : pubRange(key, ref);
+      items.push(r ? {k:label, r:r} : {k:label, txt:"문의 후 안내"});
+    }
+    if(job==="무테") add("구멍 뚫기 가공","drill",DRILL_REF);
+    if(job==="하금·반무테") add("홈파기 가공","groove",GROOVE_REF);
+    add("외부 테 가공비","outside",OUT_REF);
+    return items;
+  }
+  /* shop 없음 = 이 지역 가격대, 가격을 공개한 매장 = 그 매장이 입력한 가격 */
+  function costItems(shop){
+    var sp = lensSpec(), items;
+    if(shop){
+      var p = shop.price;
+      items = [];
+      if(sp.none) items.push({k:"무도수 렌즈", r:scaledMkt(NOPOWER_PRICE)});
+      else {
+        var base = p.lens && p.lens[sp.idx];
+        items.push({k:sp.idx+" "+sp.design+" 렌즈", r: base ? [base*DESIGN_X[sp.design], base*DESIGN_X[sp.design]] : scaledMkt(LENS_PRICE[sp.idx][sp.design])});
+      }
+      state.funcs.forEach(function(f){ var v = p.funcs && p.funcs[f]; items.push({k:f+" 추가", r: v!=null ? [v,v] : scaledMkt(FUNC_PRICE[f])}); });
+    } else items = lensItems();
+    items = items.concat(jobItems(shop));
+    return {items:items, total:sumItems(items)};
+  }
+  function priceRows(c){
+    return c.items.map(function(i){ return '<div class="pl"><span>'+i.k+'</span><span>'+(i.r ? range(i.r[0],i.r[1]) : i.txt)+'</span></div>'; }).join("")+
+      '<div class="pl tot"><span>예상 합계</span><span>'+range(c.total[0],c.total[1])+'</span></div>';
+  }
   function renderPrice(){
     var sp = lensSpec(), h = "";
     if(!sp.none){
@@ -1207,7 +1287,8 @@
       else if(state.pIdx || state.pDesign) h += '<button type="button" class="preset" data-preset="1">↺ 추천 사양으로 되돌리기</button>';
       h += '</div>';
     }
-    h += '<div class="pfoot">사양은 참고용이에요. 실제로 쓸 렌즈와 가공은 매장에서 상담해 정해요.</div>';
+    h += priceRows(costItems(null))+
+      '<div class="pfoot">이 지역 렌즈 가격대예요 (시연용 가상 시세). 안경원이 가격을 공개했다면 목록과 상세에서 그 매장 가격을 볼 수 있어요. 실제 가격은 도수·렌즈 브랜드·프레임 상태에 따라 매장 상담 후 정해져요.</div>';
     $("priceCard").innerHTML = h;
   }
   $("priceCard").addEventListener("click", function(e){
@@ -1240,7 +1321,7 @@
     $("funcs").innerHTML = FUNCS.map(function(f){
       var on = state.funcs.indexOf(f.k)>-1;
       return '<div class="func tap'+(on?" on":"")+'" data-k="'+f.k+'"><span class="sw '+f.sw+'"></span>'+
-        '<span class="tx"><b>'+f.k+'</b><small>'+f.d+'</small></span><span class="box"></span></div>';
+        '<span class="tx"><b>'+f.k+'</b><small>'+f.d+' · <span class="fp">+'+range(FUNC_PRICE[f.k][0],FUNC_PRICE[f.k][1])+'</span></small></span><span class="box"></span></div>';
     }).join("");
     var n = state.funcs.length, head = $("funcsHead");
     $("funcsSum").textContent = n ? state.funcs.join(" · ")+" ("+n+"개 선택)" : "선택 안 함 · 눌러서 고르기";
@@ -1800,6 +1881,10 @@
     var list = SHOPS.filter(function(s){ return s.policy!=="no" && w.every(function(v){ return s.caps.indexOf(v)>-1; }); });
     list.sort(function(a,b){
       if(state.sort==="dist") return dOf(a)-dOf(b);
+      if(state.sort==="price"){
+        var pa = isPub(a) ? costItems(a).total[0] : 1e9, pb = isPub(b) ? costItems(b).total[0] : 1e9;
+        return pa-pb || dOf(a)-dOf(b);
+      }
       return b.caps.length-a.caps.length || dOf(a)-dOf(b);
     });
     return list;
@@ -1859,6 +1944,11 @@
         '<div class="thumb">'+s.id+'</div><div class="info-col">'+
         '<div class="nm">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+(state.liked[s.id]?' <span style="color:#e11d48">♥</span>':'')+'</div>'+
         '<div class="meta">'+dOf(s)+'km · '+(openNow(s)?"영업 중":"영업 종료")+' · '+s.addr.split(",")[0]+'</div>'+
+        (function(){
+          if(!isPub(s)) return '<div class="pline" style="color:var(--faint)">가격 비공개</div>';
+          var c = costItems(s);
+          return '<div class="pline">예상 <span>'+range(c.total[0],c.total[1])+'</span>'+(c.items.some(function(i){ return i.txt; }) ? ' + 가공비 문의' : '')+'</div>';
+        })()+
         '<div class="tags">'+tags+'</div></div><span class="chev">›</span></div>';
     }).join("");
     $("list").querySelectorAll(".shop").forEach(function(c){
@@ -1870,9 +1960,9 @@
   }
   $("back2").addEventListener("click", function(){ setStep(1); go(1); });
   $("editCond").addEventListener("click", function(){ setStep(1); go(1); });
-  var SORT_LABEL = {dist:"거리순", caps:"가공 많은순"};
-  var SORT_NEXT = {dist:"caps", caps:"dist"};
-  var SORT_TOAST = {dist:"가까운 순으로 정렬했어요", caps:"가공 가능 항목이 많은 순으로 정렬했어요"};
+  var SORT_LABEL = {dist:"거리순", price:"가격 낮은순", caps:"가공 많은순"};
+  var SORT_NEXT = {dist:"price", price:"caps", caps:"dist"};
+  var SORT_TOAST = {dist:"가까운 순으로 정렬했어요", price:"가격이 낮은 순으로 정렬했어요 (가격 비공개 안경원은 맨 뒤)", caps:"가공 가능 항목이 많은 순으로 정렬했어요"};
   $("btnSort").addEventListener("click", function(){
     state.sort = SORT_NEXT[state.sort];
     renderList(false);
@@ -2351,13 +2441,24 @@
       '<div class="summary">'+(dOf(s)!==null?'<span class="tag ok">'+dOf(s)+'km</span>':'')+'<span class="tag '+(openNow(s)?"ok":"closed")+'">'+(openNow(s)?"영업 중":"영업 종료")+'</span>'+
         (s.ship?'<span class="tag ship">택배 가능</span>':'<span class="tag closed">매장 방문 수령</span>')+'</div>'+
       '<div class="group-title">가공 가능 항목</div><div class="group caps">'+caps+'</div>'+
+      (function(){
+        if(isPub(s)){
+          var c = costItems(s), dd = daysSince(s.price.at);
+          return '<div class="group-title">예상 비용 <span class="opt-badge">내 조건 기준</span></div><div class="group">'+priceRows(c)+'</div>'+
+            '<div class="policy-note">매장이 직접 공개한 가격 · 등록일 '+esc(s.price.at)+(dd!==null && dd>30 ? ' · <b style="color:var(--warn)">한 달 넘게 갱신되지 않아 달라졌을 수 있어요</b>' : '')+
+            '<br>실제 가격은 상담 후 확정돼요. 앱에서는 결제·할인·예약을 받지 않아요.</div>';
+        }
+        return '<div class="group-title">렌즈 가격대 <span class="opt-badge">이 지역 기준</span></div><div class="group">'+
+          lensItems().map(function(i){ return '<div class="cell"><span class="k">'+i.k+'</span><span class="v">'+range(i.r[0],i.r[1])+'</span></div>'; }).join("")+'</div>'+
+          '<div class="policy-note">이 안경원은 가격을 공개하지 않았어요. 위는 이 지역 렌즈 가격대예요 (시연용 가상 시세). 가공비와 실제 가격은 안경원에 문의해 주세요.</div>';
+      })()+
       '<div class="group-title">외부 프레임 정책 · 작업 기간</div><div class="group">'+
         '<div class="cell"><span class="k">외부 프레임</span><span class="v">'+POLICY[s.policy].label+'</span></div>'+
         '<div class="cell"><span class="k">방문 전 확인</span><span class="v">'+POLICY[s.policy].pre+'</span></div>'+
         (s.policyNote ? '<div class="cell"><span class="k">매장 안내</span><span class="v">'+esc(s.policyNote)+'</span></div>' : '')+
         '<div class="cell"><span class="k">예상 작업 기간</span><span class="v">'+s.period+'</span></div>'+
         '<div class="cell"><span class="k">완성품 수령</span><span class="v">'+(s.ship?"택배 가능 (매장이 알려 준 정보)":"매장 방문 수령 · 택배는 문의해 주세요")+'</span></div></div>'+
-      '<div class="policy-note">온라인 주문·결제·예약은 받지 않아요. 상담·도수 확인·결제는 매장 방문 시 진행돼요. 가격은 앱에서 알려 주지 않아요.</div>'+
+      '<div class="policy-note">온라인 주문·결제·예약은 받지 않아요. 상담·도수 확인·결제는 매장 방문 시 진행돼요.</div>'+
       '<div class="group-title">위치 · 영업 정보</div><div class="group">'+
         '<div class="cell"><span class="k">주소</span><span class="v">'+s.addr+'</span></div>'+
         '<div class="cell"><span class="k">영업시간</span><span class="v">'+s.hours+'</span></div>'+
@@ -2547,7 +2648,7 @@
     var sh = { id:u.id, name:u.name, verified:false, userMade:true, confirmedAt:u.confirmedAt,
       x:Math.max(4,Math.min(94,pl.x+j)), y:Math.max(6,Math.min(92,pl.y-j)),
       addr:u.addr, hours:u.hours, off:u.off, period:u.period, ship:u.ship, policy:u.policy, policyNote:u.policyNote,
-      desc:u.desc || "안경원이 직접 등록한 정보예요", caps:u.caps };
+      desc:u.desc || "안경원이 직접 등록한 정보예요", caps:u.caps, price:u.price || {public:false} };
     sh.dist = Math.max(0.1, Math.round(Math.hypot(GPS.x-sh.x, GPS.y-sh.y)*0.025*10)/10);
     var i = SHOPS.map(function(s){ return s.id; }).indexOf(u.id);
     if(i>-1) SHOPS[i] = sh; else SHOPS.push(sh);
@@ -2555,6 +2656,14 @@
   lsGet(SHKEY, []).forEach(applyUserShop);
 
   var shDraft = null, shEdit = false;
+  var LIDX = ["1.56","1.60","1.67","1.74"], FKEYS = FUNCS.map(function(f){ return f.k; });
+  function bandLabel(r){
+    if(!r) return BANDS[0][0];
+    for(var i=0;i<BANDS.length;i++) if(BANDS[i][1] && BANDS[i][1][0]===r[0] && BANDS[i][1][1]===r[1]) return BANDS[i][0];
+    return BANDS[0][0];
+  }
+  function bandVal(label){ for(var i=0;i<BANDS.length;i++) if(BANDS[i][0]===label) return BANDS[i][1]; return null; }
+  function numOrNull(v){ var n = parseFloat(v); return isFinite(n) && n>0 ? n : null; }
   function ownerShop(){
     var o = lsGet(OWKEY, null); if(!o) return null;
     return lsGet(SHKEY, []).filter(function(u){ return u.id===o.shopId; })[0] || null;
@@ -2568,15 +2677,22 @@
     var m = /^(매일|[월화수목금토일])(?:–([월화수목금토일]))?\s+(\d\d:\d\d)–(\d\d:\d\d)/.exec(h||"");
     return m ? {d1:m[1], d2:m[2]||m[1], t1:m[3], t2:m[4]} : null;
   }
-  function blankDraft(){ return {name:"", area:AREAS[0], addr:"", phone:"", d1:"월", d2:"토", t1:"10:00", t2:"20:00", off:"일요일", policy:"", policyNote:"", ship:null, period:"2 ~ 5일", desc:"", caps:["도수 렌즈"], maps:[]}; }
+  function blankDraft(){ return {name:"", area:AREAS[0], addr:"", phone:"", d1:"월", d2:"토", t1:"10:00", t2:"20:00", off:"일요일", policy:"", policyNote:"", ship:null, period:"2 ~ 5일", desc:"", caps:["도수 렌즈"], maps:[], pubPrice:true, lens:{}, funcs:{}, outL:"문의 후 안내", drillL:"문의 후 안내", grooveL:"문의 후 안내"}; }
   function draftFrom(u){
     var p = parseHours(u.hours) || {d1:"월", d2:"토", t1:"10:00", t2:"20:00"};
-    return {name:u.name, area:u.area, addr:u.addr, phone:u.phone||"", d1:p.d1, d2:p.d2, t1:p.t1, t2:p.t2, off:u.off, policy:u.policy, policyNote:u.policyNote||"", ship:u.ship, period:u.period, desc:u.desc||"", caps:u.caps.slice(), maps:(u.maps||[]).slice()};
+    return {name:u.name, area:u.area, addr:u.addr, phone:u.phone||"", d1:p.d1, d2:p.d2, t1:p.t1, t2:p.t2, off:u.off, policy:u.policy, policyNote:u.policyNote||"", ship:u.ship, period:u.period, desc:u.desc||"", caps:u.caps.slice(), maps:(u.maps||[]).slice(),
+      pubPrice:!!(u.price && u.price.public), lens:Object.assign({}, u.price && u.price.lens), funcs:Object.assign({}, u.price && u.price.funcs),
+      outL:bandLabel(u.price && u.price.outside), drillL:bandLabel(u.price && u.price.drill), grooveL:bandLabel(u.price && u.price.groove)};
   }
   function readSh(){
     if(!shDraft || !$("shName")) return;
     var m = {name:"shName", addr:"shAddr", phone:"shPhone", off:"shOff", policyNote:"shNote", period:"shPeriod", desc:"shDesc", d1:"shD1", d2:"shD2", t1:"shT1", t2:"shT2"};
     for(var k in m) if($(m[k])) shDraft[k] = $(m[k]).value;
+    LIDX.forEach(function(i,n){ if($("shPL"+n)) shDraft.lens[i] = $("shPL"+n).value; });
+    FKEYS.forEach(function(f,n){ if($("shPF"+n)) shDraft.funcs[f] = $("shPF"+n).value; });
+    if($("shOut")) shDraft.outL = $("shOut").value;
+    if($("shDrill")) shDraft.drillL = $("shDrill").value;
+    if($("shGroove")) shDraft.grooveL = $("shGroove").value;
   }
   function shChip(attr, val, label, on){ return '<button type="button" class="chip'+(on?" on":"")+'" data-'+attr+'="'+esc(val)+'">'+esc(label)+'</button>'; }
   function shSel(id, opts, cur){ return '<select id="'+id+'" class="ainp">'+opts.map(function(o){ return '<option'+(o===cur?" selected":"")+'>'+o+'</option>'; }).join("")+'</select>'; }
@@ -2599,12 +2715,24 @@
       '<div class="pfrow" style="margin-top:0"><div class="chips">'+
         [["free","추가 비용 없이 가공"],["paid","가공비 별도"],["no","외부 프레임은 안 받아요"],["ask","아직 정하지 않았어요"]].map(function(x){ return shChip("shp", x[0], x[1], d.policy===x[0]); }).join("")+'</div>'+
         shInp("shNote","정책 안내 한 줄 (선택, 금액은 쓰지 않아요)",d.policyNote,"text",60)+
-        '<div style="font-size:10px;color:var(--faint);margin-top:4px">가격은 앱에서 보여 주지 않아요. 가공비가 있으면 \'가공비 별도\'만 골라 주세요.</div></div>'+
+        '<div style="font-size:10px;color:var(--faint);margin-top:4px">가공비가 있으면 \'가공비 별도\'를 고르고, 금액은 아래 \'가격 · 공개 여부\'에서 정해요.</div></div>'+
       '<div class="group-title">완성품 택배 <span class="req">필수</span></div>'+
       '<div class="pfrow" style="margin-top:0"><div class="chips">'+shChip("shs","1","택배 가능",d.ship===true)+shChip("shs","0","방문 수령만",d.ship===false)+'</div>'+
         shInp("shPeriod","보통 작업 기간 (예: 2 ~ 5일)",d.period,"text",12)+'</div>'+
       '<div class="group-title">가공 가능 항목 <span class="req">필수</span></div>'+
       '<div class="chips">'+CAPS_PICK.map(function(c){ return shChip("shc", c, capName(c), d.caps.indexOf(c)>-1); }).join("")+'</div>'+
+      '<div class="group-title">가격 · 공개 여부 <span class="opt-badge">선택</span></div>'+
+      '<div class="pfrow" style="margin-top:0"><div class="chips">'+shChip("shv","1","손님에게 공개",d.pubPrice)+shChip("shv","0","비공개",!d.pubPrice)+'</div>'+
+        '<div style="font-size:10px;color:var(--faint);margin-top:4px">비공개로 해도 손님에게는 이 지역 렌즈 가격대(시연용 시세)가 보여요. 공개하면 내 가격과 합계가 목록·상세에 나와요.</div>'+
+        (d.pubPrice ?
+          '<div style="margin-top:8px">렌즈 가격 (비구면 한 쌍, 만 원 단위)</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+
+            LIDX.map(function(i,n){ return '<label style="display:block">'+i+'<input type="number" inputmode="decimal" min="0" step="0.5" id="shPL'+n+'" class="ainp" placeholder="예) 6" value="'+esc(d.lens[i]||"")+'"></label>'; }).join("")+'</div>'+
+          '<div style="margin-top:8px">렌즈 기능 추가 가격 (만 원, 비우면 지역 가격대로 보여요)</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+
+            FKEYS.map(function(f,n){ return '<label style="display:block">'+f+'<input type="number" inputmode="decimal" min="0" step="0.5" id="shPF'+n+'" class="ainp" placeholder="예) 2" value="'+esc(d.funcs[f]||"")+'"></label>'; }).join("")+'</div>'+
+          '<div style="margin-top:8px">외부 프레임 가공비</div>'+shSel("shOut",BANDS.map(function(b){ return b[0]; }),d.outL)+
+          '<div style="margin-top:8px">무테 구멍 뚫기 가공비</div>'+shSel("shDrill",BANDS.map(function(b){ return b[0]; }),d.drillL)+
+          '<div style="margin-top:8px">하금 홈파기 가공비</div>'+shSel("shGroove",BANDS.map(function(b){ return b[0]; }),d.grooveL)
+        : '')+'</div>'+
       '<div class="group-title">지도에 등록돼 있나요? <span class="opt-badge">선택</span></div>'+
       '<div class="chips">'+MAPS.map(function(m){ return shChip("shm", m, m, d.maps.indexOf(m)>-1); }).join("")+'</div>'+
       '<div class="hint" style="margin-top:4px">지도 정보를 가져와 영업시간을 자동으로 채우는 데 쓸 수 있어요 (다음 단계).</div>'+
@@ -2616,7 +2744,7 @@
     var inq = getInquiries().filter(function(q){ return q.shopId===u.id; });
     var reps = lsGet(RPKEY, []).filter(function(r){ return r.shopId===u.id; });
     var ds = daysSince(u.confirmedAt), stale = ds!==null && ds>30;
-    var h = '<div class="myprof"><div class="av">🏪</div><div><b>'+esc(u.name)+'</b><small>'+esc(u.area)+' · 손님 앱에 나오고 있어요<br>정보 확인일 '+esc(u.confirmedAt)+(stale?' · <b style="color:var(--warn)">한 달 넘게 확인하지 않았어요</b>':'')+'</small></div></div>'+
+    var h = '<div class="myprof"><div class="av">🏪</div><div><b>'+esc(u.name)+'</b><small>'+esc(u.area)+' · 손님 앱에 나오고 있어요<br>'+(u.price && u.price.public ? '가격 공개 중' : '가격 비공개 (지역 렌즈 가격대만 보여요)')+'<br>정보 확인일 '+esc(u.confirmedAt)+(stale?' · <b style="color:var(--warn)">한 달 넘게 확인하지 않았어요</b>':'')+'</small></div></div>'+
       '<div class="cardbtns" style="grid-template-columns:1fr 1fr"><button type="button" data-sh="confirm">정보 최신이에요</button><button type="button" data-sh="edit">정보 수정</button></div>';
     h += '<div class="group-title">✉️ 받은 문의 <span class="opt-badge">'+inq.length+'건</span></div>';
     h += inq.length ? inq.map(function(q){
@@ -2651,12 +2779,21 @@
       : (!d.t1 || !d.t2) ? "영업시간을 입력해 주세요"
       : !d.policy ? "외부 프레임 정책을 골라 주세요"
       : d.ship===null ? "택배 가능 여부를 골라 주세요"
-      : !d.caps.length ? "가공 가능 항목을 하나 이상 골라 주세요" : "";
+      : !d.caps.length ? "가공 가능 항목을 하나 이상 골라 주세요"
+      : (d.pubPrice && !LIDX.some(function(i){ return numOrNull(d.lens[i]); })) ? "가격을 공개하려면 렌즈 가격을 하나 이상 입력해 주세요" : "";
     if(err){ toast("Sh", err); return; }
     var id = u ? u.id : newShopId();
     if(!id){ toast("Sh","시연에서 등록할 수 있는 매장 수를 넘었어요"); return; }
     var rec = {id:id, name:d.name.trim(), area:d.area, addr:d.addr.trim(), phone:d.phone.trim(), hours:buildHours(d), off:d.off.trim()||"없음",
       period:d.period.trim()||"문의", ship:d.ship, policy:d.policy, policyNote:d.policyNote.trim(), desc:d.desc.trim(), caps:d.caps.slice(), maps:d.maps.slice(), confirmedAt:ymd()};
+    var pr = {public:!!d.pubPrice, at:ymd()};
+    if(d.pubPrice){
+      pr.lens = {}; LIDX.forEach(function(i){ var n = numOrNull(d.lens[i]); if(n) pr.lens[i] = n; });
+      pr.funcs = {}; FKEYS.forEach(function(f){ var n = numOrNull(d.funcs[f]); if(n) pr.funcs[f] = n; });
+      pr.outside = d.policy==="free" ? [0,0] : bandVal(d.outL);
+      pr.drill = bandVal(d.drillL); pr.groove = bandVal(d.grooveL);
+    }
+    rec.price = pr;
     var all = lsGet(SHKEY, []).filter(function(x){ return x.id!==id; }); all.push(rec);
     lsSet(SHKEY, all); lsSet(OWKEY, {shopId:id});
     applyUserShop(rec); shEdit = false; shDraft = null;
@@ -2668,6 +2805,7 @@
     var d = shDraft, t;
     if(b.dataset.sha!==undefined){ readSh(); d.area = b.dataset.sha; renderShop(); return; }
     if(b.dataset.shp!==undefined){ readSh(); d.policy = b.dataset.shp; renderShop(); return; }
+    if(b.dataset.shv!==undefined){ readSh(); d.pubPrice = b.dataset.shv==="1"; renderShop(); return; }
     if(b.dataset.shs!==undefined){ readSh(); d.ship = b.dataset.shs==="1"; renderShop(); return; }
     if(b.dataset.shc!==undefined){ readSh(); t = d.caps.indexOf(b.dataset.shc); if(t>-1) d.caps.splice(t,1); else d.caps.push(b.dataset.shc); renderShop(); return; }
     if(b.dataset.shm!==undefined){ readSh(); t = d.maps.indexOf(b.dataset.shm); if(t>-1) d.maps.splice(t,1); else d.maps.push(b.dataset.shm); renderShop(); return; }
