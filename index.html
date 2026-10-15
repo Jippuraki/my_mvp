@@ -2773,11 +2773,11 @@
   $("btnRoute").addEventListener("click", function(){
     var s = shopById(state.selected);
     setStep(5);
-    toast(3, s.name+" 길찾기 · 지도 앱을 열어요");
     var area = s.addr.indexOf("서대문구")>-1 ? "신촌역" : "홍대입구역";
-    setTimeout(function(){
-      window.open("https://map.naver.com/p/search/" + encodeURIComponent(area), "_blank", "noopener");
-    }, 500);
+    /* 누른 바로 그 순간에 열어야 브라우저가 팝업으로 막지 않아요 (기다렸다가 열면 막혀요) */
+    var w = window.open("https://map.naver.com/p/search/" + encodeURIComponent(area), "_blank");
+    if(w){ w.opener = null; toast(3, s.name+" 길찾기 · 지도 앱을 열어요"); }
+    else toast(3, "새 창이 막혔어요. 브라우저에서 팝업을 허용해 주세요");
   });
 
   /* ================= 안경원 전용 화면 (시연용) =================
