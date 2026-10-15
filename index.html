@@ -434,8 +434,16 @@
   .sv-prev b{font-size:13px;display:block;line-height:1.35;margin-bottom:6px}
   .sv-img{width:64px;height:64px;border-radius:14px;object-fit:cover;flex:0 0 64px;background:var(--main-soft);display:grid;place-items:center}
   .sv-chips{display:flex;flex-wrap:wrap;gap:6px}
-  .sv-btns{padding:10px 4px 2px}
-  .sv-btns .cta{display:block;width:100%;height:50px;font-size:15px}
+  .sv-sec{font-size:11px;color:var(--sub);margin:12px 6px 5px;display:flex;align-items:center;gap:6px}
+  .sv-pad{padding:0 4px}
+  .sv-chips2{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .sv-chips2 .chip{padding:7px 11px;font-size:12px}
+  .sv-icons{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;margin:0 4px}
+  .sv-ico{flex:0 0 46px;height:46px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-size:22px;display:grid;place-items:center;padding:0}
+  .sv-ico img{width:34px;height:34px;object-fit:contain}
+  .sv-ico.on{border-color:var(--main);box-shadow:0 0 0 2px rgba(37,99,235,.18)}
+  .sv-btns{display:flex;flex-direction:column;align-items:stretch;gap:2px;padding:12px 4px 2px}
+  .sv-btns .cta{flex:0 0 auto;display:flex;width:100%;margin:0;height:52px;font-size:15px;justify-content:center;align-items:center;text-align:center}
   .fc-f input{font:inherit;font-size:12px;border:1px solid var(--line);background:rgba(255,255,255,.9);border-radius:8px;padding:5px 8px;color:var(--ink);min-width:0;width:100%}
   .fc-use{display:block;width:100%;margin-top:9px;height:34px;border:1px solid rgba(37,99,235,.35);background:var(--glass-strong);color:var(--main);border-radius:10px;font-size:12px;font-weight:700}
   .pcell{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:13px}
@@ -1649,6 +1657,23 @@
     if(!quiet) toast(1,"보관함에 넣었어요 ("+v.length+"개)");
     return true;
   }
+  /* 안경 그림(프레임 아이콘): 보관함에 넣을 때 고를 수 있어요.
+     나중에 그림 파일이 생기면 아래 목록에 { id:"이름", label:"설명", src:"assets/frame-icons/파일.webp" } 를 더하면 돼요.
+     지금은 임시로 이모지(emoji)를 써요. src가 있으면 그림 파일이 우선이에요. */
+  var ICONS = [
+    {id:"i1", label:"기본 안경", emoji:"👓"},
+    {id:"i2", label:"선글라스", emoji:"🕶️"},
+    {id:"i3", label:"고글", emoji:"🥽"}
+  ];
+  function iconOf(id){ return ICONS.filter(function(x){ return x.id===id; })[0] || null; }
+  function iconInner(ic){ return ic.src ? '<img alt="'+esc(ic.label)+'" src="'+ic.src+'">' : esc(ic.emoji); }
+  /* 보관함 프레임의 대표 그림: 사진 > 고른 안경 그림 > 기본 👓 */
+  function itemPic(it, mode){
+    if(it.thumb) return mode==="vmini" ? '<img class="vmini" alt="" src="'+it.thumb+'">' : '<img alt="" src="'+it.thumb+'">';
+    var ic = it.icon ? iconOf(it.icon) : null;
+    var inner = ic ? iconInner(ic) : "👓";
+    return mode==="vmini" ? '<span>'+inner+'</span>' : '<span class="ph">'+inner+'</span>';
+  }
   /* 구매처: 보관함에 같이 저장해요 (고르지 않았으면 비워 둬요) */
   function whereLabel(it){
     return (it.buy && WHERE[it.buy] && WHERE[it.buy][it.where]) ? (it.buy==="online"?"온라인":"오프라인")+" · "+WHERE[it.buy][it.where].name : "";
@@ -1666,31 +1691,48 @@
   /* 보관함에 넣기 전에 별명·사진·구매처·렌즈 맞춘 날을 정하는 창 */
   var pend = null;
   function askSave(thumb, after){
-    pend = { img:thumb||null, nick:"", buy:state.whereSet?state.buy:"", where:state.whereSet?state.where:0, lens:todayStr(), after:after };
+    pend = { img:thumb||null, icon:"", nick:"", grp:state.whereSet?state.buy:"online", where:state.whereSet?state.where:-1, lens:todayStr(), after:after };
     renderSaveSheet(); swapSheet("saveSheet");
   }
   function renderSaveSheet(){
     var p = pend, lab = vaultLabel({rim:state.rim, cat:state.cat, sub:state.sub, model:state.model?MODELS.indexOf(state.model):-1});
+    var ic = p.icon ? iconOf(p.icon) : null;
+    var prev = p.img ? '<img class="sv-img" alt="" src="'+p.img+'">' : '<span class="sv-img">'+(ic ? '<span style="font-size:30px">'+iconInner(ic)+'</span>' : '<span class="glasses '+RIMS[state.rim].cls+'"></span>')+'</span>';
     $("saveBody").innerHTML =
-      '<div class="sv-prev">'+(p.img ? '<img class="sv-img" alt="" src="'+p.img+'">' : '<span class="sv-img"><span class="glasses '+RIMS[state.rim].cls+'"></span></span>')+
-      '<div class="grow"><b>'+esc(lab)+'</b><div class="sv-chips"><button type="button" class="chip" data-sv="img">📷 사진 올리기</button>'+
-      (p.img ? '<button type="button" class="chip" data-sv="noimg">기본 그림으로</button>' : '')+'</div></div></div>'+
-      '<div class="fc-f"><span>별명</span><input type="text" id="svNick" maxlength="20" placeholder="예: 내 최애 무테" value="'+esc(p.nick)+'">'+
-      '<span>구매처</span>'+whereSelect(p.buy, p.where, 'id="svWhere"')+
-      '<span>렌즈 맞춘 날</span><input type="date" id="svLens" value="'+esc(p.lens||"")+'"></div>'+
+      '<div class="sv-prev">'+prev+'<div class="grow"><b>'+esc(lab)+'</b><div class="sv-chips"><button type="button" class="chip" data-sv="img">📷 사진 올리기</button>'+
+      ((p.img||p.icon) ? '<button type="button" class="chip" data-sv="noimg">기본 그림으로</button>' : '')+'</div></div></div>'+
+      '<div class="sv-sec">안경 그림 고르기 <span class="opt-badge">선택</span></div>'+
+      '<div class="sv-icons" role="group" aria-label="안경 그림">'+ICONS.map(function(x){
+        return '<button type="button" class="sv-ico'+(!p.img && p.icon===x.id?" on":"")+'" data-sv-ico="'+x.id+'" aria-label="'+esc(x.label)+'" aria-pressed="'+(!p.img && p.icon===x.id)+'">'+iconInner(x)+'</button>';
+      }).join("")+'</div>'+
+      '<div class="sv-sec">별명 <span class="opt-badge">선택</span></div>'+
+      '<div class="sv-pad"><div class="fc-f" style="grid-template-columns:1fr;margin-top:0"><input type="text" id="svNick" maxlength="20" placeholder="예: 내 최애 무테" value="'+esc(p.nick)+'"></div></div>'+
+      '<div class="sv-sec">어디서 샀나요? <span class="opt-badge">선택</span></div>'+
+      '<div class="sv-pad"><div class="seg2"><button type="button" data-sv-grp="online" class="'+(p.grp==="online"?"on":"")+'">🌐 온라인</button>'+
+      '<button type="button" data-sv-grp="offline" class="'+(p.grp==="offline"?"on":"")+'">🏪 오프라인 매장</button></div>'+
+      '<div class="sv-chips2" role="group" aria-label="구매처">'+WHERE[p.grp].map(function(x,i){
+        var on = (p.where===i);
+        return '<button type="button" class="chip'+(on?" on":"")+'" data-sv-where="'+i+'" aria-pressed="'+on+'">'+x.e+' '+x.name+'</button>';
+      }).join("")+'</div></div>'+
+      '<div class="sv-sec">렌즈 맞춘 날</div>'+
+      '<div class="sv-pad"><div class="fc-f" style="grid-template-columns:1fr;margin-top:0"><input type="date" id="svLens" value="'+esc(p.lens||"")+'"></div></div>'+
       '<div class="sv-btns"><button type="button" class="cta" data-sv="ok">보관함에 넣기</button><button type="button" class="linkbtn" data-sv="cancel">취소</button></div>';
   }
   $("saveBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b || !pend) return;
     var a = b.dataset.sv;
+    if(b.dataset.svIco){ pend.icon = (pend.icon===b.dataset.svIco && !pend.img) ? "" : b.dataset.svIco; pend.img = null; renderSaveSheet(); return; }
+    if(b.dataset.svGrp){ if(pend.grp!==b.dataset.svGrp){ pend.grp = b.dataset.svGrp; pend.where = -1; } renderSaveSheet(); return; }
+    if(b.dataset.svWhere!==undefined){ var wi = +b.dataset.svWhere; pend.where = (pend.where===wi) ? -1 : wi; renderSaveSheet(); return; }
     if(a==="img") $("saveFile").click();
-    else if(a==="noimg"){ pend.img = null; renderSaveSheet(); }
+    else if(a==="noimg"){ pend.img = null; pend.icon = ""; renderSaveSheet(); }
     else if(a==="cancel"){ var pc = pend; pend = null; pc.after(false, true); }
     else if(a==="ok"){
       var po = pend; pend = null;
       var ex = { lensDate: po.lens || todayStr() };
       if(po.nick) ex.nick = po.nick;
-      if(po.buy){ ex.buy = po.buy; ex.where = po.where; }
+      if(po.where>=0){ ex.buy = po.grp; ex.where = po.where; }
+      if(po.icon) ex.icon = po.icon;
       po.after(addVault(po.img, true, ex), false);
     }
   });
@@ -1698,7 +1740,6 @@
   $("saveBody").addEventListener("change", function(e){
     if(!pend) return;
     if(e.target.id==="svLens") pend.lens = e.target.value || "";
-    if(e.target.id==="svWhere"){ var v = e.target.value; if(!v){ pend.buy = ""; pend.where = 0; } else { var sp = v.split(":"); pend.buy = sp[0]; pend.where = +sp[1]; } }
   });
   $("saveFile").addEventListener("change", function(){
     var f = this.files && this.files[0]; this.value = "";
@@ -1779,7 +1820,7 @@
       b.innerHTML = '<div style="font-size:13px;font-weight:700;padding:4px 12px 6px">📦 내 프레임 보관함</div>'+
         (v.length ? v.map(function(it,i){
           return '<div class="vitem"><button type="button" class="menu-item" data-vi="'+i+'">'+
-            (it.thumb ? '<img class="vmini" alt="" src="'+it.thumb+'">' : '<span>👓</span>')+
+            itemPic(it,"vmini")+
             '<span style="min-width:0"><b style="font-size:13px">'+vaultLabel(it)+'</b>'+
             (it.conf && it.conf!=="sure" ? '<span style="display:block;font-size:10.5px;color:var(--faint)">소재는 매장에서 확인</span>' : '')+
             '</span><span class="sub">불러오기</span></button>'+
@@ -2127,7 +2168,7 @@
   function frameCard(it, i){
     var sub = (it.conf && it.conf!=="sure") ? '소재는 매장에서 확인' : (it.nick ? vaultLabel(it) : ""), wl = whereLabel(it);
     return '<div class="fcard"><div class="fc-top">'+
-      (it.thumb ? '<img alt="" src="'+it.thumb+'">' : '<span class="ph">👓</span>')+
+      itemPic(it)+
       '<div class="grow"><b>'+esc(it.nick || vaultLabel(it))+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+(wl?'<small>🛒 '+esc(wl)+'</small>':'')+'</div>'+
       '<button type="button" class="vdel" data-my="vdel" data-i="'+i+'" aria-label="보관함에서 지우기">✕</button></div>'+
       '<div class="fc-f"><span>별명</span><input type="text" maxlength="20" data-f="nick" data-i="'+i+'" placeholder="예: 내 최애 무테" value="'+esc(it.nick||"")+'">'+
