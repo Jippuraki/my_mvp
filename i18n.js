@@ -768,7 +768,15 @@
 "처방전이나 예전 안경을 보고 값을 알면 \"값 입력하기\"를, 모르면 \"값은 몰라요\"를 눌러 주세요. 안 눌러도 안경원은 찾을 수 있어요.": "If you know the values from a prescription or your old glasses, tap \"Enter values\"; if not, tap \"I don't know\". You can find shops even without choosing.",
 "도수 있음 · 값은 아직 입력하지 않았어요": "Have a prescription · values not entered yet",
 "아직 고르지 않았어요. 도수 값을 입력하면 맞는 사양을 추천해 드려요. 고르지 않으면 많이 쓰는 사양(": "Not chosen yet. Enter your prescription to get a recommended spec. If you don't choose, the price range uses a common spec (",
-") 기준으로 가격대를 보여 줘요.": ")."
+") 기준으로 가격대를 보여 줘요.": ").",
+"전화번호 (필수) 예: 010-1234-5678": "Phone number (required) e.g. 010-1234-5678",
+"전화번호는 필수": "Phone number required",
+"답은 남긴 번호로 안경원이 연락해요. 언제 답이 오는지는 안경원마다 달라서 앱이 정해 주지 못해요. 시연용이라 보낸 문의는 이 기기에만 저장되고, 같은 기기의 '안경원 화면'에서 볼 수 있어요. 도수는 따로 동의한 경우에만 들어가요.": "The shop will contact you at the number you leave. When they reply depends on the shop, so the app can't promise a time. This is a demo, so sent inquiries are saved on this device only and can be viewed on the shop screen of the same device. Your prescription is included only with separate consent.",
+"안경원이 확인했어요": "The shop has read it",
+"안경원에 보냈어요 (답은 번호로 와요)": "Sent to the shop (they'll reply by phone)",
+"연락받을 곳:": "Contact:",
+"매장 전화": "Shop phone",
+"(예시)": "(example)"
 };
   var KEYS = Object.keys(DICT).sort(function(a,b){ return b.length-a.length; });
   var LKEY = "afterframe.lang.v1", ATTRS = ["placeholder","aria-label","title","alt"];
