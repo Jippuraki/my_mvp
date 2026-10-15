@@ -1101,10 +1101,10 @@
   function pdDefault(){ return PD_AVG[profile.gender] || 63; }
 
   var INIT = function(){ return {
-    rim:2, cat:1, sub:0, matConf:"sure", model:null, buy:"online", where:0,
-    rxMode:(profile.hasGlasses===false ? "unknown" : "have"), rxKnow:true, eye:"R", pd:pdDefault(), pdKnown:true, pdTouched:false, rxTouched:false, measure:false,
+    rim:null, cat:null, sub:-1, matConf:"sure", model:null, buy:"online", where:0,
+    rxMode:(profile.hasGlasses===false ? "unknown" : null), rxKnow:null, eye:"R", pd:pdDefault(), pdKnown:true, pdTouched:false, rxTouched:false, measure:false,
     /* cylMode: "has"(난시 있음·CYL/AXIS 입력) · "none"(평도수·난시 없음) · "unknown"(몰라요) */
-    rxv:{ R:{sph:-6.50, cyl:-2.25, axis:180, cylMode:"has"}, L:{sph:-6.25, cyl:-2.00, axis:175, cylMode:"has"} },
+    rxv:{ R:{sph:0, cyl:0, axis:null, cylMode:"unknown"}, L:{sph:0, cyl:0, axis:null, cylMode:"unknown"} },
     funcs:[], region:0, pIdx:null, pDesign:null }; };
   var state = INIT();
   state.sort = "dist"; state.selected = "A"; state.liked = loadLiked(); state.photo = 0; state.shareRx = false;
@@ -1271,7 +1271,7 @@
         ["1.56","1.60","1.67","1.74"].map(function(i){
           var st = idxState(i);
           if(!st.ok) return '<button type="button" class="pc dis" disabled aria-disabled="true" title="'+esc(st.why)+'" aria-label="'+i+' 선택 불가: '+esc(st.why)+'">'+i+'<i>불가</i></button>';
-          return '<button type="button" class="pc'+(i===sp.idx?" on":"")+'" data-pidx="'+i+'">'+i+(sp.rec && sp.rec.idx===i ? '<i>추천</i>' : '')+'</button>';
+          return '<button type="button" class="pc'+(i===sp.idx && (state.pIdx || sp.rec) ?" on":"")+'" data-pidx="'+i+'">'+i+(sp.rec && sp.rec.idx===i ? '<i>추천</i>' : '')+'</button>';
         }).join("")+'</div>'+
         (function(){
           var bad = ["1.56","1.60","1.67","1.74"].filter(function(i){ return !idxState(i).ok; });
@@ -1281,9 +1281,9 @@
         })()+
         '<div class="plbl">렌즈 설계</div><div class="pchips">'+
         ["구면","비구면","양면비구면"].map(function(d){
-          return '<button type="button" class="pc'+(d===sp.design?" on":"")+'" data-pdes="'+d+'">'+d+(sp.rec && sp.rec.design===d ? '<i>추천</i>' : '')+'</button>';
+          return '<button type="button" class="pc'+(d===sp.design && (state.pDesign || sp.rec) ?" on":"")+'" data-pdes="'+d+'">'+d+(sp.rec && sp.rec.design===d ? '<i>추천</i>' : '')+'</button>';
         }).join("")+'</div>';
-      if(!sp.rec) h += '<div class="pnote">도수 값을 입력하면 맞는 사양을 추천해 드려요. 지금은 많이 쓰는 사양 기준이에요.</div>';
+      if(!sp.rec) h += '<div class="pnote">아직 고르지 않았어요. 도수 값을 입력하면 맞는 사양을 추천해 드려요. 고르지 않으면 많이 쓰는 사양('+sp.idx+' · '+sp.design+') 기준으로 가격대를 보여 줘요.</div>';
       else if(state.pIdx || state.pDesign) h += '<button type="button" class="preset" data-preset="1">↺ 추천 사양으로 되돌리기</button>';
       h += '</div>';
     }
@@ -1304,7 +1304,7 @@
     $("frameName").textContent = frameLabel();
     $("frameName").style.color = state.rim===null ? "var(--faint)" : "";
     var where = (state.buy==="online"?"온라인":"오프라인") + " · " + WHERE[state.buy][state.where].name;
-    $("frameWhere").textContent = state.model ? state.model.brand + " " + state.model.model + " · " + where : where;
+    $("frameWhere").textContent = state.rim===null ? "" : state.model ? state.model.brand + " " + state.model.model + " · " + where : where;
     $("frameIcon").className = "glasses " + (state.rim===null ? "none" : RIMS[state.rim].cls);
     $("frameIcon").textContent = state.rim===null ? "+" : "";
     var j = $("jobs");
@@ -1422,9 +1422,11 @@
       return;
     }
     var h = rxRecordsHtml() + glassesTip() + '<div class="rxq">도수 값을 알고 있나요?</div>'+
-      '<div class="seg2"><button type="button" data-know="1" class="'+(state.rxKnow?"on":"")+'">값 입력하기</button>'+
-      '<button type="button" data-know="0" class="'+(state.rxKnow?"":"on")+'">값은 몰라요</button></div>';
-    if(state.rxKnow){
+      '<div class="seg2"><button type="button" data-know="1" class="'+(state.rxKnow===true?"on":"")+'">값 입력하기</button>'+
+      '<button type="button" data-know="0" class="'+(state.rxKnow===false?"on":"")+'">값은 몰라요</button></div>';
+    if(state.rxKnow===null){
+      h += '<div class="rxnote">ⓘ 처방전이나 예전 안경을 보고 값을 알면 "값 입력하기"를, 모르면 "값은 몰라요"를 눌러 주세요. 안 눌러도 안경원은 찾을 수 있어요.</div>';
+    }else if(state.rxKnow){
       var e = state.rxv[state.eye], m = maxRx();
       h += '<div class="eyes"><button type="button" data-eye="R" class="'+(state.eye==="R"?"on":"")+'">오른쪽 눈 (R)</button>'+
            '<button type="button" data-eye="L" class="'+(state.eye==="L"?"on":"")+'">왼쪽 눈 (L)</button></div>'+
@@ -2531,6 +2533,7 @@
     var w = wanted().map(capName);
     rows.push(["필요한 가공", w.length ? w.join(" · ") : "없음"]);
     if(state.rxMode==="none") rows.push(["도수", "무도수 (도수 없는 렌즈)"]);
+    else if(state.rxMode==="have" && state.rxKnow===null) rows.push(["도수", "도수 있음 · 값은 아직 입력하지 않았어요"]);
     else if(state.rxMode==="unknown" || (state.rxMode==="have" && !state.rxKnow)) rows.push(["도수", "잘 몰라요 · 측정이 필요해요"]);
     else if(hasRxValues()){
       rows.push(["도수", state.shareRx
