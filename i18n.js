@@ -573,7 +573,16 @@
 "마포구 예시로 45": "45 Yesi-ro, Mapo-gu",
 "서대문구 예시로 88": "88 Yesi-ro, Seodaemun-gu",
 "2년이 넘은 기록이에요. 눈 상태가 달라졌을 수 있어요. 새로 확인해 보세요.": "This record is over 2 years old. Your eyes may have changed — please check again.",
-"마포구": "Mapo-gu"
+"마포구": "Mapo-gu",
+"원하는 기능 · 렌즈 사양": "Desired features · Lens specs",
+"렌즈 사양": "Lens specs",
+"사양은 참고용이에요. 실제로 쓸 렌즈와 가공은 매장에서 상담해 정해요.": "Specs are for reference. The actual lenses and processing are decided with the shop.",
+"택배 가능": "Parcel available",
+"택배 가능 (매장이 알려 준 정보)": "Parcel available (as told by the shop)",
+"매장 방문 수령 · 택배는 문의해 주세요": "Pick up in store · ask the shop about parcel",
+"온라인 주문·결제·예약은 받지 않아요. 상담·도수 확인·결제는 매장 방문 시 진행돼요. 가격은 앱에서 알려 주지 않아요.": "No online orders, payment or booking. Consultation, prescription check and payment happen in store. Prices are not shown in the app.",
+"원하는 가공이 가능한 안경원을 앱에서 바로 찾고, 위치와 택배 수령 가능 여부까지 한 번에 확인한다.": "Find opticians that can do the processing you want, and check location and parcel availability at a glance.",
+"온라인 구매 ✕ · 택배 가능 여부는 안경원이 직접 알려 준 정보만 보여 줘요": "Online purchase ✕ · Parcel availability is shown only as reported by the shop"
 };
   var KEYS = Object.keys(DICT).sort(function(a,b){ return b.length-a.length; });
   var LKEY = "afterframe.lang.v1", ATTRS = ["placeholder","aria-label","title","alt"];
