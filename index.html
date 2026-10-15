@@ -961,37 +961,37 @@
   /* 안경원이 직접 입력하는 정보(가상). policy: free=외부 프레임 추가 비용 없이 가공 / paid=가공비 별도 / ask=정책 확인 중 / no=외부 프레임 안 받음 */
   var SHOPS = [
     { id:"A", name:"렌즈공방 홍대점", verified:true, dist:0.3, x:27, y:44,
-      addr:"마포구 예시로 12, 1층", hours:"월–토 10:00–20:00", off:"일요일", period:"2 ~ 5일", ship:true,
+      phone:"02-0000-0001", addr:"마포구 예시로 12, 1층", hours:"월–토 10:00–20:00", off:"일요일", period:"2 ~ 5일", ship:true,
       policy:"free", policyNote:"일반 프레임은 대부분 가공해 드려요 (예시)",
       price:{public:true, at:"2026-09-22", lens:{"1.56":5,"1.60":8,"1.67":12,"1.74":20}, funcs:{"틴팅":2,"변색":8,"블루라이트":2}, outside:[0,0], drill:[1,2], groove:[0.5,1]},
       desc:"무테·고난시 가공 경험이 많은 동네 안경원 (예시)",
       caps:["도수 렌즈","무테","하금·반무테","틴팅","변색","블루라이트","고도수","고난시","도수 측정"] },
     { id:"B", name:"연남 아이랩", verified:false, dist:0.6, x:58, y:36,
-      addr:"마포구 예시로 45, 2층", hours:"매일 11:00–21:00", off:"없음", period:"1 ~ 3일", ship:false,
+      phone:"02-0000-0002", addr:"마포구 예시로 45, 2층", hours:"매일 11:00–21:00", off:"없음", period:"1 ~ 3일", ship:false,
       policy:"paid", policyNote:"외부 프레임은 가공비가 따로 있어요. 프레임에 따라 달라요 (예시)",
       price:{public:false, at:"2026-08-20"},
       desc:"컬러 틴팅과 편광 렌즈를 자주 다루는 안경원 (예시)",
       caps:["도수 렌즈","무테","틴팅","편광","변색","블루라이트","고도수"] },
     { id:"C", name:"신촌 글라스웍스", verified:true, dist:1.1, x:72, y:60,
-      addr:"서대문구 예시로 88, 1층", hours:"화–일 10:30–19:30", off:"월요일", period:"3 ~ 7일", ship:true,
+      phone:"02-0000-0003", addr:"서대문구 예시로 88, 1층", hours:"화–일 10:30–19:30", off:"월요일", period:"3 ~ 7일", ship:true,
       policy:"free", policyNote:"천연 소재 테는 먼저 사진을 보여 주세요 (예시)",
       price:{public:true, at:"2026-09-15", lens:{"1.56":5,"1.60":9,"1.67":14,"1.74":23}, funcs:{"미러":4,"편광":7,"블루라이트":2}, outside:[0,0], drill:[1,1.5], groove:[0.5,1]},
       desc:"하금·미러·천연 소재 테 등 특수 가공을 전문으로 하는 작업실 (예시)",
       caps:["도수 렌즈","무테","하금·반무테","미러","편광","블루라이트","고도수","고난시","도수 측정","천연 소재","빈티지 테"] },
     { id:"D", name:"합정 프레임랩", verified:false, dist:1.4, x:16, y:24,
-      addr:"마포구 예시로 70, 지하 1층", hours:"매일 12:00–21:00", off:"없음", period:"2 ~ 4일", ship:true,
+      phone:"02-0000-0004", addr:"마포구 예시로 70, 지하 1층", hours:"매일 12:00–21:00", off:"없음", period:"2 ~ 4일", ship:true,
       policy:"paid", policyNote:"가공비는 방문 전에 문의해 주세요 (예시)",
       price:{public:true, at:"2026-08-20", lens:{"1.56":4,"1.60":7,"1.67":11,"1.74":19}, funcs:{"틴팅":1.5}, outside:[2,3], drill:[1.5,2]},
       desc:"편집숍에서 산 프레임 가공을 자주 맡는 작은 안경원 (예시)",
       caps:["도수 렌즈","무테","틴팅","블루라이트","도수 측정"] },
     { id:"E", name:"이대 아이웍스", verified:false, dist:1.8, x:90, y:76,
-      addr:"서대문구 예시로 31, 2층", hours:"월–금 10:00–19:00", off:"토·일요일", period:"3 ~ 5일", ship:false,
+      phone:"02-0000-0005", addr:"서대문구 예시로 31, 2층", hours:"월–금 10:00–19:00", off:"토·일요일", period:"3 ~ 5일", ship:false,
       policy:"ask", policyNote:"",
       price:{public:false, at:"2026-10-01"},
       desc:"외부 프레임 정책을 아직 알려 주지 않은 안경원 (예시)",
       caps:["도수 렌즈","틴팅","편광","블루라이트","고도수"] },
     { id:"F", name:"홍대 렌즈하우스", verified:true, dist:0.5, x:36, y:70,
-      addr:"마포구 예시로 5, 1층", hours:"매일 10:00–22:00", off:"없음", period:"1 ~ 2일", ship:true,
+      phone:"02-0000-0006", addr:"마포구 예시로 5, 1층", hours:"매일 10:00–22:00", off:"없음", period:"1 ~ 2일", ship:true,
       policy:"no", policyNote:"외부에서 산 프레임은 받지 않아요 (예시)",
       price:{public:false, at:"2026-10-01"},
       desc:"자사 프레임만 취급하는 체인점 (예시)",
@@ -2237,7 +2237,7 @@
   }
 
   /* 안경통: 닫혀 있다가 누르면 뚜껑이 열리고 칸마다 프레임이 보여요 (칸 수 = 보관함 최대 개수) */
-  var caseOpen = false, caseAnim = false, caseSel = -1, delMode = false, undoDel = null;
+  var iqOpen = null, caseOpen = false, caseAnim = false, caseSel = -1, delMode = false, undoDel = null;
   function slotName(it){ return it.nick || (RIMS[it.rim].name + (it.cat!==null && it.cat>=0 ? " "+(it.sub>=0 ? MATCATS[it.cat].subs[it.sub][0] : MATCATS[it.cat].name) : "")); }
   /* 열린 안경통 그림(720x519) 위 8칸의 중심 위치(%): 뒤 줄 4칸 → 앞 줄 4칸. 그림은 안경 개수(0~8)마다 따로 있어요(assets/case-open-N.webp) */
   var SLOTPOS = [[16.7,58.3],[38.2,55.0],[59.3,51.3],[79.9,47.7],[19.6,73.7],[41.8,69.7],[63.3,65.8],[84.7,62.0]];
@@ -2302,7 +2302,14 @@
     h += '<div class="group-title">✉️ 보낸 문의 <span class="opt-badge">'+iq.length+'건</span></div>';
     h += iq.length ? iq.slice(0,5).map(function(q){
       var d = new Date(q.at), ds = (d.getMonth()+1)+"/"+d.getDate();
-      return '<div class="scard inq"><span style="font-weight:800;color:var(--main)">'+esc(q.shopId)+'</span><span style="flex:1;min-width:0"><b>'+esc(q.shopName)+'</b><small>'+ds+' · '+esc((q.text||"안경 카드만 보냈어요").slice(0,28))+(q.card?' · 📋 카드':'')+'</small></span></div>';
+      var open = iqOpen===q.id, st = q.status==="read" ? "안경원이 확인했어요" : "안경원에 보냈어요 (답은 번호로 와요)";
+      return '<button type="button" class="scard inq" data-my="iq" data-id="'+q.id+'" aria-expanded="'+open+'" style="flex-wrap:wrap"><span style="font-weight:800;color:var(--main)">'+esc(q.shopId)+'</span><span style="flex:1;min-width:0"><b>'+esc(q.shopName)+'</b><small>'+ds+' · '+esc((q.text||"안경 카드만 보냈어요").slice(0,28))+(q.card?' · 📋 카드':'')+'</small></span><span class="chev">'+(open?'⌄':'›')+'</span>'+
+        (open ? '<span style="flex:0 0 100%;text-align:left;margin-top:8px;font-size:11px;color:var(--ink)">'+
+          '<b style="color:var(--main)">'+st+'</b><br>'+
+          (q.text ? '<span style="display:block;margin:4px 0;white-space:pre-wrap">'+esc(q.text)+'</span>' : '')+
+          (q.card ? '<span style="display:block;color:var(--sub)">'+q.card.map(function(r){ return esc(r[0])+': '+esc(r[1]); }).join('<br>')+'</span>' : '')+
+          '<span style="display:block;color:var(--faint);margin-top:4px">연락받을 곳: '+esc(q.contact.name||"")+' '+esc(q.contact.phone)+'</span></span>' : '')+
+        '</button>';
     }).join("") : '<div class="notice">아직 없어요. 매장 상세 화면의 "문의하기"에서 글과 안경 카드를 보낼 수 있어요.</div>';
     h += '<button type="button" class="linkbtn" data-my="toshop" style="margin:14px auto 0">안경원이세요? 안경원 전용 화면 ›</button>';
     h += '<div class="soon">곧 추가돼요 · 🧾 가공 이력</div>';
@@ -2386,6 +2393,7 @@
     }
     if(a==="slot"){ caseSel = (caseSel===+b.dataset.i) ? -1 : +b.dataset.i; renderMy(); return; }
     if(a==="toshop"){ renderShop(); go("Sh"); return; }
+    if(a==="iq"){ iqOpen = iqOpen===+b.dataset.id ? null : +b.dataset.id; renderMy(); return; }
     if(a==="pfopen"){
       pfDraft = {name: profile.name || "", phone: profile.phone || "", gender: profile.gender || "", hasGlasses: profile.hasGlasses===undefined ? null : profile.hasGlasses};
       renderPf(); $("dimMy").classList.add("show"); $("menuMy").classList.add("show"); return;
@@ -2465,6 +2473,7 @@
         '<div class="cell"><span class="k">주소</span><span class="v">'+s.addr+'</span></div>'+
         '<div class="cell"><span class="k">영업시간</span><span class="v">'+s.hours+'</span></div>'+
         '<div class="cell"><span class="k">휴무</span><span class="v">'+s.off+'</span></div>'+
+        (s.phone ? '<div class="cell"><span class="k">매장 전화</span><span class="v">'+esc(s.phone)+(s.userMade ? '' : ' (예시)')+'</span></div>' : '')+
         (s.confirmedAt ? '<div class="cell"><span class="k">정보 확인일</span><span class="v">'+esc(s.confirmedAt)+(daysSince(s.confirmedAt)>30 ? ' · 오래됐어요' : '')+'</span></div>' : '')+'</div>'+
       '<button type="button" class="linkbtn" id="btnReport">정보가 달라요 · 알려 주기</button>';
     $("btnLike").classList.toggle("liked", !!state.liked[s.id]);
@@ -2574,10 +2583,10 @@
       '<div class="qchips">'+QUICK_Q.map(function(q,i){ return '<button type="button" data-q="'+i+'">'+q+'</button>'; }).join("")+'</div></div>'+
       '<div style="padding:0 4px"><button type="button" class="act'+(draft.attach?" on":"")+'" data-a="attach"><span class="ic">📋</span><span class="t">내 안경 카드 함께 보내기<small>프레임 · 필요한 가공 · 소재를 안경 용어로 정리해서 보내요</small></span><span class="tg"></span></button></div>'+
       (draft.attach ? '<div class="condcard"><div class="ct">To. '+esc(s.name)+'</div><dl>'+rows+'</dl></div>'+'<div style="padding:0 4px">'+rxToggleHtml()+'</div>' : '')+
-      '<div style="padding:0 12px"><div class="pfrow">연락받을 곳 <span style="color:var(--faint)">(답변은 이 번호로 와요)</span>'+
+      '<div style="padding:0 12px"><div class="pfrow">연락받을 곳 <span class="req">전화번호는 필수</span> <span style="color:var(--faint)">(답변은 이 번호로 와요)</span>'+
         '<input type="text" id="askName" class="ainp" maxlength="20" placeholder="이름 (선택)" value="'+esc(draft.name)+'">'+
-        '<input type="tel" id="askPhone" class="ainp" maxlength="13" placeholder="전화번호 (예: 010-1234-5678)" value="'+esc(draft.phone)+'"></div></div>'+
-      '<div class="notice">시연용이에요. 보낸 문의는 이 기기에만 저장되고, 같은 기기의 \'안경원 화면\'에서 볼 수 있어요. 도수는 따로 동의한 경우에만 들어가요.</div>'+
+        '<input type="tel" id="askPhone" class="ainp" maxlength="13" placeholder="전화번호 (필수) 예: 010-1234-5678" value="'+esc(draft.phone)+'"></div></div>'+
+      '<div class="notice">답은 남긴 번호로 안경원이 연락해요. 언제 답이 오는지는 안경원마다 달라서 앱이 정해 주지 못해요. 시연용이라 보낸 문의는 이 기기에만 저장되고, 같은 기기의 \'안경원 화면\'에서 볼 수 있어요. 도수는 따로 동의한 경우에만 들어가요.</div>'+
       '<div class="cardbtns" style="grid-template-columns:1fr 1fr"><button type="button" data-a="send" style="background:var(--main);color:#fff">보내기</button><button type="button" data-a="back">돌아가기</button></div>';
   }
   function sendInquiry(){
@@ -2651,7 +2660,7 @@
     var sh = { id:u.id, name:u.name, verified:false, userMade:true, confirmedAt:u.confirmedAt,
       x:Math.max(4,Math.min(94,pl.x+j)), y:Math.max(6,Math.min(92,pl.y-j)),
       addr:u.addr, hours:u.hours, off:u.off, period:u.period, ship:u.ship, policy:u.policy, policyNote:u.policyNote,
-      desc:u.desc || "안경원이 직접 등록한 정보예요", caps:u.caps, price:u.price || {public:false} };
+      phone:u.phone, desc:u.desc || "안경원이 직접 등록한 정보예요", caps:u.caps, price:u.price || {public:false} };
     sh.dist = Math.max(0.1, Math.round(Math.hypot(GPS.x-sh.x, GPS.y-sh.y)*0.025*10)/10);
     var i = SHOPS.map(function(s){ return s.id; }).indexOf(u.id);
     if(i>-1) SHOPS[i] = sh; else SHOPS.push(sh);
