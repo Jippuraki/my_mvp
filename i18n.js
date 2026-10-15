@@ -651,7 +651,6 @@
 "답변 받을 전화번호를 입력해 주세요": "Please enter a phone number for the reply",
 "에 문의를 보냈어요 (시연용)": " – inquiry sent (demo)",
 "보낸 문의": "Sent inquiries",
-"건": " inquiries",
 "아직 없어요. 매장 상세 화면의 \"문의하기\"에서 글과 안경 카드를 보낼 수 있어요.": "None yet. You can send a message and glasses card from \"Inquiry\" on a shop's detail screen.",
 "안경 카드만 보냈어요": "Sent glasses card only",
 "곧 추가돼요 · 🧾 가공 이력": "Coming soon · 🧾 Processing history"
