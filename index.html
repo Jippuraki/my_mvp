@@ -371,7 +371,7 @@
   .case-stage>img{display:block;width:100%;height:auto;pointer-events:none}
   .case-lid{position:absolute;left:0;right:0;top:0;height:40%;border:0;background:transparent;padding:0;color:#5b3a29;font-size:10px;display:flex;align-items:flex-end;justify-content:center}
   .case-lid span{background:rgba(255,255,255,.7);border-radius:8px;padding:1px 8px;margin-bottom:4px}
-  .slot{position:absolute;width:17%;height:9.5%;margin:-4.75% 0 0 -8.5%;border:1.5px solid transparent;border-radius:6px;background:transparent;display:grid;place-items:center;padding:0;color:#5b3a29;font-size:15px;line-height:1}
+  .slot{position:absolute;width:19%;height:12%;margin:-6% 0 0 -9.5%;border:1.5px solid transparent;border-radius:6px;background:transparent;display:grid;place-items:center;padding:0;color:#5b3a29;font-size:15px;line-height:1}
   .slot .glasses{background:transparent;transform:scale(.55);margin:-6px}
   .slot img{width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid #5b3a29}
   .slot.sel{border-color:#5b3a29;background:rgba(255,255,255,.35)}
@@ -2112,8 +2112,8 @@
   /* 안경통: 닫혀 있다가 누르면 뚜껑이 열리고 칸마다 프레임이 보여요 (칸 수 = 보관함 최대 개수) */
   var caseOpen = false, caseAnim = false, caseSel = -1, delMode = false, undoDel = null;
   function slotName(it){ return it.nick || (RIMS[it.rim].name + (it.cat!==null && it.cat>=0 ? " "+(it.sub>=0 ? MATCATS[it.cat].subs[it.sub][0] : MATCATS[it.cat].name) : "")); }
-  /* 열린 안경통 그림(720x519) 위 8칸의 중심 위치(%): 뒤 줄 4칸 → 앞 줄 4칸 */
-  var SLOTPOS = [[23.6,49.7],[42.8,54.3],[61.1,58.8],[80.6,63.6],[16.7,60.1],[37.2,65.1],[55.6,69.7],[77.1,74.2]];
+  /* 열린 안경통 그림(720x519) 위 8칸의 중심 위치(%): 뒤 줄 4칸 → 앞 줄 4칸. 그림은 안경 개수(0~8)마다 따로 있어요(assets/case-open-N.webp) */
+  var SLOTPOS = [[16.7,58.3],[38.2,55.0],[59.3,51.3],[79.9,47.7],[19.6,73.7],[41.8,69.7],[63.3,65.8],[84.7,62.0]];
   function caseHtml(v){
     if(!caseOpen){
       return '<div class="casewrap"><button type="button" class="case-closed" data-my="case" aria-expanded="false" aria-label="안경통 열기">'+
@@ -2125,12 +2125,11 @@
       var it = v[i], pos = ' style="left:'+SLOTPOS[i][0]+'%;top:'+SLOTPOS[i][1]+'%"';
       slots += it
         ? '<button type="button"'+pos+' class="slot'+(i===caseSel&&!delMode?" sel":"")+(delMode?" deleting":"")+'" data-my="'+(delMode?"slotdel":"slot")+'" data-i="'+i+'" aria-label="'+esc(slotName(it))+(delMode?" 지우기":"")+'">'+
-          (it.thumb ? '<img alt="" src="'+it.thumb+'">' : '<span class="glasses '+RIMS[it.rim].cls+'"></span>')+
-          (delMode ? '<span class="xdel" aria-hidden="true">✕</span>' : (bell[i]?'<span class="bell" aria-label="알림">🔔</span>':''))+'</button>'
+                    (delMode ? '<span class="xdel" aria-hidden="true">✕</span>' : (bell[i]?'<span class="bell" aria-label="알림">🔔</span>':''))+'</button>'
         : '<button type="button"'+pos+' class="slot empty" data-my="slotadd" aria-label="프레임 추가">＋</button>';
     }
     return '<div class="casewrap"><div class="case-open'+(caseAnim?" anim":"")+'">'+
-      '<div class="case-stage"><img alt="" src="assets/case-open.webp">'+
+      '<div class="case-stage"><img alt="" src="assets/case-open-'+Math.min(v.length,VMAX)+'.webp">'+
       '<button type="button" class="case-lid" data-my="case" aria-expanded="true" aria-label="안경통 닫기"><span>눌러서 닫기</span></button>'+slots+'</div>'+
       (v.length || undoDel ? '<div class="case-tools">'+
         (v.length ? '<button type="button" class="'+(delMode?"on":"")+'" data-my="delmode">'+(delMode?"지우기 끝내기":"🗑 지우기")+'</button>' : '')+
