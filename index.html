@@ -670,7 +670,7 @@
             <!-- 4. 지역 -->
             <div class="group-title">지역 <span class="req">필수</span></div>
             <div class="group">
-              <div class="cell tap" id="regionCell"><span class="pin"></span><span id="regionName">홍대 · 연남 · 신촌</span><span class="chev" style="margin-left:auto">›</span></div>
+              <div class="cell tap" id="regionCell"><span class="pin"></span><span id="regionName">신촌 · 홍대 · 합정 · 연남 · 이대</span><span class="chev" style="margin-left:auto">›</span></div>
             </div>
           </div>
         </div>
@@ -821,6 +821,8 @@
           <span class="maplabel" style="left:56%;top:24%">연남동</span>
           <span class="maplabel" style="left:8%;top:74%">홍대입구역</span>
           <span class="maplabel" style="left:62%;top:84%">신촌역</span>
+          <span class="maplabel" style="left:6%;top:8%">합정역</span>
+          <span class="maplabel" style="left:78%;top:88%">이대역</span>
           <div class="me" id="me"></div>
         </div>
 
@@ -915,20 +917,62 @@
 <script>
 (function(){
   /* ================= 예시 데이터 (모두 가상) ================= */
+  /* 안경원이 직접 입력하는 정보(가상). policy: free=외부 프레임 추가 비용 없이 가공 / paid=가공비 별도 / ask=정책 확인 중 / no=외부 프레임 안 받음 */
   var SHOPS = [
-    { id:"A", name:"렌즈공방 홍대점", verified:true, dist:0.3, open:true, x:27, y:44,
+    { id:"A", name:"렌즈공방 홍대점", verified:true, dist:0.3, x:27, y:44,
       addr:"마포구 예시로 12, 1층", hours:"월–토 10:00–20:00", off:"일요일", period:"2 ~ 5일", ship:true,
+      policy:"free", policyNote:"일반 프레임은 대부분 가공해 드려요 (예시)",
       desc:"무테·고난시 가공 경험이 많은 동네 안경원 (예시)",
       caps:["도수 렌즈","무테","하금·반무테","틴팅","변색","블루라이트","고도수","고난시","도수 측정"] },
-    { id:"B", name:"연남 아이랩", verified:false, dist:0.6, open:true, x:58, y:36,
+    { id:"B", name:"연남 아이랩", verified:false, dist:0.6, x:58, y:36,
       addr:"마포구 예시로 45, 2층", hours:"매일 11:00–21:00", off:"없음", period:"1 ~ 3일", ship:false,
+      policy:"paid", policyNote:"외부 프레임은 가공비가 따로 있어요. 프레임에 따라 달라요 (예시)",
       desc:"컬러 틴팅과 편광 렌즈를 자주 다루는 안경원 (예시)",
       caps:["도수 렌즈","무테","틴팅","편광","변색","블루라이트","고도수"] },
-    { id:"C", name:"신촌 글라스웍스", verified:true, dist:1.1, open:false, x:72, y:60,
+    { id:"C", name:"신촌 글라스웍스", verified:true, dist:1.1, x:72, y:60,
       addr:"서대문구 예시로 88, 1층", hours:"화–일 10:30–19:30", off:"월요일", period:"3 ~ 7일", ship:true,
+      policy:"free", policyNote:"천연 소재 테는 먼저 사진을 보여 주세요 (예시)",
       desc:"하금·미러·천연 소재 테 등 특수 가공을 전문으로 하는 작업실 (예시)",
-      caps:["도수 렌즈","무테","하금·반무테","미러","편광","블루라이트","고도수","고난시","도수 측정","천연 소재","빈티지 테"] }
+      caps:["도수 렌즈","무테","하금·반무테","미러","편광","블루라이트","고도수","고난시","도수 측정","천연 소재","빈티지 테"] },
+    { id:"D", name:"합정 프레임랩", verified:false, dist:1.4, x:16, y:24,
+      addr:"마포구 예시로 70, 지하 1층", hours:"매일 12:00–21:00", off:"없음", period:"2 ~ 4일", ship:true,
+      policy:"paid", policyNote:"가공비는 방문 전에 문의해 주세요 (예시)",
+      desc:"편집숍에서 산 프레임 가공을 자주 맡는 작은 안경원 (예시)",
+      caps:["도수 렌즈","무테","틴팅","블루라이트","도수 측정"] },
+    { id:"E", name:"이대 아이웍스", verified:false, dist:1.8, x:90, y:76,
+      addr:"서대문구 예시로 31, 2층", hours:"월–금 10:00–19:00", off:"토·일요일", period:"3 ~ 5일", ship:false,
+      policy:"ask", policyNote:"",
+      desc:"외부 프레임 정책을 아직 알려 주지 않은 안경원 (예시)",
+      caps:["도수 렌즈","틴팅","편광","블루라이트","고도수"] },
+    { id:"F", name:"홍대 렌즈하우스", verified:true, dist:0.5, x:36, y:70,
+      addr:"마포구 예시로 5, 1층", hours:"매일 10:00–22:00", off:"없음", period:"1 ~ 2일", ship:true,
+      policy:"no", policyNote:"외부에서 산 프레임은 받지 않아요 (예시)",
+      desc:"자사 프레임만 취급하는 체인점 (예시)",
+      caps:["도수 렌즈","무테","틴팅","변색","블루라이트","고도수","고난시","도수 측정"] }
   ];
+  /* 영업 중 여부: 안경원이 입력한 영업시간("월–토 10:00–20:00")으로 지금 시각에 맞춰 계산해요 */
+  var DAYCH = "일월화수목금토";
+  function openNow(sh, now){
+    var m = /^(매일|[월화수목금토일])(?:–([월화수목금토일]))?\s+(\d\d):(\d\d)–(\d\d):(\d\d)/.exec(sh.hours || "");
+    if(!m) return false;
+    now = now || new Date();
+    var d = now.getDay(), ok = false;
+    if(m[1]==="매일") ok = true;
+    else {
+      var a = DAYCH.indexOf(m[1]), b = m[2] ? DAYCH.indexOf(m[2]) : a;
+      for(var k = a; ; k = (k+1)%7){ if(k===d){ ok = true; break; } if(k===b) break; }
+    }
+    if(!ok) return false;
+    var t = now.getHours()*60 + now.getMinutes();
+    return t >= (+m[3])*60 + (+m[4]) && t < (+m[5])*60 + (+m[6]);
+  }
+  var POLICY = {
+    free:{label:"가공 가능 (추가 비용 없음)", pre:"연락 권장"},
+    paid:{label:"가공 가능 (가공비 별도)", pre:"연락 권장"},
+    ask:{label:"정책 확인 중이에요", pre:"꼭 문의해 주세요"},
+    no:{label:"외부 프레임은 받지 않아요", pre:"가기 전에 확인하세요"}
+  };
+
   var CAP_ORDER = ["도수 렌즈","무테","하금·반무테","고도수","고난시","도수 측정","틴팅","미러","편광","변색","블루라이트","천연 소재"];
   var CAP_LABEL = {"무테":"무테 가공","하금·반무테":"하금 가공","천연 소재":"천연 소재 테","빈티지 테":"빈티지 테"};
   function capName(c){ return CAP_LABEL[c] || c; }
@@ -976,13 +1020,15 @@
     {k:"변색", d:"햇빛을 받으면 렌즈가 어두워져요", sw:"photo"},
     {k:"블루라이트", d:"화면에서 나오는 푸른빛을 줄여요", sw:"blue"}
   ];
-  var REGIONS = ["홍대 · 연남 · 신촌","합정 · 망원","이대 · 아현"];
-  /* 위치 바꾸기 시연용 데이터: x,y 는 지도 위 위치(%). 지금은 홍대·연남·신촌만 매장이 있어요 */
+  var REGIONS = ["신촌 · 홍대 · 합정 · 연남 · 이대"];
+  /* 위치 바꾸기 시연용 데이터: x,y 는 지도 위 위치(%). 신촌·홍대·합정·연남·이대에 매장이 있어요 */
   var GPS = {kind:"gps", name:"현재 위치", sub:"홍대입구역 근처 (예시)", x:44, y:64, covered:true};
   var KNOWN = [
     {name:"홍대입구역", kw:["홍대","홍익","서교"], x:14, y:74},
     {name:"연남동", kw:["연남"], x:62, y:28},
-    {name:"신촌역", kw:["신촌"], x:68, y:86}
+    {name:"신촌역", kw:["신촌"], x:68, y:86},
+    {name:"합정역", kw:["합정","망원"], x:12, y:16},
+    {name:"이대역", kw:["이대","아현","이화"], x:88, y:90}
   ];
 
   /* 회원 정보(시연용): 성별·기존 안경 유무. 성별은 PD 평균값을 채우는 데만 써요. 이 기기에만 저장 */
@@ -1629,7 +1675,7 @@
         REGIONS.map(function(r,i){
           return '<button class="menu-item" data-r="'+i+'"><span class="pin" style="'+(i===state.region?'':'background:#c3cde0')+'"></span>'+r+
             '<span class="sub">'+(i===0?'이용 가능':'준비 중')+'</span></button>';
-        }).join("");
+        }).join("") + '<div class="notice">다른 지역은 준비 중이에요. 안경원이 많은 곳부터 차례로 넓혀 갈게요.</div>';
       b.querySelectorAll("[data-r]").forEach(function(btn){
         btn.addEventListener("click", function(){
           state.region = +btn.dataset.r;
@@ -1712,7 +1758,7 @@
   function matches(){
     var w = wanted();
     if(!state.loc.covered) return [];
-    var list = SHOPS.filter(function(s){ return w.every(function(v){ return s.caps.indexOf(v)>-1; }); });
+    var list = SHOPS.filter(function(s){ return s.policy!=="no" && w.every(function(v){ return s.caps.indexOf(v)>-1; }); });
     list.sort(function(a,b){
       if(state.sort==="dist") return dOf(a)-dOf(b);
       return b.caps.length-a.caps.length || dOf(a)-dOf(b);
@@ -1743,7 +1789,7 @@
       m.style.left = s.x+"%"; m.style.top = s.y+"%";
       m.innerHTML = "<b>"+s.id+"</b>"; m.setAttribute("aria-label", s.name);
       m.addEventListener("click", function(){
-        if(ids.indexOf(s.id)<0){ toast(2,"선택한 조건을 모두 처리하지 못하는 매장이에요"); return; }
+        if(ids.indexOf(s.id)<0){ toast(2, s.policy==="no" ? "외부에서 산 프레임은 받지 않는 매장이에요" : "선택한 조건을 모두 처리하지 못하는 매장이에요"); return; }
         state.selected = s.id; renderList(false); setStep(4);
         var card = $("list").querySelector('[data-id="'+s.id+'"]'); if(card) card.scrollIntoView({behavior:"smooth",block:"nearest"});
       });
@@ -1752,7 +1798,7 @@
 
     if(!list.length && !state.loc.covered){
       $("countTitle").textContent = "이 위치 근처는 아직 준비 중이에요";
-      $("list").innerHTML = '<div class="empty"><b>'+esc(state.loc.name)+' 근처는 아직 준비 중이에요</b>지금은 홍대·연남·신촌 근처만 볼 수 있어요.<br><button type="button" id="emptyLoc">현재 위치로 보기</button></div>';
+      $("list").innerHTML = '<div class="empty"><b>'+esc(state.loc.name)+' 근처는 아직 준비 중이에요</b>지금은 신촌·홍대·합정·연남·이대 근처만 볼 수 있어요.<br><button type="button" id="emptyLoc">현재 위치로 보기</button></div>';
       $("emptyLoc").addEventListener("click", function(){ selectLoc(Object.assign({}, GPS)); });
       return;
     }
@@ -1768,10 +1814,12 @@
         return '<span class="tag '+(w.indexOf(c)>-1?"ok":"")+'">'+capName(c)+'</span>';
       }).join("");
       if(s.ship) tags += '<span class="tag ship">택배 가능</span>';
+      if(s.policy==="paid") tags += '<span class="tag">가공비 별도</span>';
+      if(s.policy==="ask") tags += '<span class="tag closed">정책 확인 필요</span>';
       return '<div class="shop tap'+(s.id===state.selected?" sel":"")+'" data-id="'+s.id+'">'+
         '<div class="thumb">'+s.id+'</div><div class="info-col">'+
         '<div class="nm">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+(state.liked[s.id]?' <span style="color:#e11d48">♥</span>':'')+'</div>'+
-        '<div class="meta">'+dOf(s)+'km · '+(s.open?"영업 중":"영업 종료")+' · '+s.addr.split(",")[0]+'</div>'+
+        '<div class="meta">'+dOf(s)+'km · '+(openNow(s)?"영업 중":"영업 종료")+' · '+s.addr.split(",")[0]+'</div>'+
         '<div class="tags">'+tags+'</div></div><span class="chev">›</span></div>';
     }).join("");
     $("list").querySelectorAll(".shop").forEach(function(c){
@@ -1808,7 +1856,7 @@
     return places;
   }
   function persistPlaces(){ try{ localStorage.setItem(PKEY, JSON.stringify(places)); }catch(e){} refreshMy(); }
-  /* 입력한 동네·역 이름을 시연용 지역(홍대·연남·신촌)과 맞춰 봐요. 없으면 '준비 중' */
+  /* 입력한 동네·역 이름을 시연용 지역(신촌·홍대·합정·연남·이대)과 맞춰 봐요. 없으면 '준비 중' */
   function resolvePlace(q){
     var n = norm(q), hit = null;
     if(n.length>=2) KNOWN.forEach(function(k){
@@ -1864,7 +1912,7 @@
       '<label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>'+
       '<input type="search" id="locSearch" placeholder="동네나 역 이름 (예: 연남동, 신촌역)" autocomplete="off"></label>'+
       '<div id="locRes"></div>'+
-      '<div class="notice">동네·역 이름만 저장하고, 이 기기에만 보관해요. 정확한 주소는 저장하지 않아요. 지금은 홍대·연남·신촌만 시연해요.</div>'+
+      '<div class="notice">동네·역 이름만 저장하고, 이 기기에만 보관해요. 정확한 주소는 저장하지 않아요. 지금은 신촌·홍대·합정·연남·이대만 시연해요.</div>'+
       '<button type="button" class="menu-item" data-lc="close"><span>✕</span>닫기</button>';
     renderLocRes("");
   }
@@ -2107,7 +2155,7 @@
       h += '<div class="peditor"><b style="font-size:12px">'+esc(title)+'</b>'+
         ((isNew||isX) ? '<input type="text" id="peLabel" maxlength="10" placeholder="이름 (예: 학교, 부모님 댁)" value="'+esc(cur?cur.label:"")+'">' : '')+
         '<input type="search" id="peQ" maxlength="30" placeholder="동네나 역 이름 (예: 연남동, 신촌역)" value="'+esc(cur?cur.name:"")+'" autocomplete="off">'+
-        '<div style="font-size:10.5px;color:var(--sub);margin-top:6px">지금은 홍대·연남·신촌만 지원해요. 다른 지역도 저장은 돼요.</div>'+
+        '<div style="font-size:10.5px;color:var(--sub);margin-top:6px">지금은 신촌·홍대·합정·연남·이대만 지원해요. 다른 지역도 저장은 돼요.</div>'+
         '<div class="row2"><button type="button" data-my="pcancel">취소</button><button type="button" class="pri" data-my="psave">저장</button></div></div>';
     }else if((p.extra||[]).length<3){
       h += '<button type="button" class="vault-add" data-my="padd">＋ 장소 추가</button>';
@@ -2117,7 +2165,7 @@
     h += '<div class="group-title">♥ 저장한 안경원 <span class="opt-badge">'+likedIds.length+'곳</span></div>';
     h += likedIds.length ? likedIds.map(function(id){
       var s = shopById(id);
-      return '<button type="button" class="scard" data-my="shop" data-id="'+id+'"><span style="font-weight:800;color:var(--main)">'+id+'</span><span style="flex:1;min-width:0"><b>'+esc(s.name)+'</b><small>'+esc(s.addr.split(",")[0])+' · '+(s.open?"영업 중":"영업 종료")+'</small></span><span class="chev">›</span></button>';
+      return '<button type="button" class="scard" data-my="shop" data-id="'+id+'"><span style="font-weight:800;color:var(--main)">'+id+'</span><span style="flex:1;min-width:0"><b>'+esc(s.name)+'</b><small>'+esc(s.addr.split(",")[0])+' · '+(openNow(s)?"영업 중":"영업 종료")+'</small></span><span class="chev">›</span></button>';
     }).join("") : '<div class="notice">아직 없어요. 매장 상세 화면의 ♡를 누르면 여기에 모여요.</div>';
     h += '<div class="soon">곧 추가돼요 · 🧾 가공 이력 · 로그인</div>';
     $("myBody").innerHTML = h;
@@ -2247,12 +2295,13 @@
     $("detail").innerHTML =
       '<div class="title">'+s.name+(s.verified?' <span class="badge">확인됨</span>':'')+'</div>'+
       '<div class="desc">'+s.desc+'</div>'+
-      '<div class="summary">'+(dOf(s)!==null?'<span class="tag ok">'+dOf(s)+'km</span>':'')+'<span class="tag '+(s.open?"ok":"closed")+'">'+(s.open?"영업 중":"영업 종료")+'</span>'+
+      '<div class="summary">'+(dOf(s)!==null?'<span class="tag ok">'+dOf(s)+'km</span>':'')+'<span class="tag '+(openNow(s)?"ok":"closed")+'">'+(openNow(s)?"영업 중":"영업 종료")+'</span>'+
         (s.ship?'<span class="tag ship">택배 가능</span>':'<span class="tag closed">매장 방문 수령</span>')+'</div>'+
       '<div class="group-title">가공 가능 항목</div><div class="group caps">'+caps+'</div>'+
       '<div class="group-title">외부 프레임 정책 · 작업 기간</div><div class="group">'+
-        '<div class="cell"><span class="k">외부 프레임</span><span class="v">가공 가능</span></div>'+
-        '<div class="cell"><span class="k">방문 전 확인</span><span class="v">연락 권장</span></div>'+
+        '<div class="cell"><span class="k">외부 프레임</span><span class="v">'+POLICY[s.policy].label+'</span></div>'+
+        '<div class="cell"><span class="k">방문 전 확인</span><span class="v">'+POLICY[s.policy].pre+'</span></div>'+
+        (s.policyNote ? '<div class="cell"><span class="k">매장 안내</span><span class="v">'+esc(s.policyNote)+'</span></div>' : '')+
         '<div class="cell"><span class="k">예상 작업 기간</span><span class="v">'+s.period+'</span></div>'+
         '<div class="cell"><span class="k">완성품 수령</span><span class="v">'+(s.ship?"택배 가능 (매장이 알려 준 정보)":"매장 방문 수령 · 택배는 문의해 주세요")+'</span></div></div>'+
       '<div class="policy-note">온라인 주문·결제·예약은 받지 않아요. 상담·도수 확인·결제는 매장 방문 시 진행돼요. 가격은 앱에서 알려 주지 않아요.</div>'+
