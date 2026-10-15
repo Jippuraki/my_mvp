@@ -566,7 +566,7 @@
 "가공 가능 항목 · 외부 프레임 정책·작업 기간 · 위치·영업 정보": "Available processing · outside-frame policy & lead time · location & hours",
 "이전 사진": "Previous photo",
 "다음 사진": "Next photo",
-"문의하기": "Contact",
+"문의하기": "Inquiry",
 "서강대 스타트업 연계전공 수업 과제": "Sogang University Startup Interdisciplinary Major — class project",
 "마지막으로 고친 날 2026-10-08": "Last updated 2026-10-08",
 "마포구 예시로 12": "12 Yesi-ro, Mapo-gu",
@@ -776,7 +776,27 @@
 "안경원에 보냈어요 (답은 번호로 와요)": "Sent to the shop (they'll reply by phone)",
 "연락받을 곳:": "Contact:",
 "매장 전화": "Shop phone",
-"(예시)": "(example)"
+"(예시)": "(example)",
+"신촌·홍대·합정·연남·이대": "Sinchon·Hongdae·Hapjeong·Yeonnam·Ewha",
+"동네·역 이름만 저장하고, 이 기기에만 보관해요. 정확한 주소는 저장하지 않아요. 지금은 신촌·홍대·합정·연남·이대만 시연해요.": "Only neighborhood/station names are saved, on this device only. Exact addresses are not saved. For now only Sinchon · Hongdae · Hapjeong · Yeonnam · Ewha is shown in the demo.",
+"(PD 평균값을 채우는 데만 써요)": "(only used to fill in the average PD)",
+"성별": "Gender",
+"화요일": "Tuesday",
+"수요일": "Wednesday",
+"목요일": "Thursday",
+"금요일": "Friday",
+"토요일": "Saturday",
+"매일": "Every day",
+"문의하기 · ": "Inquiry · ",
+"문의 보내기 · ": "Send inquiry · ",
+"입력한 조건을 모두 지울까요? 되돌릴 수 없어요.": "Clear all entered conditions? This can't be undone.",
+"보관함에서 이 프레임을 지울까요?": "Delete this frame from your case?",
+"저장한 장소를 지울까요?": "Delete this saved place?",
+"이 도수 기록을 지울까요?": "Delete this prescription record?",
+"회원 정보(이름·전화번호 등)를 이 기기에서 지울까요?": "Delete your member info (name, phone, etc.) from this device?",
+"회원 정보 지우기": "Delete member info",
+"본가로 저장했어요": "Saved as Home",
+"직장으로 저장했어요": "Saved as Work"
 };
   var KEYS = Object.keys(DICT).sort(function(a,b){ return b.length-a.length; });
   var LKEY = "afterframe.lang.v1", ATTRS = ["placeholder","aria-label","title","alt"];
