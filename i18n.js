@@ -764,7 +764,11 @@
 "1~2만 원": "10,000–20,000 KRW",
 "2~3만 원": "20,000–30,000 KRW",
 "3~5만 원": "30,000–50,000 KRW",
-"5만 원 이상": "50,000 KRW or more"
+"5만 원 이상": "50,000 KRW or more",
+"처방전이나 예전 안경을 보고 값을 알면 \"값 입력하기\"를, 모르면 \"값은 몰라요\"를 눌러 주세요. 안 눌러도 안경원은 찾을 수 있어요.": "If you know the values from a prescription or your old glasses, tap \"Enter values\"; if not, tap \"I don't know\". You can find shops even without choosing.",
+"도수 있음 · 값은 아직 입력하지 않았어요": "Have a prescription · values not entered yet",
+"아직 고르지 않았어요. 도수 값을 입력하면 맞는 사양을 추천해 드려요. 고르지 않으면 많이 쓰는 사양(": "Not chosen yet. Enter your prescription to get a recommended spec. If you don't choose, the price range uses a common spec (",
+") 기준으로 가격대를 보여 줘요.": ")."
 };
   var KEYS = Object.keys(DICT).sort(function(a,b){ return b.length-a.length; });
   var LKEY = "afterframe.lang.v1", ATTRS = ["placeholder","aria-label","title","alt"];
