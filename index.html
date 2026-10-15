@@ -608,6 +608,8 @@
     <div class="row"><b>핵심 가치</b><p>원하는 가공이 가능한 안경원을 앱에서 바로 찾고, 위치와 택배 수령 가능 여부까지 한 번에 확인한다.<small>온라인 구매 ✕ · 택배 가능 여부는 안경원이 직접 알려 준 정보만 보여 줘요</small></p></div>
   </section>
 
+  <div style="text-align:center;margin:-8px 0 14px"><button type="button" class="linkbtn" id="toShop">안경원이신가요? 안경원 전용 화면 보기 ›</button></div>
+
   <div class="steps" id="steps">
     <div class="step" data-step="1"><i>1</i>내 프레임</div>
     <div class="step" data-step="2"><i>2</i>도수·렌즈 기능</div>
@@ -908,6 +910,38 @@
           <div id="askBody"></div>
         </div>
         <div class="toast" id="toast3"></div>
+        <div class="homebar"></div>
+      </div></div>
+    </div>
+
+
+    <!-- ===== 화면 06 : 안경원 전용 ===== -->
+    <div class="screen-wrap" id="sSh">
+      <div class="label">
+        <div class="num">화면 06 · 안경원 전용</div>
+        <h2>안경원 전용</h2>
+        <p>가입 · 매장 정보 입력 · 받은 문의</p>
+      </div>
+      <div class="phone" id="pSh"><div class="display">
+        <div class="status">
+          <span>9:41</span><div class="island"></div>
+          <div class="sys">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg>
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 2.2c2.2 0 4.2.9 5.7 2.3l1.1-1.1A9.6 9.6 0 0 0 7.5.6 9.6 9.6 0 0 0 .7 3.4l1.1 1.1a8 8 0 0 1 5.7-2.3Zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.1a6.4 6.4 0 0 0-9 0l1.1 1.1c.9-.8 2.1-1.3 3.4-1.3Zm0 3.2c-.5 0-1 .2-1.3.5L7.5 10.4l1.3-1.3a1.9 1.9 0 0 0-1.3-.5Z"/></svg>
+            <div class="batt"><i></i></div>
+          </div>
+        </div>
+        <div class="scroll" id="shScroll">
+          <div class="nav">
+            <button class="icon-btn" type="button" aria-label="조건 입력으로" id="shBack">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <div class="t">안경원 전용</div>
+            <span></span>
+          </div>
+          <div class="content" id="shBody"></div>
+        </div>
+        <div class="toast" id="toastSh"></div>
         <div class="homebar"></div>
       </div></div>
     </div>
@@ -2142,7 +2176,7 @@
     var likedIds = Object.keys(state.liked).filter(function(k){ return state.liked[k] && shopById(k); });
     var gl = {m:"남성", f:"여성", x:"성별 선택 안 함"}[profile.gender];
     h += profile.joined
-      ? '<div class="myprof"><div class="av">🙂</div><div><b>회원 (시연용)</b><small>'+(gl||"성별 미입력")+' · 기존 안경 '+(profile.hasGlasses===true?"있어요":profile.hasGlasses===false?"없어요":"미입력")+'<br>이 기기에만 저장돼요</small></div><button type="button" class="pfbtn" data-my="pfopen">수정</button></div>'
+      ? '<div class="myprof"><div class="av">🙂</div><div><b>'+esc(profile.name||"회원")+' (시연용)</b><small>'+esc(profile.phone||"")+' · '+(gl||"성별 미입력")+' · 기존 안경 '+(profile.hasGlasses===true?"있어요":profile.hasGlasses===false?"없어요":"미입력")+'<br>이 기기에만 저장돼요</small></div><button type="button" class="pfbtn" data-my="pfopen">수정</button></div>'
       : '<div class="myprof"><div class="av">🙂</div><div><b>게스트</b><small>회원가입하면 성별에 맞는 PD 평균값을 채워 드려요. 이 기기에만 저장돼요</small></div><button type="button" class="pfbtn" data-my="pfopen">회원가입 · 로그인</button></div>';
     h += alertsHtml();
     h += '<div class="group-title">🧰 내 안경장 <span class="opt-badge">'+v.length+'/'+VMAX+'</span></div>';
@@ -2178,6 +2212,7 @@
       var d = new Date(q.at), ds = (d.getMonth()+1)+"/"+d.getDate();
       return '<div class="scard inq"><span style="font-weight:800;color:var(--main)">'+esc(q.shopId)+'</span><span style="flex:1;min-width:0"><b>'+esc(q.shopName)+'</b><small>'+ds+' · '+esc((q.text||"안경 카드만 보냈어요").slice(0,28))+(q.card?' · 📋 카드':'')+'</small></span></div>';
     }).join("") : '<div class="notice">아직 없어요. 매장 상세 화면의 "문의하기"에서 글과 안경 카드를 보낼 수 있어요.</div>';
+    h += '<button type="button" class="linkbtn" data-my="toshop" style="margin:14px auto 0">안경원이세요? 안경원 전용 화면 ›</button>';
     h += '<div class="soon">곧 추가돼요 · 🧾 가공 이력</div>';
     $("myBody").innerHTML = h;
     renderAlertCard();
@@ -2192,8 +2227,9 @@
       '<div style="font-size:13px;font-weight:700;padding:4px 12px 2px">회원가입 · 로그인 (시연용)</div>'+
       '<div style="font-size:11px;color:var(--sub);padding:0 12px 4px">시연에서는 계정을 만들지 않고, 아래 정보만 이 기기에 저장해요.</div>'+
       '<div style="padding:0 12px">'+
-      '<div class="pfrow">성별 (PD 평균값을 채우는 데만 써요)<div class="chips">'+chip("pg","m","남성",d.gender==="m")+chip("pg","f","여성",d.gender==="f")+chip("pg","x","선택 안 함",d.gender==="x")+'</div></div>'+
-      '<div class="pfrow">기존 안경이 있나요?<div class="chips">'+chip("ph","1","있어요",d.hasGlasses===true)+chip("ph","0","없어요",d.hasGlasses===false)+'</div></div>'+
+      '<div class="pfrow" style="margin-top:0">이름과 전화번호 <span class="req">필수</span><input type="text" id="pfName" class="ainp" maxlength="20" placeholder="이름 (필수)" value="'+esc(d.name||"")+'"><input type="tel" id="pfPhone" class="ainp" maxlength="13" placeholder="전화번호 (예: 010-1234-5678)" value="'+esc(d.phone||"")+'"><div style="font-size:10px;color:var(--faint);margin-top:4px">안경원에 문의할 때 답변 받을 번호로만 써요. 이 기기에만 저장돼요.</div></div>'+
+      '<div class="pfrow">성별 <span class="opt-badge">선택</span> (PD 평균값을 채우는 데만 써요)<div class="chips">'+chip("pg","m","남성",d.gender==="m")+chip("pg","f","여성",d.gender==="f")+chip("pg","x","선택 안 함",d.gender==="x")+'</div></div>'+
+      '<div class="pfrow">기존 안경이 있나요? <span class="opt-badge">선택</span><div class="chips">'+chip("ph","1","있어요",d.hasGlasses===true)+chip("ph","0","없어요",d.hasGlasses===false)+'</div></div>'+
       '</div>'+
       '<div class="notice">평균 PD는 남성 약 64mm · 여성 약 62mm예요. 사람마다 달라서 실제와 다를 수 있고, 정확한 값은 매장에서 측정해요.</div>'+
       '<div class="cardbtns" style="grid-template-columns:'+(profile.joined?"1fr 1fr 1fr":"1fr 1fr")+'">'+
@@ -2210,11 +2246,16 @@
   $("dimMy").addEventListener("click", closePf);
   $("pfBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.pg || b.dataset.ph){ if($("pfName")) pfDraft.name = $("pfName").value; if($("pfPhone")) pfDraft.phone = $("pfPhone").value; }
     if(b.dataset.pg){ pfDraft.gender = b.dataset.pg; renderPf(); return; }
     if(b.dataset.ph){ pfDraft.hasGlasses = b.dataset.ph==="1"; renderPf(); return; }
     if(b.dataset.pf==="close"){ closePf(); return; }
     if(b.dataset.pf==="save"){
-      var np = {joined:true, gender:pfDraft.gender || "x"};
+      var nm = $("pfName").value.trim(), ph = $("pfPhone").value.trim();
+      if(!nm){ toast("My","이름을 입력해 주세요"); return; }
+      if(ph.replace(/[^0-9]/g,"").length<9){ toast("My","전화번호를 입력해 주세요"); return; }
+      var np = {joined:true, name:nm, phone:ph, gender:pfDraft.gender || "x"};
+      saveContact({name:nm, phone:ph});
       if(pfDraft.hasGlasses!==null) np.hasGlasses = pfDraft.hasGlasses;
       saveProfile(np); applyProfile(); closePf(); renderMy();
       toast("My","저장했어요 · PD 기본값 "+pdDefault().toFixed(1)+"mm"); return;
@@ -2252,8 +2293,9 @@
       toast("My","지웠어요 · 안경통 아래에서 되돌릴 수 있어요"); return;
     }
     if(a==="slot"){ caseSel = (caseSel===+b.dataset.i) ? -1 : +b.dataset.i; renderMy(); return; }
+    if(a==="toshop"){ renderShop(); go("Sh"); return; }
     if(a==="pfopen"){
-      pfDraft = {gender: profile.gender || "", hasGlasses: profile.hasGlasses===undefined ? null : profile.hasGlasses};
+      pfDraft = {name: profile.name || "", phone: profile.phone || "", gender: profile.gender || "", hasGlasses: profile.hasGlasses===undefined ? null : profile.hasGlasses};
       renderPf(); $("dimMy").classList.add("show"); $("menuMy").classList.add("show"); return;
     }
     if(a==="slotadd" || a==="addframe"){ vaultMode = true; go(1); setTimeout(function(){ $("frameCell").click(); }, 350); return; }
@@ -2319,7 +2361,9 @@
       '<div class="group-title">위치 · 영업 정보</div><div class="group">'+
         '<div class="cell"><span class="k">주소</span><span class="v">'+s.addr+'</span></div>'+
         '<div class="cell"><span class="k">영업시간</span><span class="v">'+s.hours+'</span></div>'+
-        '<div class="cell"><span class="k">휴무</span><span class="v">'+s.off+'</span></div></div>';
+        '<div class="cell"><span class="k">휴무</span><span class="v">'+s.off+'</span></div>'+
+        (s.confirmedAt ? '<div class="cell"><span class="k">정보 확인일</span><span class="v">'+esc(s.confirmedAt)+(daysSince(s.confirmedAt)>30 ? ' · 오래됐어요' : '')+'</span></div>' : '')+'</div>'+
+      '<button type="button" class="linkbtn" id="btnReport">정보가 달라요 · 알려 주기</button>';
     $("btnLike").classList.toggle("liked", !!state.liked[s.id]);
     $("hero").className = "hero" + (state.photo ? " v"+state.photo : "");
     $("dots").querySelectorAll("i").forEach(function(d,i){ d.classList.toggle("on", i===state.photo); });
@@ -2445,7 +2489,7 @@
     toast(3, s.name+"에 문의를 보냈어요 (시연용)");
   }
   $("btnAsk").addEventListener("click", function(){
-    var c = getContact(); draft = {text:"", attach:true, name:c.name||"", phone:c.phone||""};
+    var c = profile.joined && profile.phone ? {name:profile.name, phone:profile.phone} : getContact(); draft = {text:"", attach:true, name:c.name||"", phone:c.phone||""};
     state.shareRx = false; renderAsk();
     $("dim3").classList.add("show"); $("menu3").classList.add("show");
   });
@@ -2453,6 +2497,10 @@
   $("askBody").addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
     var a = b.dataset.a;
+    if(b.dataset.rp!==undefined){
+      var rps = lsGet(RPKEY, []); rps.unshift({shopId:state.selected, reason:REPORT_WHY[+b.dataset.rp], at:new Date().toISOString()});
+      lsSet(RPKEY, rps.slice(0,50)); closeAsk(); renderShop(); toast(3,"알려 주셔서 고마워요. 안경원에 전달돼요 (시연용)"); return;
+    }
     if(a==="share"){ readDraft(); state.shareRx = !state.shareRx; if(askView==="card") renderCard(); else if(askView==="compose") renderCompose(); else renderAsk(); return; }
     if(b.dataset.q){ readDraft(); var q = QUICK_Q[+b.dataset.q]; draft.text = (draft.text ? draft.text.replace(/\s+$/,"")+" " : "")+q; renderCompose(); return; }
     if(a==="compose"){ renderCompose(); return; }
@@ -2481,8 +2529,186 @@
     }, 500);
   });
 
+  /* ================= 안경원 전용 화면 (시연용) =================
+     안경원이 가입하고 매장 정보(영업시간·외부 프레임 정책·택배·가공 항목)를 직접 입력해요.
+     입력한 정보는 이 기기에 저장되고, 손님 화면의 목록·상세에 바로 나와요. 받은 문의와 '정보가 달라요' 신고도 여기서 봐요. */
+  var SHKEY = "afterframe.shops.v1", OWKEY = "afterframe.owner.v1", RPKEY = "afterframe.reports.v1";
+  var DAYOPTS = ["월","화","수","목","금","토","일"], MAPS = ["네이버 지도","구글 지도","카카오맵"];
+  var CAPS_PICK = CAP_ORDER.concat(["빈티지 테"]);
+  var AREAS = KNOWN.map(function(k){ return k.name; });
+  var REPORT_WHY = ["영업시간이 달라요","외부 프레임 정책이 달라요","택배 가능 여부가 달라요","가공 가능 항목이 달라요","문을 닫았거나 이전했어요","기타"];
+  function lsGet(k, d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
+  function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function ymd(d){ d = d || new Date(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+  function daysSince(ds){ var t = Date.parse(ds); return isNaN(t) ? null : Math.floor((Date.now()-t)/86400000); }
+  function userPlace(name){ return KNOWN.filter(function(k){ return k.name===name; })[0] || KNOWN[0]; }
+  function applyUserShop(u){
+    var pl = userPlace(u.area), j = (u.id.charCodeAt(0)%5)*3-6;
+    var sh = { id:u.id, name:u.name, verified:false, userMade:true, confirmedAt:u.confirmedAt,
+      x:Math.max(4,Math.min(94,pl.x+j)), y:Math.max(6,Math.min(92,pl.y-j)),
+      addr:u.addr, hours:u.hours, off:u.off, period:u.period, ship:u.ship, policy:u.policy, policyNote:u.policyNote,
+      desc:u.desc || "안경원이 직접 등록한 정보예요", caps:u.caps };
+    sh.dist = Math.max(0.1, Math.round(Math.hypot(GPS.x-sh.x, GPS.y-sh.y)*0.025*10)/10);
+    var i = SHOPS.map(function(s){ return s.id; }).indexOf(u.id);
+    if(i>-1) SHOPS[i] = sh; else SHOPS.push(sh);
+  }
+  lsGet(SHKEY, []).forEach(applyUserShop);
+
+  var shDraft = null, shEdit = false;
+  function ownerShop(){
+    var o = lsGet(OWKEY, null); if(!o) return null;
+    return lsGet(SHKEY, []).filter(function(u){ return u.id===o.shopId; })[0] || null;
+  }
+  function newShopId(){
+    var used = SHOPS.map(function(s){ return s.id; }), L = "GHIJKLMNOPQRSTUVWXYZ";
+    for(var i=0;i<L.length;i++) if(used.indexOf(L[i])<0) return L[i];
+    return null;
+  }
+  function parseHours(h){
+    var m = /^(매일|[월화수목금토일])(?:–([월화수목금토일]))?\s+(\d\d:\d\d)–(\d\d:\d\d)/.exec(h||"");
+    return m ? {d1:m[1], d2:m[2]||m[1], t1:m[3], t2:m[4]} : null;
+  }
+  function blankDraft(){ return {name:"", area:AREAS[0], addr:"", phone:"", d1:"월", d2:"토", t1:"10:00", t2:"20:00", off:"일요일", policy:"", policyNote:"", ship:null, period:"2 ~ 5일", desc:"", caps:["도수 렌즈"], maps:[]}; }
+  function draftFrom(u){
+    var p = parseHours(u.hours) || {d1:"월", d2:"토", t1:"10:00", t2:"20:00"};
+    return {name:u.name, area:u.area, addr:u.addr, phone:u.phone||"", d1:p.d1, d2:p.d2, t1:p.t1, t2:p.t2, off:u.off, policy:u.policy, policyNote:u.policyNote||"", ship:u.ship, period:u.period, desc:u.desc||"", caps:u.caps.slice(), maps:(u.maps||[]).slice()};
+  }
+  function readSh(){
+    if(!shDraft || !$("shName")) return;
+    var m = {name:"shName", addr:"shAddr", phone:"shPhone", off:"shOff", policyNote:"shNote", period:"shPeriod", desc:"shDesc", d1:"shD1", d2:"shD2", t1:"shT1", t2:"shT2"};
+    for(var k in m) if($(m[k])) shDraft[k] = $(m[k]).value;
+  }
+  function shChip(attr, val, label, on){ return '<button type="button" class="chip'+(on?" on":"")+'" data-'+attr+'="'+esc(val)+'">'+esc(label)+'</button>'; }
+  function shSel(id, opts, cur){ return '<select id="'+id+'" class="ainp">'+opts.map(function(o){ return '<option'+(o===cur?" selected":"")+'>'+o+'</option>'; }).join("")+'</select>'; }
+  function shInp(id, ph, val, type, max){ return '<input type="'+(type||"text")+'" id="'+id+'" class="ainp" maxlength="'+(max||60)+'" placeholder="'+esc(ph)+'" value="'+esc(val)+'">'; }
+  function shopFormHtml(edit){
+    var d = shDraft;
+    return '<div class="large" style="font-size:20px">'+(edit?"매장 정보 수정":"안경원 가입")+'</div>'+
+      '<div class="hint">입력한 정보는 손님 앱의 목록과 상세에 그대로 나와요. 시연에서는 이 기기에만 저장돼요.</div>'+
+      '<div class="group-title">기본 정보 <span class="req">필수</span></div>'+
+      '<div class="pfrow" style="margin-top:0">'+shInp("shName","안경원 이름",d.name,"text",30)+
+        '<div style="margin-top:8px">동네</div><div class="chips">'+AREAS.map(function(a){ return shChip("sha", a, a, d.area===a); }).join("")+'</div>'+
+        shInp("shAddr","주소 (예: 마포구 와우산로 00, 1층)",d.addr,"text",60)+
+        shInp("shPhone","매장 전화번호",d.phone,"tel",13)+'</div>'+
+      '<div class="group-title">영업시간 · 휴무 <span class="req">필수</span></div>'+
+      '<div class="pfrow" style="margin-top:0"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'+
+        '<div>시작 요일'+shSel("shD1",["매일"].concat(DAYOPTS),d.d1)+'</div><div>끝 요일'+shSel("shD2",DAYOPTS,d.d2)+'</div>'+
+        '<div>여는 시간<input type="time" id="shT1" class="ainp" value="'+d.t1+'"></div><div>닫는 시간<input type="time" id="shT2" class="ainp" value="'+d.t2+'"></div></div>'+
+        shInp("shOff","휴무일 (예: 일요일, 없음)",d.off,"text",20)+'</div>'+
+      '<div class="group-title">외부 프레임 정책 <span class="req">필수</span></div>'+
+      '<div class="pfrow" style="margin-top:0"><div class="chips">'+
+        [["free","추가 비용 없이 가공"],["paid","가공비 별도"],["no","외부 프레임은 안 받아요"],["ask","아직 정하지 않았어요"]].map(function(x){ return shChip("shp", x[0], x[1], d.policy===x[0]); }).join("")+'</div>'+
+        shInp("shNote","정책 안내 한 줄 (선택, 금액은 쓰지 않아요)",d.policyNote,"text",60)+
+        '<div style="font-size:10px;color:var(--faint);margin-top:4px">가격은 앱에서 보여 주지 않아요. 가공비가 있으면 \'가공비 별도\'만 골라 주세요.</div></div>'+
+      '<div class="group-title">완성품 택배 <span class="req">필수</span></div>'+
+      '<div class="pfrow" style="margin-top:0"><div class="chips">'+shChip("shs","1","택배 가능",d.ship===true)+shChip("shs","0","방문 수령만",d.ship===false)+'</div>'+
+        shInp("shPeriod","보통 작업 기간 (예: 2 ~ 5일)",d.period,"text",12)+'</div>'+
+      '<div class="group-title">가공 가능 항목 <span class="req">필수</span></div>'+
+      '<div class="chips">'+CAPS_PICK.map(function(c){ return shChip("shc", c, capName(c), d.caps.indexOf(c)>-1); }).join("")+'</div>'+
+      '<div class="group-title">지도에 등록돼 있나요? <span class="opt-badge">선택</span></div>'+
+      '<div class="chips">'+MAPS.map(function(m){ return shChip("shm", m, m, d.maps.indexOf(m)>-1); }).join("")+'</div>'+
+      '<div class="hint" style="margin-top:4px">지도 정보를 가져와 영업시간을 자동으로 채우는 데 쓸 수 있어요 (다음 단계).</div>'+
+      '<div class="group-title">매장 소개 한 줄 <span class="opt-badge">선택</span></div>'+
+      '<div class="pfrow" style="margin-top:0">'+shInp("shDesc","예) 무테·하금 가공 경험이 많아요",d.desc,"text",50)+'</div>'+
+      '<div class="cardbtns" style="grid-template-columns:'+(edit?"1fr 1fr":"1fr")+';margin-top:14px"><button type="button" data-sh="save" style="background:var(--main);color:#fff">'+(edit?"저장":"가입하고 등록하기")+'</button>'+(edit?'<button type="button" data-sh="cancel">취소</button>':'')+'</div>';
+  }
+  function shopDashHtml(u){
+    var inq = getInquiries().filter(function(q){ return q.shopId===u.id; });
+    var reps = lsGet(RPKEY, []).filter(function(r){ return r.shopId===u.id; });
+    var ds = daysSince(u.confirmedAt), stale = ds!==null && ds>30;
+    var h = '<div class="myprof"><div class="av">🏪</div><div><b>'+esc(u.name)+'</b><small>'+esc(u.area)+' · 손님 앱에 나오고 있어요<br>정보 확인일 '+esc(u.confirmedAt)+(stale?' · <b style="color:var(--warn)">한 달 넘게 확인하지 않았어요</b>':'')+'</small></div></div>'+
+      '<div class="cardbtns" style="grid-template-columns:1fr 1fr"><button type="button" data-sh="confirm">정보 최신이에요</button><button type="button" data-sh="edit">정보 수정</button></div>';
+    h += '<div class="group-title">✉️ 받은 문의 <span class="opt-badge">'+inq.length+'건</span></div>';
+    h += inq.length ? inq.map(function(q){
+      var d = new Date(q.at), t = (d.getMonth()+1)+"/"+d.getDate()+" "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);
+      return '<div class="condcard" style="margin:8px 0 0"><div class="ct">'+t+' · '+esc(q.contact.name||"손님")+' · '+esc(q.contact.phone)+(q.status==="read"?' · 확인함':' · 새 문의')+'</div>'+
+        (q.text ? '<div style="font-size:12px;margin:4px 0">'+esc(q.text)+'</div>' : '')+
+        (q.card ? '<dl>'+q.card.map(function(r){ return '<dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd>'; }).join("")+'</dl>' : '')+
+        (q.status==="read" ? '' : '<div class="cardbtns" style="grid-template-columns:1fr"><button type="button" data-sh="read" data-id="'+q.id+'">확인했어요</button></div>')+'</div>';
+    }).join("") : '<div class="notice">아직 받은 문의가 없어요. 손님이 매장 상세의 "문의"에서 보내면 여기에 와요. 손님이 안경 카드를 함께 보내면 프레임·필요한 가공이 한 번에 정리돼 있어요.</div>';
+    h += '<div class="group-title">⚠️ 정보가 달라요 신고 <span class="opt-badge">'+reps.length+'건</span></div>';
+    h += reps.length ? reps.map(function(r){ var d = new Date(r.at); return '<div class="scard inq"><span>⚠️</span><span style="flex:1;min-width:0"><b>'+esc(r.reason)+'</b><small>'+(d.getMonth()+1)+'/'+d.getDate()+' · 손님이 알려 줬어요. 맞는지 확인하고 정보를 고쳐 주세요</small></span></div>'; }).join("")
+      : '<div class="notice">손님이 "정보가 달라요"를 누르면 여기에 모여요.</div>';
+    h += '<button type="button" class="linkbtn" data-sh="del" style="margin-top:16px">이 기기에서 매장 정보 지우기</button>';
+    return h;
+  }
+  function renderShop(){
+    var sc = $("shScroll"), top = sc ? sc.scrollTop : 0, u = ownerShop();
+    if(u && !shEdit) $("shBody").innerHTML = '<div class="large" style="font-size:20px">내 안경원</div>'+shopDashHtml(u);
+    else { if(!shDraft) shDraft = u ? draftFrom(u) : blankDraft(); $("shBody").innerHTML = shopFormHtml(!!u); }
+    sc.scrollTop = top;
+  }
+  function buildHours(d){
+    var t = d.t1+"–"+d.t2;
+    if(d.d1==="매일") return "매일 "+t;
+    return (d.d2 && d.d2!==d.d1 ? d.d1+"–"+d.d2 : d.d1)+" "+t;
+  }
+  function saveShop(){
+    readSh(); var d = shDraft, u = ownerShop(), phone = d.phone.replace(/[^0-9]/g,"");
+    var err = d.name.trim().length<2 ? "안경원 이름을 입력해 주세요"
+      : !d.addr.trim() ? "주소를 입력해 주세요"
+      : phone.length<8 ? "매장 전화번호를 입력해 주세요"
+      : (!d.t1 || !d.t2) ? "영업시간을 입력해 주세요"
+      : !d.policy ? "외부 프레임 정책을 골라 주세요"
+      : d.ship===null ? "택배 가능 여부를 골라 주세요"
+      : !d.caps.length ? "가공 가능 항목을 하나 이상 골라 주세요" : "";
+    if(err){ toast("Sh", err); return; }
+    var id = u ? u.id : newShopId();
+    if(!id){ toast("Sh","시연에서 등록할 수 있는 매장 수를 넘었어요"); return; }
+    var rec = {id:id, name:d.name.trim(), area:d.area, addr:d.addr.trim(), phone:d.phone.trim(), hours:buildHours(d), off:d.off.trim()||"없음",
+      period:d.period.trim()||"문의", ship:d.ship, policy:d.policy, policyNote:d.policyNote.trim(), desc:d.desc.trim(), caps:d.caps.slice(), maps:d.maps.slice(), confirmedAt:ymd()};
+    var all = lsGet(SHKEY, []).filter(function(x){ return x.id!==id; }); all.push(rec);
+    lsSet(SHKEY, all); lsSet(OWKEY, {shopId:id});
+    applyUserShop(rec); shEdit = false; shDraft = null;
+    renderShop(); renderList(false); renderDetail(); refreshMy();
+    toast("Sh", u ? "저장했어요 · 손님 화면에 바로 반영돼요" : "가입했어요 · 손님 앱 목록에 나와요 (시연용)");
+  }
+  $("shBody").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    var d = shDraft, t;
+    if(b.dataset.sha!==undefined){ readSh(); d.area = b.dataset.sha; renderShop(); return; }
+    if(b.dataset.shp!==undefined){ readSh(); d.policy = b.dataset.shp; renderShop(); return; }
+    if(b.dataset.shs!==undefined){ readSh(); d.ship = b.dataset.shs==="1"; renderShop(); return; }
+    if(b.dataset.shc!==undefined){ readSh(); t = d.caps.indexOf(b.dataset.shc); if(t>-1) d.caps.splice(t,1); else d.caps.push(b.dataset.shc); renderShop(); return; }
+    if(b.dataset.shm!==undefined){ readSh(); t = d.maps.indexOf(b.dataset.shm); if(t>-1) d.maps.splice(t,1); else d.maps.push(b.dataset.shm); renderShop(); return; }
+    var a = b.dataset.sh, u = ownerShop();
+    if(a==="save"){ saveShop(); return; }
+    if(a==="edit"){ shEdit = true; shDraft = draftFrom(u); renderShop(); return; }
+    if(a==="cancel"){ shEdit = false; shDraft = null; renderShop(); return; }
+    if(a==="confirm"){
+      var all = lsGet(SHKEY, []); all.forEach(function(x){ if(x.id===u.id) x.confirmedAt = ymd(); }); lsSet(SHKEY, all);
+      applyUserShop(all.filter(function(x){ return x.id===u.id; })[0]); renderShop(); renderDetail(); toast("Sh","확인 날짜를 오늘로 바꿨어요"); return;
+    }
+    if(a==="read"){
+      var qs = getInquiries(); qs.forEach(function(q){ if(String(q.id)===b.dataset.id) q.status = "read"; }); saveInquiries(qs); renderShop(); return;
+    }
+    if(a==="del"){
+      if(!window.confirm("이 기기에 저장된 내 매장 정보를 지울까요? 손님 앱 목록에서도 사라져요.")) return;
+      lsSet(SHKEY, lsGet(SHKEY, []).filter(function(x){ return x.id!==u.id; })); try{ localStorage.removeItem(OWKEY); }catch(er){}
+      var i = SHOPS.map(function(s){ return s.id; }).indexOf(u.id); if(i>-1) SHOPS.splice(i,1);
+      shDraft = null; shEdit = false; renderShop(); renderList(true); renderDetail(); refreshMy(); toast("Sh","지웠어요"); return;
+    }
+  });
+  $("shBack").addEventListener("click", function(){ go(1); });
+  $("toShop").addEventListener("click", function(){ renderShop(); go("Sh"); });
+
+  /* 손님: 상세 화면의 '정보가 달라요' → 안경원 전용 화면의 신고 목록으로 가요 */
+  function renderReport(){
+    askView = "report";
+    var s = shopById(state.selected);
+    $("askBody").innerHTML =
+      '<div style="font-size:13px;font-weight:700;padding:4px 12px 2px">⚠️ 정보가 달라요</div>'+
+      '<div style="font-size:11px;color:var(--sub);padding:0 12px 4px">'+esc(s.name)+'에서 어떤 정보가 달랐나요? 안경원에 알려 줘서 고칠 수 있게 해요.</div>'+
+      REPORT_WHY.map(function(r,i){ return '<button class="menu-item" data-rp="'+i+'">'+r+'</button>'; }).join("")+
+      '<button class="menu-item" data-a="close"><span>✕</span>닫기</button>';
+  }
+  $("detail").addEventListener("click", function(e){
+    if(!e.target.closest("#btnReport")) return;
+    renderReport(); $("dim3").classList.add("show"); $("menu3").classList.add("show");
+  });
+
   /* ================= 시작 ================= */
-  renderFuncs(); updateS1(); renderList(true); renderDetail(); renderMy();
+  renderFuncs(); updateS1(); renderList(true); renderDetail(); renderMy(); renderShop();
 })();
 </script>
 <script src="i18n.js"></script>
