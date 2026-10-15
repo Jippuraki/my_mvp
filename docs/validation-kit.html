@@ -1,0 +1,285 @@
+<title>After Frame 고객 검증 키트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 레이아웃: 위에 탭 5개(판매자·안경원·마니아·기록표·판정), 아래에 선택한 탭 하나만 보이는 작업 문서.
+   질문은 소리 내어 읽는 순서대로, 각 질문 아래에 "무엇을 적을지"를 작게 붙인다. */
+:root{
+  --bg:#f4f6fb; --surface:#ffffff; --fg:#14213d; --muted:#586279; --line:#d9deea;
+  --accent:#2457d6; --accent-soft:#e3ebfd; --good:#0f7a5a; --good-soft:#dcf3ea; --warn:#a65a00; --warn-soft:#fdeccd; --bad:#b3261e; --bad-soft:#fbe0dd;
+  --display:"IBM Plex Sans KR","Noto Sans KR",system-ui,sans-serif; --body:"Noto Sans KR",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1524; --surface:#171f33; --fg:#e8ecf7; --muted:#a3adc6; --line:#2b3552; --accent:#8fb0ff; --accent-soft:#1f2c52;
+  --good:#5fd3a8; --good-soft:#143a31; --warn:#f2b45a; --warn-soft:#3d2c10; --bad:#ff8a80; --bad-soft:#4a1f1c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1524; --surface:#171f33; --fg:#e8ecf7; --muted:#a3adc6; --line:#2b3552; --accent:#8fb0ff; --accent-soft:#1f2c52;
+  --good:#5fd3a8; --good-soft:#143a31; --warn:#f2b45a; --warn-soft:#3d2c10; --bad:#ff8a80; --bad-soft:#4a1f1c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.7 var(--body);padding-inline:16px;padding-block:24px 56px;word-break:keep-all;overflow-wrap:break-word}
+main{max-width:860px;margin-inline:auto;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.35}
+h1{font-size:clamp(22px,4.6vw,30px);font-weight:700}
+h2{font-size:18px;font-weight:700}
+h3{font-size:14px;font-weight:600}
+p{margin:0}
+.eyebrow{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);font-size:13.5px}
+nav{display:flex;flex-wrap:wrap;gap:6px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-block:8px;z-index:5;border-bottom:1px solid var(--line)}
+nav button{font:600 13px var(--display);border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:8px 12px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+nav button:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.panel{display:flex;flex-direction:column;gap:18px;min-width:0}
+.rules{background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.rules ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.script{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px 16px}
+.q{padding-block:12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.q:last-child{border-bottom:0}
+.q b{font-weight:700}
+.q .note{font-size:12.5px;color:var(--muted)}
+.q .note::before{content:"적을 것 · ";font-weight:600}
+.say{font-size:14px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{font:600 13px var(--display);border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer}
+.btn.ghost{background:var(--surface);color:var(--accent)}
+.status{font-size:12.5px;color:var(--good);min-height:1em}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13px}
+th,td{padding:8px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font:600 12px var(--display);color:var(--muted);background:var(--bg);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.mono{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+label{font-size:13.5px;display:flex;flex-direction:column;gap:4px}
+input[type=number]{font:600 16px var(--mono);width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+.verdict{border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;border:1.5px solid var(--line);background:var(--surface)}
+.verdict strong{font:700 19px/1.4 var(--display)}
+.verdict.keep{border-color:var(--good);background:var(--good-soft)}
+.verdict.part{border-color:var(--warn);background:var(--warn-soft)}
+.verdict.pivot{border-color:var(--bad);background:var(--bad-soft)}
+.crit li{margin-bottom:2px}
+</style>
+
+<main>
+  <header style="display:flex;flex-direction:column;gap:8px">
+    <div class="eyebrow">After Frame · 2주 고객 검증</div>
+    <h1>고객 검증 키트</h1>
+    <p class="sub">질문지 3종, 안경원 전화 스크립트, 기록표, 결과를 넣으면 방향을 알려 주는 판정표예요. 기준은 계획한 대로예요: 판매자 5곳 · 안경원 10곳 · 프레임 마니아 5명.</p>
+  </header>
+
+  <nav role="tablist" aria-label="검증 자료">
+    <button role="tab" id="t-seller" aria-selected="true" aria-controls="p-seller">판매자 인터뷰</button>
+    <button role="tab" id="t-shop" aria-selected="false" aria-controls="p-shop">안경원 전화</button>
+    <button role="tab" id="t-fan" aria-selected="false" aria-controls="p-fan">마니아 인터뷰</button>
+    <button role="tab" id="t-tool" aria-selected="false" aria-controls="p-tool">안경원 온라인 도구</button>
+    <button role="tab" id="t-sheet" aria-selected="false" aria-controls="p-sheet">기록표</button>
+    <button role="tab" id="t-verdict" aria-selected="false" aria-controls="p-verdict">판정</button>
+  </nav>
+
+  <!-- 판매자 -->
+  <section class="panel" id="p-seller" role="tabpanel" aria-labelledby="t-seller">
+    <h2>온라인 프레임 판매자 인터뷰 (15분 · 5곳)</h2>
+    <p class="sub">대상: 스마트스토어·편집숍·직구 대행·인스타 판매자. 알고 싶은 것: 가공 때문에 손님을 놓치는지, 그리고 그 문제에 돈을 쓸지.</p>
+    <div class="rules"><b>진행 원칙</b>
+      <ul><li>과거에 실제로 있었던 일을 물어요. "그럴 것 같아요"는 증거가 아니에요.</li>
+        <li>서비스를 팔지 않아요. 수업 과제 조사라고 먼저 밝혀요.</li>
+        <li>칭찬은 기록하지 않고, 숫자·사례·행동만 적어요.</li>
+        <li>녹음은 동의를 받은 경우에만 해요. 이름은 적지 않고 익명 번호(S1~S5)로 정리해요.</li></ul></div>
+    <div class="script">
+      <div class="q"><span class="say"><b>시작</b> · "안경 프레임 온라인 판매를 조사하는 학생이에요. 판매하려는 게 아니고 15분만 이야기 들려주세요."</span></div>
+      <div class="q"><span class="say"><b>1.</b> 어떤 프레임을 어디서 어떻게 파세요? 한 달에 대략 몇 건이에요?</span><span class="note">판매 채널, 월 건수, 손님 연령대</span></div>
+      <div class="q"><span class="say"><b>2.</b> 손님이 "여기서 산 프레임에 렌즈를 끼울 수 있나요?" 같은 가공 질문을 한 적 있나요? 가장 최근 일을 하나 얘기해 주세요.</span><span class="note">있음/없음, 언제, 무엇을 물었는지 (한 줄)</span></div>
+      <div class="q"><span class="say"><b>3.</b> 그때 뭐라고 안내하셨어요? 손님은 어디로 가라고 하셨어요?</span><span class="note">안내 방법, 추천한 곳이 있는지</span></div>
+      <div class="q"><span class="say"><b>4.</b> 가공이 걱정돼서 망설이거나 구매를 취소·반품한 손님이 있었나요? 지난 한 달에 몇 번쯤이에요?</span><span class="note">건수(대략), 실제 사례 한 줄. 핵심 질문이에요</span></div>
+      <div class="q"><span class="say"><b>5.</b> 지금은 그걸 줄이려고 뭘 하세요? (상세페이지 안내, 문의 응대 등) 시간이나 돈이 얼마나 들어요?</span><span class="note">현재 해결 방법과 비용(시간)</span></div>
+      <div class="q"><span class="say"><b>6.</b> (콘셉트 설명) "구매자가 프레임 정보를 넣으면, 그 프레임에 가공 가능한 근처 안경원이 뜨고 안경원에 보여 줄 조건 카드가 만들어져요. 이게 상세페이지에 있다면 어떨 것 같아요?"</span><span class="note">첫 반응, 어떤 점이 걸리는지. 칭찬 말고 걱정을 적어요</span></div>
+      <div class="q"><span class="say"><b>7.</b> 이런 서비스에 한 달에 얼마면 ① 너무 싸서 의심되고 ② 싸다 ③ 비싸지만 고민되고 ④ 너무 비싸서 안 쓸 것 같으세요?</span><span class="note">숫자 4개(원). 중간 값 두 개가 적정 범위예요</span></div>
+      <div class="q"><span class="say"><b>8.</b> 서비스가 열리면 시범으로 써 보실래요? 연락처를 남겨 주셔도 되고요. (강요하지 않아요)</span><span class="note">사전 신청 여부(예/아니오), 연락 방법</span></div>
+      <div class="q"><span class="say"><b>9.</b> 이 문제를 겪는 다른 판매자나 손님을 소개해 주실 수 있어요?</span><span class="note">소개 가능 여부</span></div>
+    </div>
+    <p class="sub">끝나면 바로 기록표에 적어요: 문제 인식(상/중/하) · 월 가공 이슈 건수 · 가격 4개 · 사전 신청 여부.</p>
+  </section>
+
+  <!-- 안경원 -->
+  <section class="panel" id="p-shop" role="tabpanel" aria-labelledby="t-shop" hidden>
+    <h2>안경원 전화 확인 (3분 · 10곳)</h2>
+    <p class="sub">대상: 홍대·연남·신촌 안경원. 알고 싶은 것: 외부 프레임 가공이 가능한지, 정보를 앱에 공개해도 괜찮은지.</p>
+    <div class="rules"><b>진행 원칙</b>
+      <ul><li>영업이나 광고가 아니라 수업 과제 조사라고 먼저 밝혀요. 손님이 바쁜 시간대(점심·퇴근 무렵)는 피해요.</li>
+        <li>녹음하지 않아요. 통화 직후 바로 기록해요.</li>
+        <li>거절하면 정중히 끊고 "공개 거부"로만 기록해요. 다시 묻지 않아요.</li>
+        <li>가게 이름·주소·영업 정보만 다뤄요. 손님이나 개인정보는 묻지 않아요.</li></ul></div>
+    <div class="script">
+      <div class="q"><span class="say"><b>시작</b> · "안녕하세요, 안경 가공 정보를 조사하는 학생이에요. 1~2분만 여쭤봐도 될까요?"</span></div>
+      <div class="q"><span class="say"><b>1.</b> "다른 곳에서 산 안경 프레임에 렌즈를 끼워 주시나요?"</span><span class="note">가능 / 조건부(어떤 조건) / 불가</span></div>
+      <div class="q"><span class="say"><b>2.</b> "프레임 형태는 어떤 게 가능해요? 무테, 하금(반무테), 풀림 중에서요."</span><span class="note">형태별 가능 여부</span></div>
+      <div class="q"><span class="say"><b>3.</b> "소재는 제한이 있나요? 뿔·나무 같은 천연 소재나 셀룰로이드는요?"</span><span class="note">불가 소재</span></div>
+      <div class="q"><span class="say"><b>4.</b> "틴팅, 미러, 편광, 변색 렌즈도 가능한가요?"</span><span class="note">가능한 기능</span></div>
+      <div class="q"><span class="say"><b>5.</b> "가공비나 작업 기간은 대략 어느 정도 걸려요?" (범위면 충분해요)</span><span class="note">가격 범위(원), 기간(일). 말하기 꺼리면 "비공개"</span></div>
+      <div class="q"><span class="say"><b>6.</b> "외국인 손님도 받으세요? 영어로 응대가 가능한가요? 완성품 택배는요?"</span><span class="note">영어 가능, 택배 가능</span></div>
+      <div class="q"><span class="say"><b>7.</b> "이 내용을 '확인됨(통화 날짜)'로 앱에 표시해도 될까요? 원하지 않으시면 바로 지울게요."</span><span class="note">동의 / 거부. 거부하면 정보를 쓰지 않아요</span></div>
+    </div>
+    <p class="sub">결과 코드: A 가능 · B 조건부 · C 불가 · D 연결 안 됨 · 공개 거부(동의 칸에 "거부").</p>
+  </section>
+
+  <!-- 마니아 -->
+  <section class="panel" id="p-fan" role="tabpanel" aria-labelledby="t-fan" hidden>
+    <h2>프레임 마니아 인터뷰 (15분 · 5명)</h2>
+    <p class="sub">대상: 프레임을 여러 개 갖고 있고 직구·중고·편집숍에서도 사 본 사람. 알고 싶은 것: 가공 거절·헛걸음이 실제로 있었는지, 안경통·알림을 쓸지.</p>
+    <div class="rules"><b>진행 원칙</b>
+      <ul><li>가장 최근에 있었던 일부터 물어요. 평소 습관 말고 마지막 한 번이에요.</li>
+        <li>앱을 보여 줄 때는 3분만, 입력→가능 매장→조건 카드 순서로 보여 줘요.</li>
+        <li>이름·연락처는 사전 신청을 원할 때만 받아요.</li></ul></div>
+    <div class="script">
+      <div class="q"><span class="say"><b>1.</b> 지금 안경(프레임)이 몇 개 있어요? 최근 1년에 몇 개 샀고 어디서 샀어요?</span><span class="note">보유 개수, 1년 구매 수, 구매처(직구·중고·편집숍 등)</span></div>
+      <div class="q"><span class="say"><b>2.</b> 산 프레임에 렌즈를 끼운 가장 최근 경험을 얘기해 주세요. 어디서 어떻게 그 안경원을 찾았어요?</span><span class="note">찾은 방법, 걸린 시간</span></div>
+      <div class="q"><span class="say"><b>3.</b> 거절당하거나 헛걸음한 적 있어요? 가장 최근 일은요? 몇 곳을 돌았고 시간·비용이 얼마나 들었어요?</span><span class="note">경험 있음/없음, 방문한 곳 수, 시간. 핵심 질문이에요</span></div>
+      <div class="q"><span class="say"><b>4.</b> 지금은 그런 정보를 어떻게 구해요? (카페·인스타·지인)</span><span class="note">현재 방법의 불편</span></div>
+      <div class="q"><span class="say"><b>5.</b> 가공을 맡길 때 제일 헷갈리는 게 뭐였어요? (도수·소재·굴절률·가공 종류)</span><span class="note">가장 헷갈린 것 한 가지</span></div>
+      <div class="q"><span class="say"><b>6.</b> (앱 3분 시연) 써 보니 어떤 부분이 도움 될 것 같아요? 불편하거나 이상한 데는요?</span><span class="note">쓸모 있는 부분 1개, 걸리는 부분 1개</span></div>
+      <div class="q"><span class="say"><b>7.</b> 내 안경을 모아 두고, 교체·점검 시기를 알려 주는 기능은 쓰실 것 같아요? 1~5점으로요.</span><span class="note">점수 1~5와 이유</span></div>
+      <div class="q"><span class="say"><b>8.</b> 이런 서비스에 돈을 내야 한다면 어떤 기능에 내실 것 같아요? 한 달 얼마까지요? (안 낸다고 해도 괜찮아요)</span><span class="note">금액 또는 "안 냄"</span></div>
+      <div class="q"><span class="say"><b>9.</b> 서비스가 열리면 알려 드려도 될까요?</span><span class="note">사전 신청 여부</span></div>
+    </div>
+  </section>
+
+  <!-- 안경원 온라인 도구 -->
+  <section class="panel" id="p-tool" role="tabpanel" aria-labelledby="t-tool" hidden>
+    <h2>안경원 온라인 노출 도구 인터뷰 (15분 · 5곳)</h2>
+    <p class="sub">대상: 안경원 사장님(아버지 소개 2~3곳 포함, 나머지는 직접 방문·전화). 가설: 안경원이 홈페이지·온라인 상품 소개를 만들고 싶지만 비용이 비싸고, 프레임 사진 인식도 잘 안 돼서 못 한다. 알고 싶은 것: 이 가설이 아버지 한 분 말씀이 아니라 여러 곳의 사정인지, 그리고 월 얼마까지 낼지.</p>
+    <div class="rules"><b>진행 원칙</b>
+      <ul><li>수업 과제 조사라고 먼저 밝히고, 서비스를 팔지 않아요.</li>
+        <li>"필요하세요?"보다 "지금 어떻게 하세요? 얼마 쓰세요?"를 물어요. 현재 행동과 비용이 증거예요.</li>
+        <li>아버지 소개 가게는 표시(소개)해서 따로 세요. 아는 사이라 좋게 말할 수 있어요.</li>
+        <li>가게 이름은 적지 않고 익명 번호(T1~T5)로 정리해요.</li></ul></div>
+    <div class="script">
+      <div class="q"><span class="say"><b>1.</b> 지금 손님이 가게를 어디서 알고 오세요? (네이버 플레이스, 인스타, 홈페이지, 소개 등) 온라인 비중은 어느 정도예요?</span><span class="note">채널, 온라인 비중(대략 %)</span></div>
+      <div class="q"><span class="say"><b>2.</b> 홈페이지나 온라인 쇼핑몰이 있으세요? 없다면 왜 안 하세요? (비용, 시간, 기술, 필요 없음)</span><span class="note">있음/없음, 안 하는 가장 큰 이유 한 가지</span></div>
+      <div class="q"><span class="say"><b>3.</b> 만들어 보신 적이 있거나 견적을 받아 보신 적 있어요? 얼마였고 왜 안 하셨어요?</span><span class="note">견적 금액(원), 포기한 이유. 핵심 질문이에요</span></div>
+      <div class="q"><span class="say"><b>4.</b> 판매하는 프레임을 온라인에 올릴 때 어떻게 하세요? 사진 찍고 이름·소재·가격을 직접 입력하세요? 시간이 얼마나 걸려요?</span><span class="note">프레임 1개 등록에 걸리는 시간, 불편한 점</span></div>
+      <div class="q"><span class="say"><b>5.</b> 지금 쓰시는 관리 프로그램이 있어요? 이름과 월 비용이 어떻게 돼요? 온라인 기능은 포함돼 있어요?</span><span class="note">프로그램 이름, 월 비용, 온라인 기능 유무</span></div>
+      <div class="q"><span class="say"><b>6.</b> (콘셉트 설명) "프레임 사진을 올리면 모양·소재가 자동으로 채워지고, 가게 소개 페이지에 상품이 바로 만들어져요. 가공 가능한 항목도 같이 보여요." 이런 게 있다면 어떨 것 같으세요?</span><span class="note">첫 반응, 걸리는 점. 칭찬 말고 걱정을 적어요</span></div>
+      <div class="q"><span class="say"><b>7.</b> 이런 서비스에 한 달에 얼마면 ① 너무 싸서 의심되고 ② 싸다 ③ 비싸지만 고민되고 ④ 너무 비싸서 안 쓸 것 같으세요?</span><span class="note">숫자 4개(원)</span></div>
+      <div class="q"><span class="say"><b>8.</b> 직접 쓰기에 가장 걸리는 게 뭐예요? (사용 방법, 직원 시간, 손님 반응, 기존 프로그램과 중복)</span><span class="note">가장 큰 장애물 한 가지</span></div>
+      <div class="q"><span class="say"><b>9.</b> 외국인 손님은 한 달에 대략 몇 분쯤 오세요? 응대할 때 가장 힘든 게 뭐예요? (말이 안 통함, 도수 확인, 가공 설명, 결제·환급 등)</span><span class="note">월 외국인 손님 수(대략), 가장 힘든 점 한 가지. 외국인이 거의 없으면 "없음"</span></div>
+      <div class="q"><span class="say"><b>10.</b> "렌즈 얼마예요?" 같은 가격·가공 문의를 하루에 몇 번쯤 받으세요? 전화·카톡·방문 중 어디로 오고, 답하는 데 시간이 얼마나 걸려요?</span><span class="note">하루 문의 수, 채널, 응대 시간</span></div>
+      <div class="q"><span class="say"><b>11.</b> 렌즈 가격표를 직접 한 번 입력해서 가게 페이지에 공개하실 의향이 있어요? 정확한 금액이 편해요, "○만~○만 원" 범위가 편해요? 공개가 꺼려지면 이유는요?</span><span class="note">공개 의향(예/아니오), 정확/범위, 꺼리는 이유</span></div>
+      <div class="q"><span class="say"><b>12.</b> 아래 세 가지 중 하나만 고른다면요? ① 온라인에서 가게가 보이고 프레임 사진으로 상품 페이지가 만들어짐 ② 외국인 손님을 영어로 자동 응대 ③ 가격·가공 문의를 정리해서 반복 질문이 줄어듦</span><span class="note">①/②/③ 중 하나와 이유. 판정표의 "가장 끌린 기능"에 쓰여요</span></div>
+    </div>
+    <p class="sub">끝나면 기록표의 "안경원 온라인 도구"에 적고, 판정표에는 "필요하다고 하고 월 요금을 낼 의향을 말한 곳"만 숫자로 넣어요.</p>
+  </section>
+
+  <!-- 기록표 -->
+  <section class="panel" id="p-sheet" role="tabpanel" aria-labelledby="t-sheet" hidden>
+    <h2>기록표 양식</h2>
+    <p class="sub">복사해서 구글 스프레드시트나 엑셀에 붙여 넣으면 칸이 나뉘어요. 이름은 적지 않고 익명 번호만 써요.</p>
+    <div class="card"><h3>판매자 (S1~S5)</h3>
+      <div class="tblwrap"><table><thead><tr><th>번호</th><th>채널</th><th>월 건수</th><th>가공 질문</th><th>포기·반품(월)</th><th>문제 인식</th><th>가격①</th><th>가격②</th><th>가격③</th><th>가격④</th><th>사전 신청</th><th>핵심 인용</th></tr></thead>
+      <tbody><tr><td class="mono">S1</td><td></td><td></td><td></td><td></td><td>상/중/하</td><td></td><td></td><td></td><td></td><td>예/아니오</td><td></td></tr></tbody></table></div>
+      <div class="tools"><button class="btn ghost" data-copy="seller">양식 복사</button><span class="status" id="st-seller" role="status"></span></div></div>
+    <div class="card"><h3>안경원 (A1~A10)</h3>
+      <div class="tblwrap"><table><thead><tr><th>번호</th><th>통화일</th><th>결과</th><th>무테</th><th>하금</th><th>풀림</th><th>불가 소재</th><th>틴팅·미러·편광·변색</th><th>가격 범위</th><th>기간</th><th>영어</th><th>택배</th><th>공개 동의</th></tr></thead>
+      <tbody><tr><td class="mono">A1</td><td>2026-10-</td><td>A/B/C/D</td><td>O/X</td><td>O/X</td><td>O/X</td><td></td><td></td><td></td><td></td><td>O/X</td><td>O/X</td><td>동의/거부</td></tr></tbody></table></div>
+      <div class="tools"><button class="btn ghost" data-copy="shop">양식 복사</button><span class="status" id="st-shop" role="status"></span></div></div>
+    <div class="card"><h3>안경원 온라인 도구 (T1~T5)</h3>
+      <div class="tblwrap"><table><thead><tr><th>번호</th><th>소개 여부</th><th>온라인 비중</th><th>홈페이지</th><th>안 하는 이유</th><th>받은 견적</th><th>상품 등록 시간</th><th>관리 프로그램</th><th>필요</th><th>가격①</th><th>가격②</th><th>가격③</th><th>가격④</th><th>장애물</th><th>외국인(월)</th><th>하루 문의 수</th><th>가격 공개</th><th>가장 끌린 기능</th><th>사전 신청</th></tr></thead>
+      <tbody><tr><td class="mono">T1</td><td>소개/직접</td><td></td><td>있음/없음</td><td></td><td></td><td></td><td></td><td>예/아니오</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>예(정확)/예(범위)/아니오</td><td>①/②/③</td><td>예/아니오</td></tr></tbody></table></div>
+      <div class="tools"><button class="btn ghost" data-copy="tool">양식 복사</button><span class="status" id="st-tool" role="status"></span></div></div>
+    <div class="card"><h3>프레임 마니아 (F1~F5)</h3>
+      <div class="tblwrap"><table><thead><tr><th>번호</th><th>보유 개수</th><th>1년 구매</th><th>구매처</th><th>거절·헛걸음</th><th>돈 곳 수</th><th>가장 헷갈린 것</th><th>안경통·알림(1~5)</th><th>지불 금액</th><th>사전 신청</th><th>핵심 인용</th></tr></thead>
+      <tbody><tr><td class="mono">F1</td><td></td><td></td><td></td><td>있음/없음</td><td></td><td></td><td></td><td></td><td>예/아니오</td><td></td></tr></tbody></table></div>
+      <div class="tools"><button class="btn ghost" data-copy="fan">양식 복사</button><span class="status" id="st-fan" role="status"></span></div></div>
+  </section>
+
+  <!-- 판정 -->
+  <section class="panel" id="p-verdict" role="tabpanel" aria-labelledby="t-verdict" hidden>
+    <h2>판정표</h2>
+    <p class="sub">결과를 숫자로 넣으면 방향을 알려 줘요. 사람 수가 적어서 확정이 아니라 참고예요. 입력값은 이 브라우저에만 기억돼요.</p>
+    <div class="grid">
+      <div class="card"><h3>판매자 (5곳 중)</h3>
+        <label>가공 때문에 손님을 놓친다고 말한 곳<input type="number" id="v-sp" min="0" max="5" value="0" inputmode="numeric"></label>
+        <label>월 요금을 낼 의향을 말한 곳<input type="number" id="v-spay" min="0" max="5" value="0" inputmode="numeric"></label></div>
+      <div class="card"><h3>안경원 (10곳 중)</h3>
+        <label>외부 프레임 가공이 가능한 곳 (A·B)<input type="number" id="v-so" min="0" max="10" value="0" inputmode="numeric"></label>
+        <label>정보 공개를 거부한 곳<input type="number" id="v-sr" min="0" max="10" value="0" inputmode="numeric"></label></div>
+      <div class="card"><h3>안경원 온라인 도구 (5곳 중)</h3>
+        <label>필요하다 + 월 요금을 낼 의향을 말한 곳<input type="number" id="v-on" min="0" max="5" value="0" inputmode="numeric"></label>
+        <label>그중 아버지 소개가 아닌 곳<input type="number" id="v-onx" min="0" max="5" value="0" inputmode="numeric"></label>
+        <label>가격표를 직접 입력·공개하겠다고 한 곳<input type="number" id="v-onp" min="0" max="5" value="0" inputmode="numeric"></label>
+        <label>가장 끌린 기능 ① 온라인 노출<input type="number" id="v-f1" min="0" max="5" value="0" inputmode="numeric"></label>
+        <label>가장 끌린 기능 ② 외국인 응대<input type="number" id="v-f2" min="0" max="5" value="0" inputmode="numeric"></label>
+        <label>가장 끌린 기능 ③ 문의 정리<input type="number" id="v-f3" min="0" max="5" value="0" inputmode="numeric"></label></div>
+      <div class="card"><h3>프레임 마니아 (5명 중)</h3>
+        <label>가공 거절·헛걸음 경험이 있는 사람<input type="number" id="v-fp" min="0" max="5" value="0" inputmode="numeric"></label></div>
+    </div>
+    <div class="verdict" id="verdict" aria-live="polite"></div>
+    <div class="card"><h3>판정 기준 (계획과 같아요)</h3>
+      <ul class="crit" style="margin:0;padding-left:18px">
+        <li><b>안경원 온라인 도구로 부분 피벗 검토</b> · 안경원 5곳 중 3곳 이상이 필요 + 요금 의향, 그중 소개가 아닌 곳이 2곳 이상. 1곳 이하면 아버지 의견은 한 가게의 사례로 기록하고 기존 판정을 따라요</li>
+        <li><b>주제 피벗 검토</b> · 판매자 문제 인식 1곳 이하 + 안경원 가공 가능 3곳 미만</li>
+        <li><b>안경원 구독(QR) 중심 부분 피벗</b> · 판매자가 약함(문제 인식 1곳 이하 또는 지불 의향 2곳 미만)인데 안경원 가능 3곳 이상 + 마니아 경험 3명 이상</li>
+        <li><b>현재 방향 유지</b> · 판매자 문제 인식 2곳 이상 + 지불 의향 2곳 이상 + 안경원 가능 3곳 이상 + 공개 거부 2곳 이하</li>
+        <li>그 밖에는 <b>추가 확인 필요</b>(곳 수를 늘리거나 질문을 다듬어요)</li></ul></div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var TABS=["seller","shop","fan","tool","sheet","verdict"];
+  function show(id){
+    TABS.forEach(function(t){
+      var on=t===id;
+      document.getElementById("p-"+t).hidden=!on;
+      document.getElementById("t-"+t).setAttribute("aria-selected",on?"true":"false");
+    });
+    try{ history.replaceState(null,"","#"+id); }catch(e){}
+  }
+  TABS.forEach(function(t){ document.getElementById("t-"+t).addEventListener("click",function(){ show(t); }); });
+  var h=(location.hash||"").slice(1); if(TABS.indexOf(h)>-1) show(h);
+
+  /* 기록표 복사: 탭으로 구분한 한 줄(머리글 + 예시 한 줄) */
+  var SHEETS={
+    seller:["번호","채널","월 건수","가공 질문","포기·반품(월)","문제 인식(상/중/하)","가격① 너무 싸다","가격② 싸다","가격③ 비싸다","가격④ 너무 비싸다","사전 신청","핵심 인용","S1"],
+    shop:["번호","통화일","결과(A/B/C/D)","무테","하금","풀림","불가 소재","틴팅·미러·편광·변색","가격 범위","기간","영어","택배","공개 동의","A1"],
+    tool:["번호","소개 여부","온라인 비중","홈페이지","안 하는 이유","받은 견적","상품 등록 시간","관리 프로그램","필요","가격① 너무 싸다","가격② 싸다","가격③ 비싸다","가격④ 너무 비싸다","장애물","외국인(월)","하루 문의 수","가격 공개(정확/범위/아니오)","가장 끌린 기능(①온라인 ②외국인 ③문의 정리)","사전 신청","T1"],
+    fan:["번호","보유 개수","1년 구매","구매처","거절·헛걸음","돈 곳 수","가장 헷갈린 것","안경통·알림(1~5)","지불 금액","사전 신청","핵심 인용","F1"]
+  };
+  function toTsv(k){
+    var a=SHEETS[k], id=a[a.length-1], head=a.slice(0,a.length-1);
+    var row=[id]; for(var i=1;i<head.length;i++) row.push("");
+    return head.join("\t")+"\n"+row.join("\t");
+  }
+  document.querySelectorAll("[data-copy]").forEach(function(b){
+    b.addEventListener("click",function(){
+      var k=b.getAttribute("data-copy"), st=document.getElementById("st-"+k), txt=toTsv(k);
+      function done(ok){ st.textContent=ok?"복사했어요. 스프레드시트에 붙여 넣으세요.":"복사가 막혀 있어요. 아래 표를 직접 선택해 복사해 주세요."; }
+      try{ navigator.clipboard.writeText(txt).then(function(){done(true);},function(){done(false);}); }catch(e){ done(false); }
+    });
+  });
+
+  /* 판정 */
+  var IDS=["v-sp","v-spay","v-so","v-sr","v-fp","v-on","v-onx","v-onp","v-f1","v-f2","v-f3"], KEY="afterframe.validation.v1";
+  function get(id){ var v=parseInt(document.getElementById(id).value,10); return isNaN(v)?0:v; }
+  try{ var s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s) IDS.forEach(function(i){ if(s[i]!==undefined) document.getElementById(i).value=s[i]; }); }catch(e){}
+  function judge(){
+    var sp=get("v-sp"), pay=get("v-spay"), so=get("v-so"), sr=get("v-sr"), fp=get("v-fp");
+    var box=document.getElementById("verdict"), cls="", t="", why="";
+    var on=get("v-on"), onx=get("v-onx"), onp=get("v-onp"), f=[get("v-f1"),get("v-f2"),get("v-f3")];
+    var names=["온라인 노출","외국인 응대","문의 정리"], top=f.indexOf(Math.max.apply(null,f));
+    var feat=Math.max.apply(null,f)>0?" 가장 많이 고른 기능은 '"+names[top]+"'("+f[top]+"곳), 가격표 직접 입력 의향은 "+onp+"곳이에요.":"";
+    if(on>=3 && onx>=2){ cls="part"; t="안경원 온라인 도구로 부분 피벗을 검토해요"; why="안경원 "+on+"곳이 필요하고 요금을 낼 의향이 있다고 했고, 그중 소개가 아닌 곳이 "+onx+"곳이에요."+feat+" 돈 내는 쪽을 안경원으로 바꾸는 안을 판매자 안과 증거로 비교해요."; }
+    else if(on>=3){ cls=""; t="추가 확인이 필요해요"; why="안경원 "+on+"곳이 긍정적이지만 소개가 아닌 곳이 "+onx+"곳뿐이에요. 아는 사이라 좋게 말했을 수 있으니 소개가 아닌 가게를 더 만나 봐요."; }
+    else if(sp<=1 && so<3){ cls="pivot"; t="주제 피벗을 검토해요"; why="판매자가 문제를 거의 못 느끼고, 가공해 주는 안경원도 3곳 미만이에요. 문제 자체가 약할 수 있어요."; }
+    else if((sp<=1 || pay<2) && so>=3 && fp>=3){ cls="part"; t="안경원 구독(QR) 중심으로 부분 피벗해요"; why="판매자 쪽은 약하지만(문제 인식 "+sp+"곳 · 지불 의향 "+pay+"곳), 안경원 가공 가능 "+so+"곳과 마니아 경험 "+fp+"명이 받쳐 줘요. 돈 내는 쪽을 안경원으로 바꿔요."; }
+    else if(sp>=2 && pay>=2 && so>=3 && sr<=2){ cls="keep"; t="현재 방향을 유지해요"; why="판매자 문제 인식 "+sp+"곳, 지불 의향 "+pay+"곳, 안경원 가능 "+so+"곳, 공개 거부 "+sr+"곳이에요. 기준을 모두 넘었어요."; }
+    else { cls=""; t="추가 확인이 필요해요"; why="기준 사이에 걸려 있어요. 곳 수를 늘리거나 질문을 다듬어 한 번 더 확인해요. (판매자 "+sp+"/지불 "+pay+" · 안경원 가능 "+so+"/거부 "+sr+" · 마니아 "+fp+")"; }
+    box.className="verdict "+cls; box.innerHTML="<strong></strong><p class=\"sub\"></p>";
+    box.querySelector("strong").textContent=t; box.querySelector("p").textContent=why;
+    try{ var o={}; IDS.forEach(function(i){ o[i]=document.getElementById(i).value; }); localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){}
+  }
+  IDS.forEach(function(i){ document.getElementById(i).addEventListener("input",judge); });
+  judge();
+})();
+</script>
