@@ -439,8 +439,14 @@
   .sv-chips2{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .sv-chips2 .chip{padding:7px 11px;font-size:12px}
   .sv-icons{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;margin:0 4px}
-  .sv-ico{flex:0 0 46px;height:46px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-size:22px;display:grid;place-items:center;padding:0}
-  .sv-ico img{width:34px;height:34px;object-fit:contain}
+  .sv-ico{flex:0 0 66px;height:46px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-size:22px;display:grid;place-items:center;padding:0}
+  .sv-ico img{width:56px;height:auto;max-height:34px;object-fit:contain}
+  img.ico{display:block;object-fit:contain}
+  .vmini-ico{width:36px;flex:0 0 36px;display:grid;place-items:center}
+  .vmini-ico img.ico{width:36px;height:auto}
+  .fc-top .ph img.ico{width:40px;height:auto;border-radius:0}
+  .sv-img img.ico{width:54px;height:auto;border-radius:0}
+  .slot img.sicon{width:100%;height:auto;border:0;border-radius:0;pointer-events:none;transform:rotate(-7deg)}
   .sv-ico.on{border-color:var(--main);box-shadow:0 0 0 2px rgba(37,99,235,.18)}
   .sv-btns{display:flex;flex-direction:column;align-items:stretch;gap:2px;padding:12px 4px 2px}
   .sv-btns .cta{flex:0 0 auto;display:flex;width:100%;margin:0;height:52px;font-size:15px;justify-content:center;align-items:center;text-align:center}
@@ -1836,22 +1842,31 @@
     if(!quiet) toast(1,"보관함에 넣었어요 ("+v.length+"개)");
     return true;
   }
-  /* 안경 그림(프레임 아이콘): 보관함에 넣을 때 고를 수 있어요.
-     나중에 그림 파일이 생기면 아래 목록에 { id:"이름", label:"설명", src:"assets/frame-icons/파일.webp" } 를 더하면 돼요.
-     지금은 임시로 이모지(emoji)를 써요. src가 있으면 그림 파일이 우선이에요. */
+  /* 안경 그림(프레임 아이콘): 보관함에 넣을 때 고르면 안경장 칸과 보관함 카드에 그대로 보여요.
+     그림 파일은 assets/frame-icons/ 에 있어요. 고르지 않으면 i1(갈색 둥근 뿔테)을 기본으로 써요. */
   var ICONS = [
-    {id:"i1", label:"기본 안경", emoji:"👓"},
-    {id:"i2", label:"선글라스", emoji:"🕶️"},
-    {id:"i3", label:"고글", emoji:"🥽"}
+    {id:"i1", label:"둥근 뿔테 (갈색)", src:"assets/frame-icons/icon-4.webp"},
+    {id:"i2", label:"웨이페어러 선글라스", src:"assets/frame-icons/icon-9.webp"},
+    {id:"i3", label:"스포츠 선글라스", src:"assets/frame-icons/icon-5.webp"},
+    {id:"i4", label:"무테", src:"assets/frame-icons/icon-1.webp"},
+    {id:"i5", label:"둥근 뿔테 (진갈색)", src:"assets/frame-icons/icon-2.webp"},
+    {id:"i6", label:"원형 선글라스", src:"assets/frame-icons/icon-3.webp"},
+    {id:"i7", label:"스퀘어 선글라스 (호피)", src:"assets/frame-icons/icon-6.webp"},
+    {id:"i8", label:"캣아이 (호피)", src:"assets/frame-icons/icon-7.webp"},
+    {id:"i9", label:"사각 뿔테 (검정)", src:"assets/frame-icons/icon-8.webp"},
+    {id:"i10", label:"원형 메탈 (노랑)", src:"assets/frame-icons/icon-10.webp"},
+    {id:"i11", label:"육각 테 (회색)", src:"assets/frame-icons/icon-11.webp"},
+    {id:"i12", label:"에비에이터 선글라스", src:"assets/frame-icons/icon-12.webp"}
   ];
   function iconOf(id){ return ICONS.filter(function(x){ return x.id===id; })[0] || null; }
-  function iconInner(ic){ return ic.src ? '<img alt="'+esc(ic.label)+'" src="'+ic.src+'">' : esc(ic.emoji); }
+  function iconInner(ic){ return ic.src ? '<img class="ico" alt="'+esc(ic.label)+'" src="'+ic.src+'">' : esc(ic.emoji); }
   /* 보관함 프레임의 대표 그림: 사진 > 고른 안경 그림 > 기본 👓 */
   function itemPic(it, mode){
     if(it.thumb) return mode==="vmini" ? '<img class="vmini" alt="" src="'+it.thumb+'">' : '<img alt="" src="'+it.thumb+'">';
-    var ic = it.icon ? iconOf(it.icon) : null;
-    var inner = ic ? iconInner(ic) : "👓";
-    return mode==="vmini" ? '<span>'+inner+'</span>' : '<span class="ph">'+inner+'</span>';
+    var ic = (it.icon ? iconOf(it.icon) : null) || iconOf("i1");
+    var inner = iconInner(ic);
+    if(mode==="slot") return '<img class="ico sicon" alt="" src="'+ic.src+'">';
+    return mode==="vmini" ? '<span class="vmini-ico">'+inner+'</span>' : '<span class="ph">'+inner+'</span>';
   }
   /* 구매처: 보관함에 같이 저장해요 (고르지 않았으면 비워 둬요) */
   function whereLabel(it){
@@ -2438,7 +2453,7 @@
   var iqOpen = null, caseOpen = false, caseAnim = false, caseSel = -1, delMode = false, undoDel = null;
   function slotName(it){ return it.nick || (RIMS[it.rim].name + (it.cat!==null && it.cat>=0 ? " "+(it.sub>=0 ? MATCATS[it.cat].subs[it.sub][0] : MATCATS[it.cat].name) : "")); }
   /* 열린 안경통 그림(720x519) 위 8칸의 중심 위치(%): 뒤 줄 4칸 → 앞 줄 4칸. 그림은 안경 개수(0~8)마다 따로 있어요(assets/case-open-N.webp) */
-  var SLOTPOS = [[16.7,58.3],[38.2,55.0],[59.3,51.3],[79.9,47.7],[19.6,73.7],[41.8,69.7],[63.3,65.8],[84.7,62.0]];
+  var SLOTPOS = [[16.7,61.3],[38.2,58.0],[59.3,54.3],[79.9,50.7],[19.6,76.7],[41.8,72.7],[63.3,68.8],[84.7,65.0]];  /* y를 3%씩 아래로 내림 */
   function caseHtml(v){
     if(!caseOpen){
       return '<div class="casewrap"><button type="button" class="case-closed" data-my="case" aria-expanded="false" aria-label="안경통 열기">'+
@@ -2450,11 +2465,11 @@
       var it = v[i], pos = ' style="left:'+SLOTPOS[i][0]+'%;top:'+SLOTPOS[i][1]+'%"';
       slots += it
         ? '<button type="button"'+pos+' class="slot'+(i===caseSel&&!delMode?" sel":"")+(delMode?" deleting":"")+'" data-my="'+(delMode?"slotdel":"slot")+'" data-i="'+i+'" aria-label="'+esc(slotName(it))+(delMode?" 지우기":"")+'">'+
-                    (delMode ? '<span class="xdel" aria-hidden="true">✕</span>' : (bell[i]?'<span class="bell" aria-label="알림">🔔</span>':''))+'</button>'
+                    itemPic(it,"slot")+(delMode ? '<span class="xdel" aria-hidden="true">✕</span>' : (bell[i]?'<span class="bell" aria-label="알림">🔔</span>':''))+'</button>'
         : '<button type="button"'+pos+' class="slot empty" data-my="slotadd" aria-label="프레임 추가">＋</button>';
     }
     return '<div class="casewrap"><div class="case-open'+(caseAnim?" anim":"")+'">'+
-      '<div class="case-stage"><img alt="" src="assets/case-open-'+Math.min(v.length,VMAX)+'.webp">'+
+      '<div class="case-stage"><img alt="" src="assets/case-open-0.webp">'+
       '<button type="button" class="case-lid" data-my="case" aria-expanded="true" aria-label="안경통 닫기"><span>눌러서 닫기</span></button>'+slots+'</div>'+
       (v.length || undoDel ? '<div class="case-tools">'+
         (v.length ? '<button type="button" class="'+(delMode?"on":"")+'" data-my="delmode">'+(delMode?"지우기 끝내기":"🗑 지우기")+'</button>' : '')+
