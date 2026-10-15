@@ -25,7 +25,7 @@
 
 ## 문서(`docs/`)
 - `PLAN.md`(기획·진행 기록), `validation-kit.html`(고객 검증 키트), `bm-onepager.html`(비즈니스 모델 요약), `shop-demo.html`(안경원 데모). 자세한 목록은 `docs/README.md`.
-- 이 저장소는 비공개(Private)예요.
+- 이 저장소는 비공개(Private)예요. `.vercelignore`로 `docs/`와 이 파일은 배포 사이트에 올라가지 않게 막아 두었어요(문서가 인터넷에 공개되지 않도록).
 
 ## 화면 규칙
 - 앱 안 문구는 쉬운 한국어(~요 체)로 써요. 전문용어는 풀어 써요.
