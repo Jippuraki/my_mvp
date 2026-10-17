@@ -1191,7 +1191,7 @@
   function pdDefault(){ return PD_AVG[profile.gender] || 63; }
 
   var INIT = function(){ return {
-    rim:null, cat:null, sub:-1, matConf:"sure", model:null, buy:"online", where:0,
+    rim:null, cat:null, sub:-1, matConf:"sure", model:null, buy:"online", where:0, whereSet:false,
     rxMode:(profile.hasGlasses===false ? "unknown" : null), rxKnow:null, eye:"R", pd:pdDefault(), pdKnown:true, pdTouched:false, rxTouched:false, measure:false,
     /* cylMode: "has"(난시 있음·CYL/AXIS 입력) · "none"(평도수·난시 없음) · "unknown"(몰라요) */
     rxv:{ R:{sph:0, cyl:0, axis:null, cylMode:"unknown"}, L:{sph:0, cyl:0, axis:null, cylMode:"unknown"} },
@@ -1393,8 +1393,10 @@
   function renderFrameCell(){
     $("frameName").textContent = frameLabel();
     $("frameName").style.color = state.rim===null ? "var(--faint)" : "";
-    var where = (state.buy==="online"?"온라인":"오프라인") + " · " + WHERE[state.buy][state.where].name;
-    $("frameWhere").textContent = state.rim===null ? "" : state.model ? state.model.brand + " " + state.model.model + " · " + where : where;
+    /* 구매처는 사용자가 직접 골랐을 때만 보여 줘요 */
+    var where = state.whereSet ? (state.buy==="online"?"온라인":"오프라인") + " · " + WHERE[state.buy][state.where].name : "";
+    var model = state.model ? state.model.brand + " " + state.model.model : "";
+    $("frameWhere").textContent = state.rim===null ? "" : [model, where].filter(Boolean).join(" · ");
     $("frameIcon").className = "glasses " + (state.rim===null ? "none" : RIMS[state.rim].cls);
     $("frameIcon").textContent = state.rim===null ? "+" : "";
     var j = $("jobs");
@@ -1643,7 +1645,7 @@
       '<div class="sh-pad"><div class="seg2"><button type="button" data-buy="online" class="'+(state.buy==="online"?"on":"")+'">🌐 온라인</button>'+
       '<button type="button" data-buy="offline" class="'+(state.buy==="offline"?"on":"")+'">🏪 오프라인 매장</button></div></div>'+
       '<div class="sh-pad tiles c2" style="margin-top:7px">'+w.map(function(x,i){
-        return '<button type="button" class="tile row2'+(i===state.where?" on":"")+'" data-where="'+i+'"><span class="em">'+x.e+'</span><b>'+x.name+'</b></button>';
+        return '<button type="button" class="tile row2'+(state.whereSet && i===state.where?" on":"")+'" data-where="'+i+'"><span class="em">'+x.e+'</span><b>'+x.name+'</b></button>';
       }).join("")+'</div>'+
       '<button type="button" class="vault-add" data-vault="1"'+(state.rim===null?" disabled":"")+'>📦 내 프레임 보관함에 넣기</button>'+
       '<button type="button" class="cta sh-done" data-done="1"'+(state.rim===null?" disabled":"")+'>'+(state.rim===null?"테 모양을 골라 주세요":vaultMode?"보관함에 넣고 마이페이지로":"선택 완료")+'</button>';
@@ -1684,7 +1686,7 @@
     if(b.dataset.rim) state.rim = +b.dataset.rim;
     if(b.dataset.cat){ var nc = +b.dataset.cat; if(nc!==state.cat){ state.cat = nc; state.sub = -1; } }
     if(b.dataset.sub) state.sub = +b.dataset.sub;
-    if(b.dataset.buy){ if(state.buy!==b.dataset.buy){ state.buy = b.dataset.buy; state.where = 0; } state.whereSet = true; }
+    if(b.dataset.buy && state.buy!==b.dataset.buy){ state.buy = b.dataset.buy; state.where = 0; state.whereSet = false; } /* 온라인/오프라인만 바꾸면 아직 고른 게 아니에요 */
     if(b.dataset.where){ state.where = +b.dataset.where; state.whereSet = true; }
     if(manual && state.model) { state.model = null; renderSearch(); }
     renderFrameSheet(); updateS1();
